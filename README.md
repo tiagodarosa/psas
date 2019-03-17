@@ -1,27 +1,23 @@
 # Avaliacao
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.6.
+Sistema em desenvolvimento!
 
-## Development server
+## Servidor de desenvolvimento
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Utilize o comando `ng serve` para utilizar o sistema localmente, navegando para o endereço `http://localhost:4200/` para visualizar a página.
 
-## Code scaffolding
+## Criar componentes
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Utilize o comando `ng generate component component-name` para gerar um novo componente. Ou utilize `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+## Produção
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Utilize o comando `ng build` para gerar a versão que estará no diretório `dist/`. A flag `--prod` deve ser utilizada para configurar corretamente as variáveis.
 
-## Running unit tests
+## Rotinas de testes unitários
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Utilize o comando `ng test` para executar testes unitários usando o [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+## Rotinas de testes integrados
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Utilize o comando `ng e2e` para executar testes integrados com o [Protractor](http://www.protractortest.org/).
