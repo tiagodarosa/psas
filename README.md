@@ -1,6 +1,7 @@
 # Avaliacao
 
 Sistema em desenvolvimento!
+Todos os commits serão publicados automaticamente nos endereços `http://tiagosantos.net/` e `https://tiagodarosaavaliacao.mybluemix.net`. Clique [aqui](https://tiagodarosaavaliacao.mybluemix.net) para acessar.
 
 ## Servidor de desenvolvimento
 
