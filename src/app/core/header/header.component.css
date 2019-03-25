@@ -1,0 +1,24 @@
+.navbar {
+    background-color: rgb(218,238,252);
+    border-bottom: solid 1px rgb(142,186,223);
+    height: 60px;
+}
+
+.navbar-brand {
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.button-help {
+    background-image: url("../../../assets/help-button.png");
+    width: 22px;
+    height: 22px;
+    border: none;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    left: 100px;
+}
+
+.button-help:hover {
+    background-image: url("../../../assets/help-button-active.png");
+}
