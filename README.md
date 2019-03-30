@@ -1,6 +1,6 @@
 # PSAS - Peer Skills Assessment System
 
-Sistema em desenvolvimento! Aguarde!
+Sistema em desenvolvimento! Em breve!
 Todos os commits serão publicados automaticamente nos endereços `http://tiagosantos.net/` e `https://psas.mybluemix.net`. Clique [aqui](https://psas.mybluemix.net) para acessar.
 
 ## Instalação
