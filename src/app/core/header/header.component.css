@@ -22,3 +22,7 @@
 .button-help:hover {
     background-image: url("../../../assets/help-button-active.png");
 }
+
+.nav-link {
+    color: rgb(0, 99, 204);
+}

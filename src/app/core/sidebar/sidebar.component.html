@@ -1,26 +1,68 @@
 <nav id="sidebar">
+    
+    <!--Inicio-->
     <ul class="list-unstyled components">
-        <p>Dummy Heading</p>
-        <li>
-            <a href="#">About</a>
-        </li>
-        <li>
-            <a href="#">Portfolio</a>
-        </li>
-        <li>
-            <a href="#">Contact</a>
-        </li>
-    </ul>
-    <ul class="list-unstyled components">
-        <p>Dummy Heading</p>
+        <p>Início</p>
         <li class="active">
-            <a href="#">About</a>
+            <a routerLink="/home" routerLinkActive="active-link">Dashboard</a>
         </li>
         <li>
-            <a href="#">Portfolio</a>
-        </li>
-        <li>
-            <a href="#">Contact</a>
+            <a routerLink="/none" routerLinkActive="active-link">Notificações</a>
         </li>
     </ul>
+
+    <!--Performance-->
+    <ul class="list-unstyled components">
+        <p>Performance</p>
+        <li>
+            <a routerLink="/none" routerLinkActive="active-link">Visão geral</a>
+        </li>
+        <li>
+            <a routerLink="/none" routerLinkActive="active-link">Por avaliação</a>
+        </li>
+        <li>
+            <a routerLink="/none" routerLinkActive="active-link">Por competência</a>
+        </li>
+    </ul>
+
+    <!--Times-->
+    <ul class="list-unstyled components">
+        <p>Times</p>
+        <li>
+            <a routerLink="/none" routerLinkActive="active-link">Meus times</a>
+        </li>
+    </ul>
+
+    <!--Avaliações-->
+    <ul class="list-unstyled components">
+        <p>Avaliações</p>
+        <li>
+            <a routerLink="/none" routerLinkActive="active-link">Minhas avaliações</a>
+        </li>
+        <li>
+            <a routerLink="/none" routerLinkActive="active-link">Avaliações públicas</a>
+        </li>
+    </ul>
+
+    <!--Conta-->
+    <ul class="list-unstyled components">
+        <p>Conta</p>
+        <li>
+            <a routerLink="/user" routerLinkActive="active-link">Gerenciar</a>
+        </li>
+    </ul>
+
+    <!--Sobre-->
+    <ul class="list-unstyled components">
+            <p>Sobre o PSAS</p>
+            <li>
+                <a routerLink="/help" routerLinkActive="active-link">Ajuda</a>
+            </li>
+            <li>
+                <a routerLink="/privacy" routerLinkActive="active-link">Privacidade</a>
+            </li>
+            <li>
+                <a routerLink="/contact" routerLinkActive="active-link">Contato</a>
+            </li>
+        </ul>
 </nav>

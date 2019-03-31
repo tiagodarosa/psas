@@ -4,10 +4,8 @@
     min-height: 100vh;
     width: 200px;
     position: fixed;
-    /*top: 0;*/
     left: 0;
     height: 100vh;
-    /*z-index: 999;*/
     background-color: rgb(249,249,249);
     color: #fff;
     transition: all 0.3s;
@@ -35,6 +33,7 @@
 #sidebar ul p {
     color: rgb(102, 102, 102);
     padding-left: 15px;
+    font-weight: bold;
     margin-bottom: 0px;
     font-size: 0.9em;
 }
@@ -44,28 +43,24 @@
     font-size: 1.1em;
     display: block;
     color: rgb(3, 3, 3);
-    font-weight: bold;
-    margin-bottom: 12px;
-    margin-top: 12px;
+    font-weight: normal;
+    margin-bottom: 5px;
+    margin-top: 5px;
     text-decoration: none;
+    padding-top: 1px;
+    padding-bottom: 1px;
 }
 
 #sidebar li:last-child {
     border-bottom: solid 1px rgb(212,212,212);
     padding-bottom: 12px;
-    margin-left: 15px;
     padding-left: 0px;
 }
 
-#sidebar ul li:last-child a {
-    padding-left: 0px;
+#sidebar ul:last-child li:last-child {
+    border-bottom: none;
 }
 
-#sidebar ul li a:hover {
-    /*color: rgb(40, 40, 40);*/
-    /*background: #fff;*/
-}
-
-#sidebar ul li a:active {
+.active-link {
     background-color: rgb(214, 216, 219);
 }
