@@ -10,8 +10,8 @@ import { FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-logi
 })
 export class HeaderComponent implements OnInit {
 
-  private user: SocialUser;
-  private loggedIn: boolean;
+  public user: SocialUser;
+  public loggedIn: boolean;
 
   constructor(private authService: AuthService) {  }
 
