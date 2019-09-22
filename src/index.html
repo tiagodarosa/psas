@@ -1,17 +1,78 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
 <head>
-  <meta charset="utf-8">
-  <title>Avaliacao</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>PSAS</title>
   <base href="/">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <!--Google API -->
+  <meta name="google-signin-scope" content="profile email">
+  <meta name="google-signin-client_id" content="929484490456-cc41rqbu22rpl9td26v6i4k299mvje7p.apps.googleusercontent.com">
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script src="https://apis.google.com/js/api:client.js"></script>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  
 </head>
 <body>
   <app-root></app-root>
-</body>
+
+  <!--  Scripts
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://kit.fontawesome.com/2a820c45bb.js" crossorigin="anonymous"></script>
+  
+  <script>
+      var auth2;
+      var googleUser;
+      var appStart = function() {
+        gapi.load('auth2', initSigninV2);
+      };
+      var initSigninV2 = function() {
+        auth2 = gapi.auth2.init({
+            client_id: '929484490456-cc41rqbu22rpl9td26v6i4k299mvje7p.apps.googleusercontent.com',
+            scope: 'profile'
+        });
+        auth2.isSignedIn.listen(signinChanged);
+        auth2.currentUser.listen(userChanged);
+        if (auth2.isSignedIn.get() == true) {
+          auth2.signIn();
+        }
+        refreshValues();
+      };
+      var signinChanged = function (val) {
+        console.log('Signin state changed to ', val);
+        console.log(val);
+      };
+      var userChanged = function (user) {
+        console.log('User now: ', user);
+        googleUser = user;
+        updateGoogleUser();
+        console.log(JSON.stringify(user, undefined, 2));
+      };
+      var updateGoogleUser = function () {
+        if (googleUser) {
+          console.log(googleUser.getId());
+          console.log(googleUser.getGrantedScopes());
+          console.log(JSON.stringify(googleUser.getAuthResponse(), undefined, 2));
+        } else {
+          console.log('--');
+        }
+      };
+      var refreshValues = function() {
+        if (auth2){
+          googleUser = auth2.currentUser.get();
+          console.log(JSON.stringify(googleUser, undefined, 2));
+          console.log(auth2.isSignedIn.get());
+          updateGoogleUser();
+        }
+      }
+      appStart();
+    </script>-->
+
+
+  </body>
 </html>
