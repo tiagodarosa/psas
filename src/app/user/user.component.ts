@@ -14,7 +14,7 @@ export class UserComponent implements OnInit {
 
   private user: SocialUser;
   private loggedIn: boolean;
-  private authorizationError: boolean;
+  public authorizationError: boolean;
 
   constructor(private authService: AuthService, public router: Router) { }
 
