@@ -1,13 +1,29 @@
+<!-- Navbar -->
 <nav>
   <div class="nav-wrapper light-blue">
-    <!--<img src="../../../assets/psas.png" width="20" height="20" alt="PSAS" style="margin-top:-5px;">-->
-    <a routerLink="/home" class="brand-logo">PSAS</a>
+    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <a routerLink="/home" class="brand-logo" style="padding-left: 10px;">PSAS</a>
+    <!-- Navbar medium and upper -->
     <ul id="nav-mobile" class="right hide-on-med-and-down">
-      <li *ngIf="loggedIn"><a routerLink="/help">Olá {{ user.firstName }}</a></li>
+      <li *ngIf="loggedIn"><a routerLink="/home">Olá {{ user.firstName }}</a></li>
       <li *ngIf="loggedIn==false"><a routerLink="/user">Entrar</a></li>
+      <li *ngIf="loggedIn"><a (click)="signOut()">Sair</a></li>
+    </ul>
+    <!-- Sidenav medium and down -->
+    <ul class="sidenav" id="mobile-demo">
+      <li *ngIf="loggedIn"><a routerLink="/home">Olá {{ user.firstName }}</a></li>
+      <li *ngIf="loggedIn==false"><a href="/user">Entrar</a></li>
       <li><a routerLink="/contact">Sobre</a></li>
       <li><a routerLink="/help">Ajuda</a></li>
       <li *ngIf="loggedIn"><a (click)="signOut()">Sair</a></li>
     </ul>
   </div>
 </nav>
+
+<!-- Sidenav medium and upper -->
+<ul id="slide-out" class="sidenav sidenav-fixed">
+  <li><a routerLink="/contact">Sobre</a></li>
+  <li><a routerLink="/help">Ajuda</a></li>
+</ul>
+
+ 

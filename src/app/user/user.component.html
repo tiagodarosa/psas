@@ -3,8 +3,13 @@
         <div class="col s12 m6 offset-m3">
           <div class="card">
             <div class="card-content">
-              <span class="card-title center"><h1>PSAS</h1></span>
+              <span class="card-title center"><h2>PSAS</h2></span>
               <h5 class="center">Entre com sua conta de redes sociais</h5>
+              <p class="center" *ngIf="authorizationError" style="color: red">
+                Ocorreu algum erro :(
+                <br>
+                Por favor, tente novamente :)
+              </p>
               <br>
               <div class="row center">
                   <a class="waves-effect waves-light btn-large red" (click)="signInWithGoogle()" style="width: 280px"><i class="fab fa-google left"></i>Google</a>

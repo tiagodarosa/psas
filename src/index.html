@@ -6,73 +6,53 @@
   <title>PSAS</title>
   <base href="/">
 
-  <!--Google API -->
+  <!-- Google API -->
   <meta name="google-signin-scope" content="profile email">
   <meta name="google-signin-client_id" content="929484490456-cc41rqbu22rpl9td26v6i4k299mvje7p.apps.googleusercontent.com">
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="https://apis.google.com/js/api:client.js"></script>
 
+  <!-- Javascript -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://kit.fontawesome.com/2a820c45bb.js" crossorigin="anonymous"></script>
+
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <style>
+    header, main, footer {
+      padding-left: 300px;
+    }
+
+    @media only screen and (max-width : 992px) {
+      header, main, footer {
+        padding-left: 0;
+      }
+    }
+    
+  </style>
   
 </head>
 <body>
+
+  <style>
+    .container {
+      margin-left: 10px !important;
+    }
+  </style>
+
+  <!-- Main content -->
   <app-root></app-root>
-
-  <!--  Scripts
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script src="https://kit.fontawesome.com/2a820c45bb.js" crossorigin="anonymous"></script>
   
+  <!-- Scripts -->
   <script>
-      var auth2;
-      var googleUser;
-      var appStart = function() {
-        gapi.load('auth2', initSigninV2);
-      };
-      var initSigninV2 = function() {
-        auth2 = gapi.auth2.init({
-            client_id: '929484490456-cc41rqbu22rpl9td26v6i4k299mvje7p.apps.googleusercontent.com',
-            scope: 'profile'
-        });
-        auth2.isSignedIn.listen(signinChanged);
-        auth2.currentUser.listen(userChanged);
-        if (auth2.isSignedIn.get() == true) {
-          auth2.signIn();
-        }
-        refreshValues();
-      };
-      var signinChanged = function (val) {
-        console.log('Signin state changed to ', val);
-        console.log(val);
-      };
-      var userChanged = function (user) {
-        console.log('User now: ', user);
-        googleUser = user;
-        updateGoogleUser();
-        console.log(JSON.stringify(user, undefined, 2));
-      };
-      var updateGoogleUser = function () {
-        if (googleUser) {
-          console.log(googleUser.getId());
-          console.log(googleUser.getGrantedScopes());
-          console.log(JSON.stringify(googleUser.getAuthResponse(), undefined, 2));
-        } else {
-          console.log('--');
-        }
-      };
-      var refreshValues = function() {
-        if (auth2){
-          googleUser = auth2.currentUser.get();
-          console.log(JSON.stringify(googleUser, undefined, 2));
-          console.log(auth2.isSignedIn.get());
-          updateGoogleUser();
-        }
-      }
-      appStart();
-    </script>-->
-
+    // Sidenav
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('.sidenav');
+      var instances = M.Sidenav.init(elems);
+    });
+  </script>
 
   </body>
 </html>

@@ -14,14 +14,21 @@ export class UserComponent implements OnInit {
 
   private user: SocialUser;
   private loggedIn: boolean;
+  private authorizationError: boolean;
 
   constructor(private authService: AuthService, public router: Router) { }
 
   env = environment;
 
   signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-    this.router.navigate(['home']);
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((error) => {
+      if (error) {
+        this.router.navigate(['home']);
+      } else {
+        console.log('An error has occurred while using Google Authorization Service.');
+        this.authorizationError = true;
+      }
+    });
   }
 
   signInWithFB(): void {
