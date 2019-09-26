@@ -12,6 +12,7 @@ import { PrivacyComponent } from './privacy/privacy.component';
 import { ContactComponent } from './contact/contact.component';
 import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
+import { FooterComponent } from './core/footer/footer.component';
 
 const config = new AuthServiceConfig([
   {
@@ -37,7 +38,8 @@ export function provideConfig() {
     HomeComponent,
     HelpComponent,
     PrivacyComponent,
-    ContactComponent
+    ContactComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
