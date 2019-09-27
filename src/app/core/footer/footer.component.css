@@ -18,3 +18,14 @@
     padding-left: 10px;
     padding-right: 10px;
 }
+
+.ul-footer {
+    display:flex;  
+    list-style:none;
+}
+
+@media only screen and (max-width : 992px) {
+    .ul-footer {
+        display: list-item;
+    }
+  }

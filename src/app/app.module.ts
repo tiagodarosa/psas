@@ -13,6 +13,9 @@ import { ContactComponent } from './contact/contact.component';
 import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 import { FooterComponent } from './core/footer/footer.component';
+import { OrganizationComponent } from './organization/organization.component';
+import { TeamComponent } from './team/team.component';
+import { AssessmentComponent } from './assessment/assessment.component';
 
 const config = new AuthServiceConfig([
   {
@@ -39,7 +42,10 @@ export function provideConfig() {
     HelpComponent,
     PrivacyComponent,
     ContactComponent,
-    FooterComponent
+    FooterComponent,
+    OrganizationComponent,
+    TeamComponent,
+    AssessmentComponent
   ],
   imports: [
     BrowserModule,

@@ -13,6 +13,11 @@
     <ul class="sidenav" id="mobile-nav">
       <li *ngIf="loggedIn"><a class="sidenav-close" href="/home">Olá {{ user.firstName }}</a></li>
       <li *ngIf="loggedIn==false"><a class="sidenav-close" href="/user">Entrar</a></li>
+      <li><a class="sidenav-close" href="/">Dashboard</a></li>
+      <li><a class="sidenav-close" href="/organization">Organização</a></li>
+      <li><a class="sidenav-close" href="/team">Equipe</a></li>
+      <li><a class="sidenav-close" href="/assessment">Avaliação</a></li>
+      <li><div class="divider"></div></li>
       <li><a class="sidenav-close" href="/contact">Sobre</a></li>
       <li><a class="sidenav-close" href="/help">Ajuda</a></li>
       <li *ngIf="loggedIn"><a (click)="signOut()">Sair</a></li>
@@ -24,9 +29,9 @@
 <ul id="slide-out" class="sidenav sidenav-fixed">
   <li class="logo center" style="margin-top: 30px; margin-bottom: 30px;">PSAS</li>
   <li><a routerLink="/">Dashboard</a></li>
-  <li><a routerLink="/contact">Organização</a></li>
-  <li><a routerLink="/contact">Equipe</a></li>
-  <li><a routerLink="/contact">Avaliações</a></li>
+  <li><a routerLink="/organization">Organização</a></li>
+  <li><a routerLink="/team">Equipe</a></li>
+  <li><a routerLink="/assessment">Avaliação</a></li>
   <li><div class="divider"></div></li>
   <li><a routerLink="/contact">Sobre</a></li>
   <li><a routerLink="/help">Ajuda</a></li>
