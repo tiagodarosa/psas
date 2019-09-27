@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './core/header/header.component';
-import { SidebarComponent } from './core/sidebar/sidebar.component';
 import { AppRoutingModule } from './routing.module';
 import { UserComponent } from './user/user.component';
 import { HomeComponent } from './home/home.component';
@@ -36,7 +35,6 @@ export function provideConfig() {
   declarations: [
     AppComponent,
     HeaderComponent,
-    SidebarComponent,
     UserComponent,
     HomeComponent,
     HelpComponent,
