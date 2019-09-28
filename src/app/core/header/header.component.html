@@ -11,15 +11,15 @@
     </ul>
     <!-- Sidenav medium and down -->
     <ul class="sidenav" id="mobile-nav">
-      <li *ngIf="loggedIn"><a class="sidenav-close" href="/home">Olá {{ user.firstName }}</a></li>
+      <li *ngIf="loggedIn"><a class="sidenav-close" routerLink="/home">Olá {{ user.firstName }}</a></li>
       <li *ngIf="loggedIn==false"><a class="sidenav-close" href="/user">Entrar</a></li>
-      <li><a class="sidenav-close" href="/">Dashboard</a></li>
-      <li><a class="sidenav-close" href="/organization">Organização</a></li>
-      <li><a class="sidenav-close" href="/team">Equipe</a></li>
-      <li><a class="sidenav-close" href="/assessment">Avaliação</a></li>
+      <li><a class="sidenav-close" routerLink="/">Dashboard</a></li>
+      <li><a class="sidenav-close" routerLink="/organization">Organização</a></li>
+      <li><a class="sidenav-close" routerLink="/team">Equipe</a></li>
+      <li><a class="sidenav-close" routerLink="/assessment">Avaliação</a></li>
       <li><div class="divider"></div></li>
-      <li><a class="sidenav-close" href="/contact">Sobre</a></li>
-      <li><a class="sidenav-close" href="/help">Ajuda</a></li>
+      <li><a class="sidenav-close" routerLink="/contact">Sobre</a></li>
+      <li><a class="sidenav-close" routerLink="/help">Ajuda</a></li>
       <li *ngIf="loggedIn"><a (click)="signOut()">Sair</a></li>
     </ul>
   </div>
