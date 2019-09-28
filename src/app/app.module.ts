@@ -15,6 +15,7 @@ import { FooterComponent } from './core/footer/footer.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { TeamComponent } from './team/team.component';
 import { AssessmentComponent } from './assessment/assessment.component';
+import { NotfoundComponent } from './notfound/notfound.component';
 
 const config = new AuthServiceConfig([
   {
@@ -43,7 +44,8 @@ export function provideConfig() {
     FooterComponent,
     OrganizationComponent,
     TeamComponent,
-    AssessmentComponent
+    AssessmentComponent,
+    NotfoundComponent
   ],
   imports: [
     BrowserModule,
