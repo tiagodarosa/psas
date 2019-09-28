@@ -16,7 +16,6 @@ import { OrganizationComponent } from './organization/organization.component';
 import { TeamComponent } from './team/team.component';
 import { AssessmentComponent } from './assessment/assessment.component';
 import { NotfoundComponent } from './notfound/notfound.component';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 const config = new AuthServiceConfig([
   {
@@ -57,10 +56,6 @@ export function provideConfig() {
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig
-    },
-    {
-      provide: LocationStrategy,
-      useClass: HashLocationStrategy
     }
   ],
   bootstrap: [AppComponent]

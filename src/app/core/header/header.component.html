@@ -12,7 +12,7 @@
     <!-- Sidenav medium and down -->
     <ul class="sidenav" id="mobile-nav">
       <li *ngIf="loggedIn"><a class="sidenav-close" routerLink="/home">Olá {{ user.firstName }}</a></li>
-      <li *ngIf="loggedIn==false"><a class="sidenav-close" href="/user">Entrar</a></li>
+      <li *ngIf="loggedIn==false"><a class="sidenav-close" routerLink="/user">Entrar</a></li>
       <li><a class="sidenav-close" routerLink="/">Dashboard</a></li>
       <li><a class="sidenav-close" routerLink="/organization">Organização</a></li>
       <li><a class="sidenav-close" routerLink="/team">Equipe</a></li>
