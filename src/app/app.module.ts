@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './core/header/header.component';
@@ -24,7 +25,7 @@ const config = new AuthServiceConfig([
   },
   {
     id: FacebookLoginProvider.PROVIDER_ID,
-    provider: new FacebookLoginProvider('Facebook-App-Id')
+    provider: new FacebookLoginProvider('535368723864853')
   }
 ]);
 
@@ -50,7 +51,8 @@ export function provideConfig() {
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SocialLoginModule
+    SocialLoginModule,
+    HttpClientModule
   ],
   providers: [
     {
