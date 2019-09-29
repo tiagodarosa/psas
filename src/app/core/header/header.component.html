@@ -1,7 +1,7 @@
 <!-- Navbar -->
 <nav>
   <div class="nav-wrapper light-blue">
-    <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <a href="#" data-target="slide-out" class="sidenav-trigger" onclick="M.Sidenav.init(document.querySelectorAll('.sidenav'));"><i class="material-icons">menu</i></a>
     <a routerLink="/home" class="brand-logo" style="padding-left: 10px;">PSAS</a>
     <!-- Navbar medium and upper -->
     <ul id="nav-mobile" class="right hide-on-med-and-down">
@@ -10,31 +10,30 @@
       <li *ngIf="loggedIn"><a (click)="signOut()">Sair</a></li>
     </ul>
     <!-- Sidenav medium and down -->
-    <ul class="sidenav" id="mobile-nav">
+    <ul class="sidenav" id="slide-out">
       <li *ngIf="loggedIn"><a class="sidenav-close" routerLink="/home">Olá {{ user.firstName }}</a></li>
       <li *ngIf="loggedIn==false"><a class="sidenav-close" routerLink="/user">Entrar</a></li>
-      <li><a class="sidenav-close" routerLink="/">Dashboard</a></li>
-      <li><a class="sidenav-close" routerLink="/organization">Organização</a></li>
-      <li><a class="sidenav-close" routerLink="/team">Equipe</a></li>
-      <li><a class="sidenav-close" routerLink="/assessment">Avaliação</a></li>
+      <li routerLinkActive="active"><a class="sidenav-close" routerLink="/home">Dashboard</a></li>
+      <li routerLinkActive="active"><a class="sidenav-close" routerLink="/organization">Organização</a></li>
+      <li routerLinkActive="active"><a class="sidenav-close" routerLink="/team">Equipe</a></li>
+      <li routerLinkActive="active"><a class="sidenav-close" routerLink="/assessment">Avaliação</a></li>
       <li><div class="divider"></div></li>
-      <li><a class="sidenav-close" routerLink="/contact">Sobre</a></li>
-      <li><a class="sidenav-close" routerLink="/help">Ajuda</a></li>
-      <li *ngIf="loggedIn"><a (click)="signOut()">Sair</a></li>
+      <li routerLinkActive="active"><a class="sidenav-close" routerLink="/contact">Sobre</a></li>
+      <li routerLinkActive="active"><a class="sidenav-close" routerLink="/help">Ajuda</a></li>
+      <li *ngIf="loggedIn"><a class="sidenav-close" (click)="signOut()">Sair</a></li>
     </ul>
   </div>
 </nav>
 
 <!-- Sidenav medium and upper -->
-<ul id="slide-out" class="sidenav sidenav-fixed">
+<ul class="sidenav sidenav-fixed">
   <li class="logo center" style="margin-top: 30px; margin-bottom: 30px;">PSAS</li>
-  <li><a routerLink="/">Dashboard</a></li>
-  <li><a routerLink="/organization">Organização</a></li>
-  <li><a routerLink="/team">Equipe</a></li>
-  <li><a routerLink="/assessment">Avaliação</a></li>
+  <li routerLinkActive="active"><a class="waves-effect" routerLink="/home">Dashboard</a></li>
+  <li routerLinkActive="active"><a class="waves-effect" routerLink="/organization">Organização</a></li>
+  <li routerLinkActive="active"><a class="waves-effect" routerLink="/team">Equipe</a></li>
+  <li routerLinkActive="active"><a class="waves-effect" routerLink="/assessment">Avaliação</a></li>
   <li><div class="divider"></div></li>
-  <li><a routerLink="/contact">Sobre</a></li>
-  <li><a routerLink="/help">Ajuda</a></li>
+  <li routerLinkActive="active"><a class="waves-effect" routerLink="/contact">Sobre</a></li>
+  <li routerLinkActive="active"><a class="waves-effect" routerLink="/help">Ajuda</a></li>
 </ul>
-
  
