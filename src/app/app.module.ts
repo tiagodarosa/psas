@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './core/header/header.component';
@@ -72,7 +73,8 @@ export function tokenGetter() {
         ],
         blacklistedRoutes: []
       }
-    })
+    }),
+    NgxSpinnerModule
   ],
   providers: [
     {
