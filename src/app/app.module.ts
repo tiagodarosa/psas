@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -33,6 +34,10 @@ export function provideConfig() {
   return config;
 }
 
+export function tokenGetter() {
+  return localStorage.getItem('access_token');
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +57,22 @@ export function provideConfig() {
     BrowserModule,
     AppRoutingModule,
     SocialLoginModule,
-    HttpClientModule
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter,
+        whitelistedDomains: [
+          'localhost:4200',
+          'us-south.functions.cloud.ibm.com',
+          'https://us-south.functions.cloud.ibm.com/*',
+          'https://us-south.functions.cloud.ibm.com/',
+          'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/default/teste.json',
+          'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/default/',
+          'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/default'
+        ],
+        blacklistedRoutes: []
+      }
+    })
   ],
   providers: [
     {

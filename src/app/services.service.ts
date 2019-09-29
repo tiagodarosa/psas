@@ -2,13 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
+import { AuthService, SocialUser } from 'angularx-social-login';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 const endpoint = 'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/default/teste.json';
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json'
-  })
-};
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +13,10 @@ const httpOptions = {
 
 export class ServicesService {
 
-  constructor(private http: HttpClient) {
+  private token = '';
+  private httpOptions = {};
+
+  constructor(private http: HttpClient, private jwtHelper: JwtHelperService, private authService: AuthService) {
   }
 
   private extractData(res: Response) {
@@ -24,8 +24,22 @@ export class ServicesService {
     return body || { };
   }
 
+  private getHttpOptions() {
+    this.authService.authState.subscribe((user) => {
+      if (user != null) {
+        this.httpOptions = {
+          headers: new HttpHeaders({
+            'Content-Type': 'application/json',
+            Authorization: user.idToken
+          })
+        };
+      }
+    });
+  }
+
   getProducts() {
-    return this.http.get(endpoint).pipe(
+    this.getHttpOptions();
+    return this.http.get(endpoint, this.httpOptions).pipe(
       map(this.extractData));
   }
 
