@@ -9,11 +9,13 @@ import { AssessmentComponent } from './assessment/assessment.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { TeamComponent } from './team/team.component';
 import { NotfoundComponent } from './notfound/notfound.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 const routes: Routes = [
   { path: 'user', component: UserComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'dashboard', component: DashboardComponent },
   { path: 'help', component: HelpComponent },
   { path: 'privacy', component: PrivacyComponent },
   { path: 'contact', component: ContactComponent },

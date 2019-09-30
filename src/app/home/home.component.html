@@ -7,19 +7,123 @@
   <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
 
   <!-- Main content -->
-  <main>
-    <div class="container">
+  <div class="">
+    
+    <!-- Title -->
+    <div class="row center">
+      <div class="col s12 m12">
+        <h1 class="header">PSAS</h1>
+      </div>
+      <div class="col s12 m8 offset-m2">
+        <h4 class="light">Um framework para avaliação de competências em pares de equipes de projetos de software.</h4>
+      </div>
+    </div>
+    <div class="row center">
+        <a *ngIf="loggedIn" routerLink="/dashboard" class="btn-large waves-effect light-blue">Acessar</a>
+        <a *ngIf="loggedIn==false" routerLink="/user" class="btn-large waves-effect light-blue">Acessar</a>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 3 steps -->
+    <div class="section">
       <div class="row">
-        <div class="col s12">
-          <h3 class="header">Dashboard</h3>
-          <p class="caption">Esta é a página principal.</p>
+        <div class="col s12 m10 offset-m1">
+          <div class="row">
+            <div class="col s12 m4">
+              <div class="center promo">
+                <i class="material-icons">edit</i>
+                <p class="promo-caption">Crie</p>
+                <p class="light center promo-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ex dolor, hendrerit vitae rutrum quis, pharetra eu augue. Proin id nunc lacinia, placerat est at, varius ante. Donec nec ipsum nibh. Pellentesque odio magna, convallis at suscipit vel, accumsan sit amet quam.</p>
+              </div>
+            </div>
+            <div class="col s12 m4">
+              <div class="center promo">
+                <i class="material-icons">people</i>
+                <p class="promo-caption">Avalie</p>
+                <p class="light center promo-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ex dolor, hendrerit vitae rutrum quis, pharetra eu augue. Proin id nunc lacinia, placerat est at, varius ante. Donec nec ipsum nibh. Pellentesque odio magna, convallis at suscipit vel, accumsan sit amet quam.</p>
+              </div>
+            </div>
+            <div class="col s12 m4">
+              <div class="center promo">
+                <i class="material-icons">show_chart</i>
+                <p class="promo-caption">Veja</p>
+                <p class="light center promo-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ex dolor, hendrerit vitae rutrum quis, pharetra eu augue. Proin id nunc lacinia, placerat est at, varius ante. Donec nec ipsum nibh. Pellentesque odio magna, convallis at suscipit vel, accumsan sit amet quam.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </main>
+    <div class="divider"></div>
+
+    <!-- AAA -->
+    <div class="section">
+      <div class="row center">
+        <h3 class="light header">Porquê avaliar competências?</h3>
+        <p class="col s12 m8 offset-m2 caption promo-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ex dolor, hendrerit vitae rutrum quis, pharetra eu augue. Proin id nunc lacinia, placerat est at, varius ante. Donec nec ipsum nibh.</p>
+      </div>
+      <div class="row center">
+        <a href="http://materializecss.com/showcase.html" class="btn-large waves-effect light-blue">Mais informações</a>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- AAA -->
+    <div class="section">
+      <div class="row center">
+        <h3 class="light header">Porquê avaliar em pares?</h3>
+        <p class="col s12 m8 offset-m2 caption promo-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ex dolor, hendrerit vitae rutrum quis, pharetra eu augue. Proin id nunc lacinia, placerat est at, varius ante. Donec nec ipsum nibh.</p>
+      </div>
+      <div class="row center">
+        <a href="http://materializecss.com/showcase.html" class="btn-large waves-effect light-blue">Mais informações</a>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+  </div>
 
   <!-- Footer -->
-  <app-footer></app-footer>
+  <div class="row" style="margin-bottom: 0;">
+      <div class="col s12 m10 offset-m1">
+        <div class="row">
+          <div class="col l4 s12">
+            <h5>Contribuições científicas</h5>
+            <p class="grey-text text-darken-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ex dolor, hendrerit vitae rutrum quis, pharetra eu augue. Proin id nunc lacinia, placerat est at, varius ante. Donec nec ipsum nibh.</p>
+            
+          </div>
+          <div class="col l4 s12">
+            <h5>Entre na discussão</h5>
+            <p class="grey-text text-darken-2">O PSAS é de código aberto, acesse o Github e contribua!</p>
+            <iframe src="https://ghbtns.com/github-btn.html?user=dogfalo&amp;repo=materialize&amp;type=watch&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>
+          </div>
+          <div class="col l4 s12" style="overflow: hidden;">
+            <h5>Desenvolvido</h5>
+            <div class="patreon-footer-ad">
+                <a href="http://www2.joinville.udesc.br/%7Egpie/site/" alt="Compare Energy" target="_blank" rel="noopener">
+                  <img width="140px" height="93px" style="margin-top: 5px;" src="http://www.ead.joinville.udesc.br/images/GPIE/logo_gpie-small.jpg" alt="GPIE">
+                </a>
+              </div>
+              <div class="patreon-footer-ad">
+                  <a href="http://www.joinville.udesc.br/portal/departamentos/dcc/" target="_blank" rel="noopener">
+                  <img width="172px" height="63px" style="margin-top: 20px;" src="http://www.ead.joinville.udesc.br/images/logodcc.gif" alt="DCC">
+                  </a>
+                </div>
+                <div class="patreon-footer-ad">
+                    <a href="http://www.joinville.udesc.br/" target="_blank" rel="noopener">
+                    <img width="189px" height="65px" style="margin-top: 20px;" src="https://www.udesc.br/templates/portal_udesc/imagens/marca.png" alt="UDESC">
+                    </a>
+                  </div>
+          </div>
+        </div>
+        
+
+        <div class="footer-copyright">
+          © 2019 PSAS.
+          <a class="a-footer-copyright" routerLink="/privacy">Política de privacidade</a>
+        </div>
+
+      </div>
+    </div>
 
 </div>
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ServicesService } from '../services.service';
+import { AuthService, SocialUser } from 'angularx-social-login';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
@@ -10,11 +11,17 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class HomeComponent implements OnInit {
 
   teste = {};
+  public user: SocialUser;
+  public loggedIn: boolean;
 
-  constructor(public service: ServicesService, private spinner: NgxSpinnerService) { }
+  constructor(private authService: AuthService, public service: ServicesService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.spinner.show();
+    this.authService.authState.subscribe((user) => {
+      this.user = user;
+      this.loggedIn = (user != null);
+    });
     this.getProducts();
   }
 
