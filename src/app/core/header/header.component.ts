@@ -16,14 +16,15 @@ export class HeaderComponent implements OnInit {
   public loggedIn: boolean;
   public home: boolean;
 
-  constructor(private authService: AuthService, public jwtHelper: JwtHelperService, private route: Router) {  }
+  constructor(private authService: AuthService, public jwtHelper: JwtHelperService, private router: Router) {  }
 
   signOut(): void {
     this.authService.signOut();
+    this.router.navigate(['home']);
   }
 
   ngOnInit() {
-    if (this.route.url === '/home') {
+    if (this.router.url === '/home') {
       this.home = true;
     } else {
       this.home = false;
@@ -31,6 +32,9 @@ export class HeaderComponent implements OnInit {
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = (user != null);
+      if (this.home === false && this.loggedIn === false) {
+        this.router.navigate(['home']);
+      }
     });
   }
 

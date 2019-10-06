@@ -5,7 +5,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { AuthService, SocialUser } from 'angularx-social-login';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-const endpoint = 'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/default/teste.json';
+const endpoint = 'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +39,13 @@ export class ServicesService {
 
   getProducts() {
     this.getHttpOptions();
-    return this.http.get(endpoint, this.httpOptions).pipe(
+    return this.http.get(endpoint + 'default/teste.json', this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  getOrganizations() {
+    this.getHttpOptions();
+    return this.http.get(endpoint + 'Organizations/get-organizations.json', this.httpOptions).pipe(
       map(this.extractData));
   }
 
