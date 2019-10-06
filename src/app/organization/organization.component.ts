@@ -10,6 +10,8 @@ import { ServicesService } from '../services.service';
 export class OrganizationComponent implements OnInit {
 
   organizations = {};
+  organizationsCount = 0;
+  organizationsList = [];
 
   constructor(public service: ServicesService, private spinner: NgxSpinnerService) { }
 
@@ -19,11 +21,12 @@ export class OrganizationComponent implements OnInit {
   }
 
   getOrganizations() {
-    this.organizations = [];
     this.service.getOrganizations().subscribe((data) => {
       this.spinner.hide();
       console.log(data);
-      this.organizations = data;
+      this.organizations = Object(data);
+      this.organizationsCount = Object(this.organizations).count;
+      this.organizationsList = Object(this.organizations).organizationList;
     }, (error) => {
       console.log(error);
       this.spinner.hide();

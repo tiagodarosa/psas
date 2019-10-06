@@ -17,7 +17,7 @@
         </div>
 
         <!-- Table -->
-        <div class="row" *ngIf="organizations.count>0">
+        <div class="row" *ngIf="organizationsCount>0">
             <div class="col s12">
               <div class="card darken-1">
                 <div class="card-content" style="padding: 0px;">
@@ -30,7 +30,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let org of organizations.organizationList">
+                          <tr *ngFor="let org of organizationsList">
                             <td>{{org.name}}</td>
                             <td>{{org.users.length}}</td>
                             <td>
