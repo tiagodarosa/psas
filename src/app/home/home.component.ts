@@ -22,19 +22,7 @@ export class HomeComponent implements OnInit {
       this.user = user;
       this.loggedIn = (user != null);
     });
-    this.getProducts();
-  }
-
-  getProducts() {
-    this.teste = [];
-    this.service.getProducts().subscribe((data: {}) => {
-      this.spinner.hide();
-      console.log(data);
-      this.teste = data;
-    }, (error: {}) => {
-      console.log(error);
-      this.spinner.hide();
-    });
+    this.spinner.hide();
   }
 
 }

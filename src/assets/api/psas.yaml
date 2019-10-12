@@ -1,0 +1,192 @@
+swagger: "2.0"
+info:
+  description: "This is the API documentation for PSAS - Peer Skills Assessment System.  You can find out more about PSAS at [https://psas.mybluemix.net](https://psas.mybluemix.net). To access the API, you need to authorize using a bearer token from PSAS website."
+  version: "1.0.0"
+  title: "PSAS API"
+  termsOfService: "http://psas.mybluemix.net/privacy"
+  contact:
+    email: "psas@udesc.br"
+host: "service.us.apiconnect.ibmcloud.com"
+basePath: "/gws/apigateway/api/16791cf85ff313b34cd173a787b8bc7e7db32bb091122a0c2b68299bcb420da2/api/v1"
+schemes:
+- "https"
+paths:
+  /organization:
+    post:
+      tags:
+      - "organization"
+      summary: "Add a new organization"
+      description: ""
+      operationId: "addOrganization"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Organization object that needs to be added to the PSAS"
+        required: true
+        schema:
+          $ref: "#/definitions/Organization"
+      responses:
+        200:
+          description: "Successful operation"
+        405:
+          description: "Invalid input"
+      security:
+      - authorization: []
+    get:
+      tags:
+      - "organization"
+      summary: "Find all organizations from user"
+      operationId: "findOrganizationsFromUser"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Organization"
+        400:
+          description: "Invalid status value"
+      security:
+      - authorization: []
+  /organization/{organizationId}:
+    get:
+      tags:
+      - "organization"
+      summary: "Find organization by Id"
+      description: "Returns a single organization"
+      operationId: "findOrganizationById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "organizationId"
+        in: "path"
+        description: "Id of organization to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Organization"
+        400:
+          description: "Invalid Id supplied"
+        404:
+          description: "Organization not found"
+      security:
+      - authorization: []
+    put:
+        tags:
+        - "organization"
+        summary: "Updates an organization"
+        description: ""
+        operationId: "updateOrganization"
+        consumes:
+        - "application/x-www-form-urlencoded"
+        produces:
+        - "application/json"
+        parameters:
+        - name: "organizationId"
+          in: "path"
+          description: "Id of organization to update"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/Organization"
+        responses:
+          405:
+            description: "Invalid input"
+        security:
+        - authorization: []
+    delete:
+      tags:
+      - "organization"
+      summary: "Deletes an organization"
+      description: ""
+      operationId: "deleteOrganization"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "organizationId"
+        in: "path"
+        description: "Organization id to delete"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful operation"
+        404:
+          description: "Pet not found"
+      security:
+      - authorization: []
+securityDefinitions:
+  authorization:
+    type: "apiKey"
+    name: "authorization"
+    in: "header"
+definitions:
+  User:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      profile:
+        type: "string"
+        description: ""
+        enum:
+        - "administrator"
+      status:
+        type: "string"
+        enum:
+        - "active"
+        - "inactive"
+        - "deleted"
+      image:
+        type: "string"
+  Competence:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      type:
+        type: "string"
+        enum:
+        - "knowledge"
+        - "ability"
+        - "attitude"
+      description:
+        type: "string"
+  Organization:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      id:
+        type: "string"
+        format: "int64"
+      name:
+        type: "string"
+        example: "string"
+      users:
+        type: "array"
+        items:
+          $ref: "#/definitions/User"
+      competences:
+        type: "array"
+        items:
+          $ref: "#/definitions/Competence"
+      status:
+        type: "string"
+        description: "Organization status"
+        enum:
+        - "active"
+        - "inactive"
+        - "deleted"

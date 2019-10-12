@@ -24,18 +24,18 @@
                     <table class="">
                         <thead>
                           <tr>
-                              <th style="width: 40%;">Nome</th>
-                              <th style="width: 40%;">Usuários</th>
+                              <th style="width: 40%;padding-left:15px;">Nome</th>
+                              <th style="width: 40%;">Pessoas</th>
                               <th style="width: 20%;">Opções</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr *ngFor="let org of organizationsList">
-                            <td>{{org.name}}</td>
+                            <td style="padding-left:15px;">{{org.name}}</td>
                             <td>{{org.users.length}}</td>
                             <td>
-                              <a href="#"><i class="material-icons left">person</i></a>
-                              <a href="#"><i class="material-icons left">delete</i></a>
+                              <a class="modal-trigger" href="#manageUsers"><span title="Gerenciar pessoas da organização"><i class="material-icons left">person</i></span></a>
+                              <a class="modal-trigger" href="#deleteOrganization" onclick="M.Modal.init(document.querySelectorAll('.modal')).open();" (click)="organizationId=org._id; organizationName=org.name"><span title="Excluir organização"><i class="material-icons left">delete</i></span></a>
                             </td>
                           </tr>
                         </tbody>
@@ -48,9 +48,53 @@
           <!-- Buttons -->
           <div class="row">
             <div class="col s12">
-                <a class="waves-effect waves-light light-blue btn-large"><i class="material-icons left">add</i>Nova organização</a>
+              <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newOrganization" onclick="M.Modal.init(document.querySelectorAll('.modal')).open();"><i class="material-icons left">add</i>Nova organização</a>
             </div>
           </div>
+
+          <!-- Modal for new organization -->
+          <div id="newOrganization" class="modal modal-fixed-footer">
+            <div class="modal-content">
+              <h4>Nova organização</h4>
+              <p>
+                Uma organização permite que você gerencie todas as competências, pessoas e equipes de trabalho.
+                Dentro do PSAS, os dados de uma organização não podem ser acessados ou vinculados à outra organização, mesmo que você tenha o perfil de acesso de gestor da organização.
+                Ao criar uma nova organização, o seu perfil já será incluído como gestor da organização.
+              </p>
+              <div class="row">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s6">
+                      <i class="material-icons prefix">description</i>
+                      <input #orgName id="organizationName" type="text" class="validate">
+                      <label for="organizationName">Nome</label>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <a onclick="M.Modal.init(document.querySelectorAll('.modal')).close();" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+              <a class="waves-effect waves-light light-blue btn" onclick="M.Modal.init(document.querySelectorAll('.modal')).close();" (click)="addOrganization(orgName.value)">Salvar</a>
+            </div>
+          </div>
+
+          <!-- Modal to delete organization -->
+          <div id="deleteOrganization" class="modal modal-fixed-footer">
+              <div class="modal-content">
+                <h4>Excluir organização <b>{{ organizationName }}</b></h4>
+                <p>
+                  Você tem certeza que deseja excluir a organização?
+                  Todas as informações relacionadas à organização serão apagadas e nenhuma pessoa terá mais acesso à esta organização.
+                  Essa ação não poderá ser desfeita!
+                </p>
+              </div>
+              <div class="modal-footer">
+                <a onclick="M.Modal.init(document.querySelectorAll('.modal')).close();" (click)="organizationId=''" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+                <a class="waves-effect waves-light red btn" onclick="M.Modal.init(document.querySelectorAll('.modal')).close();" (click)="deleteOrganization(organizationId)">Excluir</a>
+              </div>
+            </div>
+
       </div>
     </main>
   

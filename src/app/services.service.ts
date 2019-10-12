@@ -5,7 +5,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { AuthService, SocialUser } from 'angularx-social-login';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-const endpoint = 'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/';
+const endpoint = 'https://61914044.us-south.apiconnect.appdomain.cloud/api/v1';
 
 @Injectable({
   providedIn: 'root'
@@ -37,15 +37,45 @@ export class ServicesService {
     });
   }
 
-  getProducts() {
+  findOrganizationsFromUser() {
     this.getHttpOptions();
-    return this.http.get(endpoint + 'default/teste.json', this.httpOptions).pipe(
+    return this.http.get(endpoint + '/organization', this.httpOptions).pipe(
       map(this.extractData));
   }
 
-  getOrganizations() {
+  deleteOrganization(id: string) {
     this.getHttpOptions();
-    return this.http.get(endpoint + 'Organizations/get-organizations.json', this.httpOptions).pipe(
+    return this.http.delete(endpoint + '/organization/' + id, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  addOrganization(organizationName: string) {
+    this.getHttpOptions();
+    const body = {
+      name: organizationName
+    };
+    return this.http.post(endpoint + '/organization', body, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  updateOrganization(organization: object) {
+    this.getHttpOptions();
+    const org = Object(organization);
+    const body = {
+      _id: org._id,
+      _rev: org._rev,
+      name: org.name,
+      users: org.users,
+      status: org.status
+    };
+    console.log(body);
+    return this.http.put(endpoint + '/organization/' + org._id, body, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  findOrganizationById(id: string) {
+    this.getHttpOptions();
+    return this.http.get(endpoint + '/organization/' + id, this.httpOptions).pipe(
       map(this.extractData));
   }
 
