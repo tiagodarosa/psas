@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'angularx-social-login';
 
 @Component({
   selector: 'app-footer',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
-  constructor() { }
+  public token = '';
 
-  ngOnInit() {
+  constructor(private authService: AuthService) { }
+
+  ngOnInit() { }
+
+  getToken() {
+    this.authService.authState.subscribe((user) => {
+      if (user != null) {
+        this.token = user.idToken;
+      }
+    });
   }
 
 }

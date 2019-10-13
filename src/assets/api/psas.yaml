@@ -87,7 +87,7 @@ paths:
         description: ""
         operationId: "updateOrganization"
         consumes:
-        - "application/x-www-form-urlencoded"
+        - "application/json"
         produces:
         - "application/json"
         parameters:
@@ -169,9 +169,10 @@ definitions:
     required:
     - "name"
     properties:
-      id:
+      _id:
         type: "string"
-        format: "int64"
+      _rev:
+        type: "string"
       name:
         type: "string"
         example: "string"

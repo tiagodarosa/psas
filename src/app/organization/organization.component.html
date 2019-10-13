@@ -81,19 +81,19 @@
 
           <!-- Modal to delete organization -->
           <div id="deleteOrganization" class="modal modal-fixed-footer">
-              <div class="modal-content">
-                <h4>Excluir organização <b>{{ organizationName }}</b></h4>
-                <p>
-                  Você tem certeza que deseja excluir a organização?
-                  Todas as informações relacionadas à organização serão apagadas e nenhuma pessoa terá mais acesso à esta organização.
-                  Essa ação não poderá ser desfeita!
-                </p>
-              </div>
-              <div class="modal-footer">
-                <a onclick="M.Modal.init(document.querySelectorAll('.modal')).close();" (click)="organizationId=''" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-                <a class="waves-effect waves-light red btn" onclick="M.Modal.init(document.querySelectorAll('.modal')).close();" (click)="deleteOrganization(organizationId)">Excluir</a>
-              </div>
+            <div class="modal-content">
+              <h4>Excluir organização <b>{{ organizationName }}</b></h4>
+              <p>
+                Você tem certeza que deseja excluir a organização?
+                Todas as informações relacionadas à organização serão apagadas e nenhuma pessoa terá mais acesso à esta organização.
+                Essa ação não poderá ser desfeita!
+              </p>
             </div>
+            <div class="modal-footer">
+              <a onclick="M.Modal.init(document.querySelectorAll('.modal')).close();" (click)="organizationId=''" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+              <a class="waves-effect waves-light red btn" onclick="M.Modal.init(document.querySelectorAll('.modal')).close();" (click)="deleteOrganization(organizationId)">Excluir</a>
+            </div>
+          </div>
 
       </div>
     </main>
