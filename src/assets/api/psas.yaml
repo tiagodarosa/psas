@@ -774,8 +774,10 @@ definitions:
     properties:
       _id:
         type: "string"
+        readOnly: true
       _rev:
         type: "string"
+        readOnly: true
       name:
         type: "string"
         example: "string"
@@ -802,8 +804,10 @@ definitions:
     properties:
       _id:
         type: "string"
+        readOnly: true
       _rev:
         type: "string"
+        readOnly: true
       name:
         type: "string"
         example: "string"
@@ -824,8 +828,10 @@ definitions:
     properties:
       _id:
         type: "string"
+        readOnly: true
       _rev:
         type: "string"
+        readOnly: true
       name:
         type: "string"
       projectId:
@@ -865,8 +871,10 @@ definitions:
     properties:
       _id:
         type: "string"
+        readOnly: true
       _rev:
         type: "string"
+        readOnly: true
       name:
         type: "string"
       organizationId:
@@ -950,8 +958,10 @@ definitions:
     properties:
       _id:
         type: "string"
+        readOnly: true
       _rev:
         type: "string"
+        readOnly: true
       teamId:
         type: "string"
       teamRev:
