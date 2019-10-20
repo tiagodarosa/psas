@@ -883,6 +883,11 @@ definitions:
         type: "string"
       public:
         type: "boolean"
+      tool:
+        type: "string"
+        enum:
+        - "rubric"
+        - "questionnaire"
       status:
         type: "string"
         enum:
