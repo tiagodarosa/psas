@@ -7,6 +7,7 @@ import { PrivacyComponent } from './privacy/privacy.component';
 import { ContactComponent } from './contact/contact.component';
 import { AssessmentComponent } from './assessment/assessment.component';
 import { OrganizationComponent } from './organization/organization.component';
+import { ProjectComponent } from './project/project.component';
 import { TeamComponent } from './team/team.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'assessment', component: AssessmentComponent },
   { path: 'organization', component: OrganizationComponent },
+  { path: 'project', component: ProjectComponent },
   { path: 'team', component: TeamComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '404', component: NotfoundComponent },

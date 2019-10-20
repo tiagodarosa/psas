@@ -18,7 +18,7 @@ Utilize o comando `ng serve` para utilizar o sistema localmente, navegando para 
 
 ## Criar componentes
 
-Utilize o comando `ng generate component component-name` para gerar um novo componente. Ou utilize `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Utilize o comando `ng generate component component-name [--module app]` para gerar um novo componente. Ou utilize `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Produção
 

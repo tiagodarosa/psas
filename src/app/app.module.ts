@@ -20,6 +20,7 @@ import { TeamComponent } from './team/team.component';
 import { AssessmentComponent } from './assessment/assessment.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ProjectComponent } from './project/project.component';
 
 const config = new AuthServiceConfig([
   {
@@ -54,7 +55,8 @@ export function tokenGetter() {
     TeamComponent,
     AssessmentComponent,
     NotfoundComponent,
-    DashboardComponent
+    DashboardComponent,
+    ProjectComponent
   ],
   imports: [
     BrowserModule,
