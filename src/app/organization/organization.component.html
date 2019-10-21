@@ -9,10 +9,27 @@
     <!-- Main content -->
     <main>
       <div class="container">
+        
+        <!-- Title -->
         <div class="row">
           <div class="col s12">
             <h3 class="header">Organização</h3>
-            <p class="caption">Esta é a página com informações da organização.</p>
+            <!--<p class="caption">
+                
+            </p>-->
+          </div>
+        </div>
+
+        <div class="row" *ngIf="organizationsCount<=0">
+          <div class="col s12 center">
+            <h5 class="header">Você não está cadastrado em nenhuma organização!</h5>
+            <p class="caption">
+              Uma organização é o maior conjunto dentro do PSAS, onde você gerencia as competências e pessoas.
+              <br>
+              Os dados de uma organização não podem ser acessados ou vinculados à outra organização, mesmo que você tenha o perfil de acesso de gestor.
+              <br><br>
+              Crie sua organização clicando no botão "Nova organização" ou solicite para o gestor da organização que você deseja participar incluir o seu e-mail <b>{{ email }}</b> como membro da organização.
+            </p>
           </div>
         </div>
 
@@ -53,7 +70,7 @@
 
           <!-- Buttons -->
           <div class="row">
-            <div class="col s12">
+            <div class="col s12 center">
               <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newOrganization" onclick="M.Modal.init(document.querySelectorAll('.modal'));$('.newOrganization').modal('open');"><i class="material-icons left">add</i>Nova organização</a>
             </div>
           </div>
@@ -63,8 +80,7 @@
             <div class="modal-content">
               <h4>Nova organização</h4>
               <p>
-                Uma organização permite que você gerencie todas as competências, pessoas e equipes de trabalho.
-                Dentro do PSAS, os dados de uma organização não podem ser acessados ou vinculados à outra organização, mesmo que você tenha o perfil de acesso de gestor da organização.
+                Informe o nome da organização. Após a criação, você poderá editar as competências e pessoas da organização.
                 Ao criar uma nova organização, o seu perfil já será incluído como gestor da organização.
               </p>
               <div class="row">
@@ -106,6 +122,12 @@
   
     <!-- Footer -->
     <app-footer></app-footer>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.tooltipped').tooltip();
+      });
+    </script>
   
   </div>
   

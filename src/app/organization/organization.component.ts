@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ServicesService } from '../services.service';
+import { AuthService, SocialUser } from 'angularx-social-login';
 
 @Component({
   selector: 'app-organization',
@@ -14,11 +15,17 @@ export class OrganizationComponent implements OnInit {
   organizationsList = [];
   organizationId = '';
   organizationName = '';
+  email = '';
+  user: SocialUser;
 
-  constructor(public service: ServicesService, private spinner: NgxSpinnerService) { }
+  constructor(private authService: AuthService, public service: ServicesService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.spinner.show();
+    this.authService.authState.subscribe((user) => {
+      this.user = user;
+      this.email = user.email;
+    });
     this.getOrganizations();
   }
 
