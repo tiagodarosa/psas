@@ -54,6 +54,14 @@ export class OrganizationComponent implements OnInit {
     });
   }
 
+  deleteOrganizationModal(organizationId: string) {
+    const organization = this.organizationsList.find(org => org._id === organizationId);
+    this.organizationId = organizationId;
+    this.organizationName = organization.name;
+    $('.modal').modal();
+    $('.deleteOrganization').modal('open');
+  }
+
   deleteOrganization(id: string) {
     this.spinner.show();
     this.service.deleteOrganization(id).subscribe((data) => {
@@ -64,8 +72,13 @@ export class OrganizationComponent implements OnInit {
     });
   }
 
+  addOrganizationModal() {
+    this.organizationName = '';
+    $('.modal').modal();
+    $('.newOrganization').modal('open');
+  }
+
   addOrganization(name: string) {
-    console.log(name);
     this.spinner.show();
     this.service.addOrganization(name).subscribe((data) => {
       this.getOrganizations();

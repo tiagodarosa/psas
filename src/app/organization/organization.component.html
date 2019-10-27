@@ -7,7 +7,7 @@
     <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
   
     <!-- Main content -->
-    <main onload="M.AutoInit();">
+    <main>
       <div class="container">
         
         <!-- Title -->
@@ -44,10 +44,8 @@
                 </p>
               </div>
               <div class="card-action light-blue">
-                <a [routerLink]="['/organization', org._id]"><i class="material-icons left">person</i></a>
-                <a class="modal-trigger" style="color: white;" href="#editUsers" onclick="M.Modal.init(document.querySelectorAll('.modal'));" (click)="editUsers(org._id)"><span title="Gerenciar pessoas da organização"><i class="material-icons left">person</i></span></a>
-                <a class="modal-trigger" style="color: white;" href="#editCompetences" onclick="M.Modal.init(document.querySelectorAll('.modal'));" (click)="editCompetences(org._id)"><span title="Gerenciar competências da organização"><i class="material-icons left">device_hub</i></span></a>
-                <a class="modal-trigger" style="color: white;" href="#deleteOrganization" onclick="M.Modal.init(document.querySelectorAll('.modal'));$('.deleteOrganization').modal('open');" (click)="organizationId=org._id; organizationName=org.name"><span title="Excluir organização"><i class="material-icons left">delete</i></span></a>
+                <a style="color: white;" [routerLink]="['/organization', org._id]" title="Editar organização {{ org.name }}"><i class="material-icons left">edit</i></a>
+                <a class="modal-trigger" style="color: white;" href="#deleteOrganization" title="Excluir organização {{ org.name }}" (click)="deleteOrganizationModal(org._id)"><i class="material-icons left">delete</i></a>
               </div>
             </div>
           </div>
@@ -56,7 +54,7 @@
         <!-- Buttons -->
         <div class="row">
           <div class="col s12 center">
-            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newOrganization" onclick="M.Modal.init(document.querySelectorAll('.modal'));$('.newOrganization').modal('open');"><i class="material-icons left">add</i>Nova organização</a>
+            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newOrganization" (click)="addOrganizationModal()"><i class="material-icons left">add</i>Nova organização</a>
           </div>
         </div>
 
@@ -99,75 +97,6 @@
           <div class="modal-footer">
             <a (click)="organizationId=''" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
             <a class="modal-close waves-effect waves-light red btn" (click)="deleteOrganization(organizationId)">Excluir</a>
-          </div>
-        </div>
-
-        <!-- Modal to edit competences -->
-        <div id="editCompetences" class="modal modal-fixed-footer editCompetences">
-          <div class="modal-content">
-            <h4>Competências da organização <b>{{ organizationName }}</b></h4>
-            <p>
-              A competência pode ser vista como um conjunto de atributos funcionais e comportamentais, descritos em três tipos: conhecimento, habilidade e atitude.
-              Para editar as competências utilizadas nas avaliações das pessoas nesta organização, clique no botão "Editar".
-            </p>
-            <table *ngIf="organizationCompetences.length>0">
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Tipo</th>
-                    <th>Descrição</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let competence of organizationCompetences">
-                    <td>{{ competence.name }}</td>
-                    <td>{{ competence.type }}</td>
-                    <td>{{ competence.description }}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="col s12 center" *ngIf="organizationCompetences.length<=0">
-                <br>
-                <h5 class="header">Nenhuma competência cadastrada!</h5>
-              </div>
-          </div>
-          <div class="modal-footer">
-            <a (click)="organizationId=''" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            <a class="modal-close waves-effect waves-light light-blue btn" (click)="editOrganization(organizationId)">Editar</a>
-          </div>
-        </div>
-
-        <!-- Modal to show users -->
-        <div id="editUsers" class="modal modal-fixed-footer editUsers">
-          <div class="modal-content">
-            <h4>Pessoas da organização <b>{{ organizationName }}</b></h4>
-            <p>
-              Você pode adicionar um número ilimitado de pessoas à esta organização.
-              Uma pessoa também pode estar associada a mais de uma organização e ter um perfil de acesso diferente em cada organização.
-              Para editar as pessoas desta organização, clique no botão "Editar".
-            </p>
-            <table>
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>E-mail</th>
-                  <th>Perfil</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let user of organizationUsers">
-                  <td>{{ user.name }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>{{ user.profile }}</td>
-                  <td>{{ user.status }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="modal-footer">
-            <a (click)="organizationId=''" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
-            <a class="modal-close waves-effect waves-light light-blue btn" (click)="editOrganization(organizationId)">Editar</a>
           </div>
         </div>
 
