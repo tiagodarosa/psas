@@ -17,72 +17,6 @@
           </div>
         </div>
 
-        <!-- Organization info 
-        <div class="row">
-          <div class="col s6">
-            <h5 class="header">Informações da organização</h5>
-            <label class="active" for="name">Nome</label>
-            <input value="{{ organization.name }}" id="name" type="text" disabled>
-          </div>
-        </div>
-        -->
-
-        <!-- Organization users 
-        <div class="row">
-          <div class="col s12">
-            <h5 class="header">Pessoas da organização</h5>
-            <table class="highlight">
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>E-mail</th>
-                  <th>Perfil</th>
-                  <th>Status</th>
-                  <th>Opções</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let user of organization.users">
-                  <td>{{ user.name }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>{{ user.profile }}</td>
-                  <td>{{ user.status }}</td>
-                  <td>$0.87</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        -->
-
-        <!-- Organization competences 
-        <div class="row">
-          <div class="col s12">
-            <h5 class="header">Competências avaliadas na organização</h5>
-            <table class="highlight" *ngIf="organization.competences.length>0">
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>Tipo</th>
-                  <th>Descrição</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let competence of organization.competences">
-                  <td>{{ user.name }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>{{ user.profile }}</td>
-                </tr>
-              </tbody>
-            </table>
-            <p class="caption" *ngIf="organization.competences.length<=0">
-              Esta organização não possui competências cadastradas.
-            </p>
-          </div>
-        </div>
-        -->
-
-
         <!-- Organization info -->
         <div class="row">
           <div class="col s12">
@@ -105,151 +39,80 @@
 
         <!-- Organization users -->
         <div class="row">
-            <div class="col s12">
-              <div class="card">
-                <div class="card-content light-blue white-text">
-                  <span class="card-title">Pessoas</span>
-                    <!--<p></p>-->
-                </div>
-                <div class="divider"></div>
-                <div class="card-content">
-                  <table class="highlight responsive-table">
-                    <thead>
-                      <tr>
-                        <th>Nome</th>
-                        <th>E-mail</th>
-                        <th>Perfil</th>
-                        <th>Status</th>
-                        <th>Opções</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let user of organization.users">
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ filterUserProfile(user.profile) }}</td>
-                        <td>{{ filterUserStatus(user.status) }}</td>
-                        <td>
-                          <a class="modal-trigger" href="#deleteUser" title="Excluir usuário {{ user.name }}" (click)="deleteUserModal(user.name, user.email)"><i class="material-icons left">delete</i></a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="card-action">
-                  <a class="waves-effect waves-light light-blue btn-small modal-trigger" href="#addUser" (click)="addUserModal()"><i class="material-icons left">add</i>Adicionar pessoa</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-
-          <!-- Organization competences -->
-          <div class="row">
-            <div class="col s12">
-              <div class="card">
-                <div class="card-content light-blue white-text">
-                  <span class="card-title">Competências avaliadas</span>
-                    <!--<p></p>-->
-                </div>
-                <div class="divider"></div>
-                <div class="card-content">
-                  <table class="highlight" *ngIf="organization.competences.length>0">
-                    <thead>
-                      <tr>
-                        <th>Nome</th>
-                        <th>Tipo</th>
-                        <th>Descrição</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let competence of organization.competences">
-                        <td>{{ competence.name }}</td>
-                        <td>{{ filterCompetenceType(competence.type) }}</td>
-                        <td>{{ competence.description }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <p class="caption" *ngIf="organization.competences.length<=0">
-                    Esta organização não possui competências cadastradas.
-                  </p>
-                </div>
-                <div class="card-action">
-                  <a class="waves-effect waves-light light-blue btn-small modal-trigger" href="#addCompetence" (click)="addCompetenceModal()"><i class="material-icons left">add</i>Adicionar competência</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-        <!--
-        <div class="row">
           <div class="col s12">
-            <ul class="collapsible expandable">
-              <li class="active">
-                <div class="collapsible-header light-blue waves-effect"><i class="material-icons">info_outline</i>Informações</div>
-                <div class="collapsible-body">
-                  <label class="active" for="name">Nome</label>
-                  <input value="{{ organization.name }}" id="name" type="text" disabled>
-                </div>
-              </li>
-              <li class="active">
-                <div class="collapsible-header light-blue waves-effect"><i class="material-icons">people_outline</i>Pessoas</div>
-                <div class="collapsible-body">
-                  <table class="highlight">
-                    <thead>
-                      <tr>
-                        <th>Nome</th>
-                        <th>E-mail</th>
-                        <th>Perfil</th>
-                        <th>Status</th>
-                        <th>Opções</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let user of organization.users">
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.profile }}</td>
-                        <td>{{ user.status }}</td>
-                        <td>$0.87</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </li>
-              <li class="active">
-                <div class="collapsible-header light-blue waves-effect"><i class="material-icons">device_hub</i>Competências avaliadas</div>
-                <div class="collapsible-body">
-                  <table class="highlight" *ngIf="organization.competences.length>0">
-                    <thead>
-                      <tr>
-                        <th>Nome</th>
-                        <th>Tipo</th>
-                        <th>Descrição</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let competence of organization.competences">
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.profile }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <p class="caption" *ngIf="organization.competences.length<=0">
-                    Esta organização não possui competências cadastradas.
-                  </p>
-                </div>
-              </li>
-            </ul>
+            <div class="card">
+              <div class="card-content light-blue white-text">
+                <span class="card-title">Pessoas</span>
+                  <!--<p></p>-->
+              </div>
+              <div class="divider"></div>
+              <div class="card-content">
+                <table class="highlight responsive-table">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>E-mail</th>
+                      <th>Perfil</th>
+                      <th>Status</th>
+                      <th>Opções</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let user of organization.users">
+                      <td>{{ user.name }}</td>
+                      <td>{{ user.email }}</td>
+                      <td>{{ filterUserProfile(user.profile) }}</td>
+                      <td>{{ filterUserStatus(user.status) }}</td>
+                      <td>
+                        <a class="modal-trigger" href="#deleteUser" title="Excluir usuário {{ user.name }}" (click)="deleteUserModal(user.name, user.email)"><i class="material-icons left">delete</i></a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="card-action">
+                <a class="waves-effect waves-light light-blue btn-small modal-trigger" href="#addUser" (click)="addUserModal()"><i class="material-icons left">add</i>Adicionar pessoa</a>
+              </div>
+            </div>
           </div>
         </div>
-        -->
 
-
-
+        <!-- Organization competences -->
+        <div class="row">
+          <div class="col s12">
+            <div class="card">
+              <div class="card-content light-blue white-text">
+                <span class="card-title">Competências avaliadas</span>
+                  <!--<p></p>-->
+              </div>
+              <div class="divider"></div>
+              <div class="card-content">
+                <table class="highlight" *ngIf="organization.competences.length>0">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Tipo</th>
+                      <th>Descrição</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let competence of organization.competences">
+                      <td>{{ competence.name }}</td>
+                      <td>{{ filterCompetenceType(competence.type) }}</td>
+                      <td>{{ competence.description }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p class="caption" *ngIf="organization.competences.length<=0">
+                  Esta organização não possui competências cadastradas.
+                </p>
+              </div>
+              <div class="card-action">
+                <a class="waves-effect waves-light light-blue btn-small modal-trigger" href="#addCompetence" (click)="addCompetenceModal()"><i class="material-icons left">add</i>Adicionar competência</a>
+              </div>
+            </div>
+          </div>
+        </div>
 
 
         <!-- Buttons -->
@@ -269,7 +132,7 @@
             <div class="row">
               <form class="col s12">
                 <div class="row">
-                  <div class="input-field col s6">
+                  <div class="input-field col s12 m6">
                     <i class="material-icons prefix">description</i>
                     <label class="active" for="organizationName">Nome</label>
                     <input #organizationName id="organizationName" type="text" class="validate" value="{{ organization.name }}">
@@ -294,21 +157,21 @@
             <div class="row">
               <form class="col s12">
                 <div class="row">
-                  <div class="input-field col s6">
+                  <div class="input-field col s12 m6">
                     <i class="material-icons prefix">person_outline</i>
                     <label class="active" for="organizationName">Nome</label>
                     <input #userName id="userName" type="text" class="validate" value="">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="input-field col s6">
+                  <div class="input-field col s12 m6">
                     <i class="material-icons prefix">email</i>
                     <label class="active" for="organizationName">E-mail</label>
                     <input #userEmail id="userEmail" type="email" class="validate" value="">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="input-field col s6">
+                  <div class="input-field col s12 m6">
                     <i class="material-icons prefix">security</i>
                     <label class="active" for="organizationName">Perfil</label>
                     <select #userProfile id="userProfile" class="validate">
@@ -351,14 +214,14 @@
             <div class="row">
               <form class="col s12">
                 <div class="row">
-                  <div class="input-field col s6">
+                  <div class="input-field col s12 m6">
                     <i class="material-icons prefix">blur_on</i>
                     <label class="active" for="competenceName">Nome</label>
                     <input #competenceName id="competenceName" type="text" class="validate" value="">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="input-field col s6">
+                  <div class="input-field col s12 m6">
                     <i class="material-icons prefix">Tipo</i>
                     <label class="active" for="competenceType">Tipo</label>
                     <select #competenceType id="competenceType" class="validate">
@@ -369,7 +232,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="input-field col s6">
+                  <div class="input-field col s12 m6">
                     <i class="material-icons prefix">security</i>
                     <label class="active" for="competenceDescription">Descrição</label>
                     <input #competenceDescription id="competenceDescription" type="text" class="validate" value="">
