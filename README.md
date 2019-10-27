@@ -22,7 +22,7 @@ Utilize o comando `ng generate component component-name [--module app]` para ger
 
 ## Produção
 
-Utilize o comando `ng build` para gerar a versão que estará no diretório `dist/`. A flag `--prod` deve ser utilizada para configurar corretamente as variáveis.
+Utilize o comando `ng build` para gerar a versão que estará no diretório `dist/`. A flag `--prod --output-hashing=all` deve ser utilizada para configurar corretamente as variáveis.
 
 ## Rotinas de testes unitários
 
