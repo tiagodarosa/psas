@@ -30,6 +30,10 @@ export class ServicesService {
         this.httpOptions = {
           headers: new HttpHeaders({
             'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache',
+            'If-Modified-Since': '0',
+            Pragma: 'no-cache',
+            Expires: 'Thu, 01 Jan 1970 00:00:00 GMT',
             Authorization: user.idToken
           })
         };
@@ -77,6 +81,44 @@ export class ServicesService {
   findOrganizationById(id: string) {
     this.getHttpOptions();
     return this.http.get(endpoint + '/organization/' + id, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  findProjectsFromUser() {
+    this.getHttpOptions();
+    return this.http.get(endpoint + '/project', this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  addProject(project: object) {
+    this.getHttpOptions();
+    const proj = Object(project);
+    const body = {
+      name: proj.name,
+      organizationId: proj.organizationId,
+      status: proj.status
+    };
+    return this.http.post(endpoint + '/project', body, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  deleteProject(id: string) {
+    this.getHttpOptions();
+    return this.http.delete(endpoint + '/project/' + id, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  updateProject(project: object) {
+    this.getHttpOptions();
+    const proj = Object(project);
+    const body = {
+      _id: proj._id,
+      _rev: proj._rev,
+      name: proj.name,
+      organizationId: proj.organizationId,
+      status: proj.status
+    };
+    return this.http.put(endpoint + '/project/' + body._id, body, this.httpOptions).pipe(
       map(this.extractData));
   }
 

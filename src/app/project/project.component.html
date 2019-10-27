@@ -1,26 +1,150 @@
 <div class="body">
 
-  <!--Header-->
-  <app-header></app-header>
-    
-  <!-- Spinner -->
-  <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
-    
-  <!-- Main content -->
-  <main>
-    <div class="container">
-      <div class="row">
-        <div class="col s12">
-          <h3 class="header">Projeto</h3>
-          <p class="caption">Esta é a página de projetos.</p>
+    <!--Header-->
+    <app-header></app-header>
+
+    <!-- Spinner -->
+    <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+  
+    <!-- Main content -->
+    <main>
+      <div class="container">
+        
+        <!-- Title -->
+        <div class="row">
+          <div class="col s12">
+            <h3 class="header">Projetos</h3>
+            <!--<p class="caption">
+                
+            </p>-->
+          </div>
         </div>
+
+        <div class="row" *ngIf="projectsCount<=0">
+          <div class="col s12 center">
+            <h5 class="header">Você não tem nenhum projeto!</h5>
+            <p class="caption">
+              Crie um projeto clicando no botão "Novo projeto" ou solicite para o gestor da organização ou gestor de projetos que você deseja participar de um projeto!
+            </p>
+          </div>
+        </div>
+
+        <!-- Cards of projects -->
+        <div class="row">
+          <div class="col s12 m6 l6 xl4" *ngFor="let project of projectsList">
+            <div class="card small darken-1">
+              <div class="card-content">
+                <span class="card-title">{{ project.name }}</span>
+                <p>
+                  Organização {{ filterOrgOfProject(project.organizationId) }}
+                </p>
+              </div>
+              <div class="card-action light-blue">
+                <a class="modal-trigger" style="color: white;" href="#editProject" title="Editar projeto {{ project.name }}" (click)="editProjectModal(project._id)"><i class="material-icons left">edit</i></a>
+                <a class="modal-trigger" style="color: white;" href="#deleteProject" title="Excluir projeto {{ project.name }}" (click)="deleteProjectModal(project._id)"><i class="material-icons left">delete</i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="row">
+          <div class="col s12 center">
+            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newProject" (click)="addProjectModal()"><i class="material-icons left">add</i>Novo projeto</a>
+          </div>
+        </div>
+
+        <!-- Modal for new project -->
+        <div id="newProject" class="modal modal-fixed-footer newProject">
+          <div class="modal-content">
+            <h4>Novo projeto</h4>
+            <p>
+              Informe os dados para criar um novo projeto.
+            </p>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">description</i>
+                    <input #projName id="projName" type="text" class="validate">
+                    <label for="projName">Nome</label>
+                  </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m6">
+                      <i class="material-icons prefix">playlist_add_check</i>
+                      <label for="organization" class="active">Organização</label>
+                      <select #organization id="organization" class="validate">
+                          <option *ngFor="let org of organizationsList" [value]="org._id">
+                            {{ org.name }}
+                          </option>
+                      </select>
+                    </div>
+                  </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="addProject(projName.value, organization.value)">Salvar</a>
+          </div>
+        </div>
+
+        <!-- Modal to edit project -->
+        <div id="editProject" class="modal modal-fixed-footer editProject">
+          <div class="modal-content">
+            <h4>Editar projeto {{ projectName }}</h4>
+            <p>
+              Atualize as informações do projeto.
+            </p>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">description</i>
+                    <input #projNameEdit id="projNameEdit" type="text" class="validate" value="{{ projectName }}">
+                    <label for="projNameEdit" class="active">Nome</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">playlist_add_check</i>
+                    <label for="organizationEdit" class="active">Organização</label>
+                    <select #organizationEdit id="organizationEdit" class="validate">
+                        <option *ngFor="let org of organizationsList" [value]="org._id" [selected]="org._id == projectOrganizationId">
+                          {{ org.name }}
+                        </option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="updateProject(projectId, projNameEdit.value, organizationEdit.value)">Salvar</a>
+          </div>
+        </div>
+
+        <!-- Modal to delete project -->
+        <div id="deleteProject" class="modal modal-fixed-footer">
+          <div class="modal-content">
+            <h4>Excluir projeto <b>{{ projectName }}</b></h4>
+            <p>
+              Você tem certeza que deseja excluir o projeto? Essa ação não poderá ser desfeita!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light red btn" (click)="deleteProject(projectId)">Excluir</a>
+          </div>
+        </div>
+
       </div>
-    </div>
-  </main>
-    
-  <!-- Footer -->
-  <app-footer></app-footer>
-    
-</div>
-    
-    
+    </main>
+  
+    <!-- Footer -->
+    <app-footer></app-footer>
+  
+  </div>
+  
