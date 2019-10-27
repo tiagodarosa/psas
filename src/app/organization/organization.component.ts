@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ServicesService } from '../services.service';
 import { AuthService, SocialUser } from 'angularx-social-login';
+declare var $: any;
 
 @Component({
   selector: 'app-organization',
@@ -15,6 +16,8 @@ export class OrganizationComponent implements OnInit {
   organizationsList = [];
   organizationId = '';
   organizationName = '';
+  organizationUsers = [];
+  organizationCompetences = [];
   email = '';
   user: SocialUser;
 
@@ -27,6 +30,8 @@ export class OrganizationComponent implements OnInit {
       this.email = user.email;
     });
     this.getOrganizations();
+    $('select').formSelect();
+    $('.modal').modal();
   }
 
   findOrganizationById(id: string) {
@@ -68,6 +73,20 @@ export class OrganizationComponent implements OnInit {
       console.log('ohoh, mostrar mensagem de erro pro usuario');
       this.spinner.hide();
     });
+  }
+
+  editCompetences(organizationId) {
+    const organization = this.organizationsList.find(org => org._id === organizationId);
+    this.organizationName = organization.name;
+    this.organizationCompetences = organization.competences;
+    $('.editCompetences').modal('open');
+  }
+
+  editUsers(organizationId) {
+    const organization = this.organizationsList.find(org => org._id === organizationId);
+    this.organizationName = organization.name;
+    this.organizationUsers = organization.users;
+    $('.editUsers').modal('open');
   }
 
 }

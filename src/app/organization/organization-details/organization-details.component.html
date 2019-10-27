@@ -1,0 +1,76 @@
+<div class="body">
+
+    <!--Header-->
+    <app-header></app-header>
+
+    <!-- Spinner -->
+    <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+  
+    <!-- Main content -->
+    <main onload="M.AutoInit();">
+      <div class="container">
+        
+        <!-- Title -->
+        <div class="row">
+          <div class="col s12">
+            <h3 class="header">Organizações > {{ organizationId }}</h3>
+            <!--<p class="caption">
+                
+            </p>-->
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col s12 center">
+            <h5 class="header">Você não está cadastrado em nenhuma organização!</h5>
+            <p class="caption">
+              Uma organização é o maior conjunto dentro do PSAS, onde você gerencia as competências e pessoas.
+              <br>
+              Os dados de uma organização não podem ser acessados ou vinculados à outra organização, mesmo que você tenha o perfil de acesso de gestor.
+              <br><br>
+              Crie sua organização clicando no botão "Nova organização" ou solicite para o gestor da organização que você deseja participar incluir o seu e-mail <b>{{ email }}</b> como membro da organização.
+            </p>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="row">
+          <div class="col s12 center">
+            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newOrganization" onclick="M.Modal.init(document.querySelectorAll('.modal'));$('.newOrganization').modal('open');"><i class="material-icons left">add</i>Nova organização</a>
+          </div>
+        </div>
+
+        <!-- Modal for new organization -->
+        <div id="newOrganization" class="modal modal-fixed-footer newOrganization">
+          <div class="modal-content">
+            <h4>Nova organização</h4>
+            <p>
+              Informe o nome da organização. Após a criação, você poderá editar as competências e pessoas da organização.
+              Ao criar uma nova organização, o seu perfil já será incluído como gestor da organização.
+            </p>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s6">
+                    <i class="material-icons prefix">description</i>
+                    <input #orgName id="organizationName" type="text" class="validate">
+                    <label for="organizationName">Nome</label>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="addOrganization(orgName.value)">Salvar</a>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  
+    <!-- Footer -->
+    <app-footer></app-footer>
+  
+  </div>
+  
