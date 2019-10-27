@@ -66,6 +66,7 @@ export class ServicesService {
       _rev: org._rev,
       name: org.name,
       users: org.users,
+      competences: org.competences,
       status: org.status
     };
     console.log(body);
