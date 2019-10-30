@@ -24,6 +24,14 @@ export class ServicesService {
     return body || { };
   }
 
+  private getUserEmail() {
+    this.authService.authState.subscribe((user) => {
+      if (user != null) {
+        return user.email;
+      }
+    });
+  }
+
   private getHttpOptions() {
     this.authService.authState.subscribe((user) => {
       if (user != null) {
@@ -119,6 +127,45 @@ export class ServicesService {
       status: proj.status
     };
     return this.http.put(endpoint + '/project/' + body._id, body, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  findTeamsFromUser() {
+    this.getHttpOptions();
+    return this.http.get(endpoint + '/team', this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  addTeam(teamName: string) {
+    this.getHttpOptions();
+    const body = {
+      name: teamName,
+      members: {
+        email: this.getUserEmail(),
+        status: 'active'
+      }
+    };
+    return this.http.post(endpoint + '/team', body, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  deleteTeam(id: string) {
+    this.getHttpOptions();
+    return this.http.delete(endpoint + '/team/' + id, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  findTeamById(id: string) {
+    this.getHttpOptions();
+    return this.http.get(endpoint + '/team/' + id, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  updateTeam(teamId: string, team: object) {
+    this.getHttpOptions();
+    const t = Object(team);
+    const body = t;
+    return this.http.put(endpoint + '/team/' + teamId, body, this.httpOptions).pipe(
       map(this.extractData));
   }
 

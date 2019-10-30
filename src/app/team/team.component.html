@@ -1,22 +1,103 @@
 <div class="body">
 
-    <!--Header-->
-    <app-header></app-header>
-  
-    <!-- Main content -->
-    <main>
-      <div class="container">
-        <div class="row">
-          <div class="col s12">
-            <h3 class="header">Equipe</h3>
-            <p class="caption">Esta é a página com informações da equipe.</p>
+  <!--Header-->
+  <app-header></app-header>
+
+  <!-- Spinner -->
+  <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+
+  <!-- Main content -->
+  <main>
+    <div class="container">
+      
+      <!-- Title -->
+      <div class="row">
+        <div class="col s12">
+          <h3 class="header">Equipes</h3>
+          <!--<p class="caption">
+              
+          </p>-->
+        </div>
+      </div>
+
+      <div class="row" *ngIf="teamsCount<=0">
+        <div class="col s12 center">
+          <h5 class="header">Você não está cadastrado em nenhuma equipe!</h5>
+          <p class="caption">
+            Crie uma equipe clicando no botão "Nova equipe" ou solicite para o gestor da organização ou gestor de equipe que você deseja participar incluir você como membro da organização.
+          </p>
+        </div>
+      </div>
+
+      <!-- Cards of organizations -->
+      <div class="row">
+        <div class="col s12 m6 l6 xl4" *ngFor="let team of teamsList">
+          <div class="card small darken-1">
+            <div class="card-content">
+              <span class="card-title">{{ team.name }}</span>
+              <p>
+                {{ team.members.length }} {{ team.members.length>1 ? 'pessoas' : 'pessoa' }}
+              </p>
+            </div>
+            <div class="card-action light-blue">
+              <a style="color: white;" [routerLink]="['/team', team._id]" title="Editar equipe {{ team.name }}"><i class="material-icons left">edit</i></a>
+              <a class="modal-trigger" style="color: white;" href="#deleteTeam" title="Excluir equipe {{ team.name }}" (click)="deleteTeamModal(team._id)"><i class="material-icons left">delete</i></a>
+            </div>
           </div>
         </div>
       </div>
-    </main>
-  
-    <!-- Footer -->
-    <app-footer></app-footer>
-  
-  </div>
-  
+
+      <!-- Buttons -->
+      <div class="row">
+        <div class="col s12 center">
+          <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#addTeam" (click)="addTeamModal()"><i class="material-icons left">add</i>Nova equipe</a>
+        </div>
+      </div>
+
+      <!-- Modal for new team -->
+      <div id="addTeam" class="modal modal-fixed-footer addTeam">
+        <div class="modal-content">
+          <h4>Nova equipe</h4>
+          <p>
+            Informe o nome da equipe.
+          </p>
+          <div class="row">
+            <form class="col s12">
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">description</i>
+                  <input #tName id="tName" type="text" class="validate">
+                  <label for="tName">Nome</label>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+          <a class="modal-close waves-effect waves-light light-blue btn" (click)="addTeam(tName.value)">Salvar</a>
+        </div>
+      </div>
+
+      <!-- Modal to delete organization -->
+      <div id="deleteTeam" class="modal modal-fixed-footer deleteTeam">
+        <div class="modal-content">
+          <h4>Excluir equipe <b>{{ teamName }}</b></h4>
+          <p>
+            Você tem certeza que deseja excluir a equipe?
+            Essa ação não poderá ser desfeita!
+          </p>
+        </div>
+        <div class="modal-footer">
+          <a (click)="teamId=''" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+          <a class="modal-close waves-effect waves-light red btn" (click)="deleteTeam(teamId)">Excluir</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+
+</div>

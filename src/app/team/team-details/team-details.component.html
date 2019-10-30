@@ -1,0 +1,173 @@
+<div class="body">
+
+  <!--Header-->
+  <app-header></app-header>
+
+  <!-- Spinner -->
+  <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+
+  <!-- Main content -->
+  <main onload="M.AutoInit();">
+    <div class="container">
+      
+      <!-- Title -->
+      <div class="row">
+        <div class="col s12">
+          <h3 class="header"><a [routerLink]="['/team']">Equipes</a> > {{ team.name }}</h3>
+        </div>
+      </div>
+
+      <!-- Team info -->
+      <div class="row">
+        <div class="col s12">
+          <div class="card">
+            <div class="card-content light-blue white-text">
+              <span class="card-title">Informações</span>
+                <!--<p></p>-->
+            </div>
+            <div class="divider"></div>
+            <div class="card-content">
+              <label class="active" for="name">Nome</label>
+              <input value="{{ team.name }}" id="name" type="text" disabled>
+            </div>
+            <div class="card-action">
+              <a class="waves-effect waves-light light-blue btn-small modal-trigger" href="#editTeam" (click)="editTeamModal()"><i class="material-icons left">edit</i>Editar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team members -->
+      <div class="row">
+        <div class="col s12">
+          <div class="card">
+            <div class="card-content light-blue white-text">
+              <span class="card-title">Pessoas</span>
+                <!--<p></p>-->
+            </div>
+            <div class="divider"></div>
+            <div class="card-content">
+              <table class="highlight responsive-table">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Status</th>
+                    <th>Opções</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let member of team.members">
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.email }}</td>
+                    <td>{{ filterUserStatus(member.status) }}</td>
+                    <td>
+                      <a class="modal-trigger" href="#deleteMember" title="Excluir membro {{ member.name }}" (click)="deleteMemberModal(member.name, member.email)"><i class="material-icons left">delete</i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card-action">
+              <a class="waves-effect waves-light light-blue btn-small modal-trigger" href="#addMember" (click)="addMemberModal()"><i class="material-icons left">add</i>Adicionar pessoa</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="row">
+        <div class="col s12">
+          <a class="waves-effect waves-light light-blue btn-large" [routerLink]="['/team']"><i class="material-icons left">arrow_back</i>Voltar</a>
+        </div>
+      </div>
+
+      <!-- Modal to edit team -->
+      <div id="editTeam" class="modal modal-fixed-footer editTeam">
+        <div class="modal-content">
+          <h4>Editar organização {{ team.name }}</h4>
+          <p>
+            Informe o novo nome da organização e clique em Salvar.
+          </p>
+          <div class="row">
+            <form class="col s12">
+              <div class="row">
+                <div class="input-field col s12 m6">
+                  <i class="material-icons prefix">description</i>
+                  <label class="active" for="teamName">Nome</label>
+                  <input #teamName id="teamName" type="text" class="validate" value="{{ team.name }}">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+          <a class="modal-close waves-effect waves-light light-blue btn" (click)="updateTeam(teamName.value)">Salvar</a>
+        </div>
+      </div>
+
+      <!-- Modal to add user -->
+      <div id="addUser" class="modal modal-fixed-footer addUser">
+        <div class="modal-content">
+          <h4>Adicionar pessoa na equipe {{ team.name }}</h4>
+          <p>
+            Informe os dados da pessoa a ser cadastrada na organização.
+          </p>
+          <div class="row">
+            <form class="col s12">
+              <div class="row">
+                <div class="input-field col s12 m6">
+                  <i class="material-icons prefix">person_outline</i>
+                  <label class="active" for="memberName">Nome</label>
+                  <input #memberName id="memberName" type="text" class="validate" value="">
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12 m6">
+                  <i class="material-icons prefix">email</i>
+                  <label class="active" for="memberEmail">E-mail</label>
+                  <input #memberEmail id="userEmail" type="email" class="validate" value="">
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12 m6">
+                  <i class="material-icons prefix">security</i>
+                  <label class="active" for="memberProfile">Perfil</label>
+                  <select #userProfile id="memberProfile" class="validate">
+                      <option *ngFor='let profile of userProfiles' [value]="profile.value">
+                        {{ profile.description }}
+                      </option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+          <a class="modal-close waves-effect waves-light light-blue btn" (click)="addUser(userName.value, userEmail.value, userProfile.value)">Adicionar</a>
+        </div>
+      </div>
+
+      <!-- Modal to delete user -->
+      <div id="deleteUser" class="modal modal-fixed-footer deleteUser">
+        <div class="modal-content">
+          <h4>Excluir pessoa</h4>
+          <p>
+            Você realmente deseja excluir {{ email }} da equipe {{ team.name }}? Essa ação não poderá ser desfeita.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+          <a class="modal-close waves-effect waves-light red btn" (click)="deleteUser(email)">Excluir</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+
+</div>
