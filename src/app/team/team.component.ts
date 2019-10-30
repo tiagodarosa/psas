@@ -53,7 +53,7 @@ export class TeamComponent implements OnInit {
     });
   }
 
-  addTeamModal(teamId: string) {
+  addTeamModal() {
     this.teamId = '';
     this.teamName = '';
     $('.modal').modal();
