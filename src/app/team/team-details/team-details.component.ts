@@ -63,7 +63,7 @@ export class TeamDetailsComponent implements OnInit {
     });
   }
 
-  editOrganizationModal() {
+  editTeamModal() {
     $('.modal').modal();
     $('.deleteOrganization').modal('open');
   }
@@ -84,7 +84,7 @@ export class TeamDetailsComponent implements OnInit {
     });
   }
 
-  addUserModal() {
+  addMemberModal() {
     $('.modal').modal();
     $('select').formSelect();
     $('.addUser').modal('open');

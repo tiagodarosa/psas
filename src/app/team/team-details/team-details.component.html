@@ -127,14 +127,14 @@
                 <div class="input-field col s12 m6">
                   <i class="material-icons prefix">email</i>
                   <label class="active" for="memberEmail">E-mail</label>
-                  <input #memberEmail id="userEmail" type="email" class="validate" value="">
+                  <input #memberEmail id="memberEmail" type="email" class="validate" value="">
                 </div>
               </div>
               <div class="row">
                 <div class="input-field col s12 m6">
                   <i class="material-icons prefix">security</i>
                   <label class="active" for="memberProfile">Perfil</label>
-                  <select #userProfile id="memberProfile" class="validate">
+                  <select #memberProfile id="memberProfile" class="validate">
                       <option *ngFor='let profile of userProfiles' [value]="profile.value">
                         {{ profile.description }}
                       </option>
@@ -146,7 +146,7 @@
         </div>
         <div class="modal-footer">
           <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-          <a class="modal-close waves-effect waves-light light-blue btn" (click)="addUser(userName.value, userEmail.value, userProfile.value)">Adicionar</a>
+          <a class="modal-close waves-effect waves-light light-blue btn" (click)="addUser(memberName.value, memberEmail.value, memberProfile.value)">Adicionar</a>
         </div>
       </div>
 
