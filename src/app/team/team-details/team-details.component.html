@@ -38,7 +38,7 @@
       </div>
 
       <!-- Team members -->
-      <div class="row">
+      <div class="row" *ngIf="organizationUsers.length>0">
         <div class="col s12">
           <div class="card">
             <div class="card-content light-blue white-text">
@@ -58,7 +58,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let member of team.members">
-                    <td>{{ member.name }}</td>
+                    <td>{{ findName(member.email) }}</td>
                     <td>{{ member.email }}</td>
                     <td>{{ filterUserStatus(member.status) }}</td>
                     <td>
@@ -108,36 +108,25 @@
       </div>
 
       <!-- Modal to add user -->
-      <div id="addUser" class="modal modal-fixed-footer addUser">
+      <div id="addMember" class="modal modal-fixed-footer addMember">
         <div class="modal-content">
           <h4>Adicionar pessoa na equipe {{ team.name }}</h4>
-          <p>
-            Informe os dados da pessoa a ser cadastrada na organização.
+          <p *ngIf="userList.length>0">
+            Selecione a pessoa que deve ser incluída na equipe.
+          </p>
+          <p *ngIf="userList.length<=0">
+            Todas as pessoas da organização já foram adicionadas nesta equipe!
           </p>
           <div class="row">
             <form class="col s12">
               <div class="row">
-                <div class="input-field col s12 m6">
+                <div class="input-field col s12">
                   <i class="material-icons prefix">person_outline</i>
-                  <label class="active" for="memberName">Nome</label>
-                  <input #memberName id="memberName" type="text" class="validate" value="">
-                </div>
-              </div>
-              <div class="row">
-                <div class="input-field col s12 m6">
-                  <i class="material-icons prefix">email</i>
-                  <label class="active" for="memberEmail">E-mail</label>
-                  <input #memberEmail id="memberEmail" type="email" class="validate" value="">
-                </div>
-              </div>
-              <div class="row">
-                <div class="input-field col s12 m6">
-                  <i class="material-icons prefix">security</i>
-                  <label class="active" for="memberProfile">Perfil</label>
-                  <select #memberProfile id="memberProfile" class="validate">
-                      <option *ngFor='let profile of userProfiles' [value]="profile.value">
-                        {{ profile.description }}
-                      </option>
+                  <label class="active" for="userEmail">Pessoa</label>
+                  <select #userEmail id="userEmail" class="validate">
+                    <option *ngFor='let user of userList' [value]="user.email">
+                      {{ (user.name ? user.name+' - ' : '') + user.email }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -146,7 +135,7 @@
         </div>
         <div class="modal-footer">
           <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-          <a class="modal-close waves-effect waves-light light-blue btn" (click)="addUser(memberName.value, memberEmail.value, memberProfile.value)">Adicionar</a>
+          <a *ngIf="userList.length>0" class="modal-close waves-effect waves-light light-blue btn" (click)="addUser(userEmail.value)">Adicionar</a>
         </div>
       </div>
 

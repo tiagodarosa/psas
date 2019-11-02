@@ -130,16 +130,23 @@ export class ServicesService {
       map(this.extractData));
   }
 
+  findProjectById(id: string) {
+    this.getHttpOptions();
+    return this.http.get(endpoint + '/project/' + id, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
   findTeamsFromUser() {
     this.getHttpOptions();
     return this.http.get(endpoint + '/team', this.httpOptions).pipe(
       map(this.extractData));
   }
 
-  addTeam(teamName: string) {
+  addTeam(teamName: string, projId: string) {
     this.getHttpOptions();
     const body = {
       name: teamName,
+      projectId: projId,
       members: {
         email: this.getUserEmail(),
         status: 'active'

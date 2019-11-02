@@ -15,6 +15,9 @@ export class TeamComponent implements OnInit {
   teamsList = [];
   teamId = '';
   teamName = '';
+  teamProjectId = '';
+  projectsCount = 0;
+  projectsList = [];
 
   constructor(private service: ServicesService, private spinner: NgxSpinnerService, private router: Router) { }
 
@@ -30,10 +33,22 @@ export class TeamComponent implements OnInit {
       const teams = Object(data);
       this.teamsCount = Object(teams).count;
       this.teamsList = Object(teams).teams;
-      this.spinner.hide();
+      this.service.findProjectsFromUser().subscribe((proj) => {
+        const projs = Object(proj);
+        this.projectsCount = Object(projs).count;
+        this.projectsList = Object(projs).projects;
+        this.spinner.hide();
+      }, (error) => {
+        this.router.navigate(['home']);
+      });
     }, (error) => {
       this.router.navigate(['home']);
     });
+  }
+
+  findProjectName(projectId: string) {
+    const project = this.projectsList.find(p => p._id === projectId);
+    return project.name || '';
   }
 
   deleteTeamModal(teamId: string) {
@@ -57,12 +72,13 @@ export class TeamComponent implements OnInit {
     this.teamId = '';
     this.teamName = '';
     $('.modal').modal();
+    $('select').formSelect();
     $('.addTeam').modal('open');
   }
 
-  addTeam(name: string) {
+  addTeam(name: string, projectId: string) {
     this.spinner.show();
-    this.service.addTeam(name).subscribe((data) => {
+    this.service.addTeam(name, projectId).subscribe((data) => {
       this.getTeams();
     }, (error) => {
       this.router.navigate(['home']);

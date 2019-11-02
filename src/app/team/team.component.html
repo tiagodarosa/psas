@@ -30,12 +30,14 @@
       </div>
 
       <!-- Cards of organizations -->
-      <div class="row">
+      <div class="row" *ngIf="projectsList.length>0">
         <div class="col s12 m6 l6 xl4" *ngFor="let team of teamsList">
           <div class="card small darken-1">
             <div class="card-content">
               <span class="card-title">{{ team.name }}</span>
               <p>
+                Projeto {{ findProjectName(team.projectId) }}
+                <br>
                 {{ team.members.length }} {{ team.members.length>1 ? 'pessoas' : 'pessoa' }}
               </p>
             </div>
@@ -70,12 +72,23 @@
                   <label for="tName">Nome</label>
                 </div>
               </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">description</i>
+                  <select #tProjectId id="tProjectId" class="validate">
+                      <option *ngFor='let project of projectsList' [value]="project._id">
+                        {{ project.name }}
+                      </option>
+                  </select>
+                  <label for="tProjectId" class="active">Projeto</label>
+                </div>
+              </div>
             </form>
           </div>
         </div>
         <div class="modal-footer">
           <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-          <a class="modal-close waves-effect waves-light light-blue btn" (click)="addTeam(tName.value)">Salvar</a>
+          <a class="modal-close waves-effect waves-light light-blue btn" (click)="addTeam(tName.value, tProjectId.value)">Salvar</a>
         </div>
       </div>
 

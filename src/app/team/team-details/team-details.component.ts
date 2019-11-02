@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServicesService } from 'src/app/services.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { forEach } from '@angular/router/src/utils/collection';
 declare var $: any;
 
 @Component({
@@ -16,11 +17,14 @@ export class TeamDetailsComponent implements OnInit {
     _id: '',
     _rev: '',
     name: '',
+    projectId: '',
     members: [],
     status: ''
   };
   username = '';
   email = '';
+  organizationUsers = [];
+  userList = [];
 
   userProfiles = [
     {value: 'organizationManager', description: 'Gerente da organização'},
@@ -55,9 +59,22 @@ export class TeamDetailsComponent implements OnInit {
       this.team._id = result.team._id || '';
       this.team._rev = result.team._rev;
       this.team.name = result.team.name || '';
+      this.team.projectId = result.team.projectId || '';
       this.team.members = result.team.members || [];
       this.team.status = result.team.status || 'active';
-      this.spinner.hide();
+      this.service.findProjectById(this.team.projectId).subscribe((data2) => {
+        const proj = Object(data2);
+        this.service.findOrganizationById(proj.project.organizationId).subscribe((data3) => {
+          const org = Object(data3);
+          this.organizationUsers = org.users;
+          this.filterUsersNotInTeam();
+          this.spinner.hide();
+        }, (error) => {
+          this.router.navigate(['home']);
+        });
+      }, (error) => {
+        this.router.navigate(['home']);
+      });
     }, (error) => {
       this.router.navigate(['home']);
     });
@@ -74,6 +91,7 @@ export class TeamDetailsComponent implements OnInit {
       _id: this.teamId,
       _rev: this.team._rev,
       name: teamName,
+      projectId: this.team.projectId,
       members: this.team.members,
       status: this.team.status
     };
@@ -84,10 +102,19 @@ export class TeamDetailsComponent implements OnInit {
     });
   }
 
+  filterUsersNotInTeam() {
+    const users = [];
+    this.team.members.forEach(function teste(u) {
+      users.push(u.email);
+    });
+    this.userList = this.organizationUsers.filter(user => !users.includes(user.email));
+  }
+
   addMemberModal() {
+    console.log(this.userList);
     $('.modal').modal();
     $('select').formSelect();
-    $('.addUser').modal('open');
+    $('.addMember').modal('open');
   }
 
   filterUserProfile(profile: string) {
@@ -95,6 +122,14 @@ export class TeamDetailsComponent implements OnInit {
       return this.userProfiles.find(userProfile => userProfile.value === profile).description;
     } catch {
       return profile;
+    }
+  }
+
+  findName(email: string) {
+    try  {
+      return this.organizationUsers.find(user => user.email === email).name;
+    } catch {
+      return '';
     }
   }
 
@@ -106,7 +141,7 @@ export class TeamDetailsComponent implements OnInit {
     }
   }
 
-  addUser(userName: string, userEmail: string, userProfile: string) {
+  addUser(userEmail: string) {
     this.spinner.show();
     const user = {
       email: userEmail,
