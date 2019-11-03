@@ -13,6 +13,7 @@ import { NotfoundComponent } from './notfound/notfound.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { OrganizationDetailsComponent } from './organization/organization-details/organization-details.component';
 import { TeamDetailsComponent } from './team/team-details/team-details.component';
+import { AssessmentDetailsComponent } from './assessment/assessment-details/assessment-details.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'privacy', component: PrivacyComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'assessment', component: AssessmentComponent },
+  { path: 'assessment/:assessmentId', component: AssessmentDetailsComponent },
   { path: 'organization', component: OrganizationComponent },
   { path: 'organization/:organizationId', component: OrganizationDetailsComponent },
   { path: 'project', component: ProjectComponent },

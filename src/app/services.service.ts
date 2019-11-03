@@ -176,4 +176,34 @@ export class ServicesService {
       map(this.extractData));
   }
 
+  findAssessmentsFromUser() {
+    this.getHttpOptions();
+    return this.http.get(endpoint + '/assessment', this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  addAssessment(assessment: object) {
+    this.getHttpOptions();
+    const a = Object(assessment);
+    const body = {
+      _id: a._id,
+      _rev: a._rev,
+      name: a.name,
+      organizationId: a.organizationId,
+      userCreator: a.userCreator || this.getUserEmail(),
+      public: a.public || false,
+      tool: a.tool || 'rubric',
+      status: a.status || 'active',
+      questions: a.questions || []
+    };
+    return this.http.post(endpoint + '/assessment/', body, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  deleteAssessment(id: string) {
+    this.getHttpOptions();
+    return this.http.delete(endpoint + '/assessment/' + id, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
 }

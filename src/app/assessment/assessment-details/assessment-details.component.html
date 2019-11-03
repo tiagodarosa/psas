@@ -1,0 +1,89 @@
+<div class="body">
+
+  <!--Header-->
+  <app-header></app-header>
+
+  <!-- Spinner -->
+  <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+
+  <!-- Main content -->
+  <main>
+    <div class="container">
+      
+      <!-- Title -->
+      <div class="row">
+        <div class="col s12">
+          <h3 class="header"><a [routerLink]="['/assessment']">Avaliações</a> > {{ assessment.name }}</h3>
+        </div>
+      </div>
+
+      <!-- Team info 
+      <div class="row">
+        <div class="col s12">
+          <div class="card">
+            <div class="card-content light-blue white-text">
+              <span class="card-title">Informações</span>
+            </div>
+            <div class="divider"></div>
+            <div class="card-content">
+              <label class="active" for="name">Nome</label>
+              <input value="{{ team.name }}" id="name" type="text" disabled>
+            </div>
+            <div class="card-action">
+              <a class="waves-effect waves-light light-blue btn-small modal-trigger" href="#editTeam" (click)="editTeamModal()"><i class="material-icons left">edit</i>Editar</a>
+            </div>
+          </div>
+        </div>
+      </div>-->
+
+      <!-- Team members 
+      <div class="row" *ngIf="organizationUsers.length>0">
+        <div class="col s12">
+          <div class="card">
+            <div class="card-content light-blue white-text">
+              <span class="card-title">Pessoas</span>
+            </div>
+            <div class="divider"></div>
+            <div class="card-content">
+              <table class="highlight responsive-table">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Status</th>
+                    <th>Opções</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let member of team.members">
+                    <td>{{ findName(member.email) }}</td>
+                    <td>{{ member.email }}</td>
+                    <td>{{ filterUserStatus(member.status) }}</td>
+                    <td>
+                      <a class="modal-trigger" href="#deleteMember" title="Excluir membro {{ member.name }}" (click)="deleteMemberModal(member.name, member.email)"><i class="material-icons left">delete</i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card-action">
+              <a class="waves-effect waves-light light-blue btn-small modal-trigger" href="#addMember" (click)="addMemberModal()"><i class="material-icons left">add</i>Adicionar pessoa</a>
+            </div>
+          </div>
+        </div>
+      </div>-->
+
+      <!-- Buttons -->
+      <div class="row">
+        <div class="col s12">
+          <a class="waves-effect waves-light light-blue btn-large" [routerLink]="['/assessment']"><i class="material-icons left">arrow_back</i>Voltar</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+
+</div>

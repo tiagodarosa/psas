@@ -2,16 +2,159 @@
 
     <!--Header-->
     <app-header></app-header>
+
+    <!-- Spinner -->
+    <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
   
     <!-- Main content -->
     <main>
       <div class="container">
+
+        <!-- Title -->
         <div class="row">
           <div class="col s12">
-            <h3 class="header">Avaliação</h3>
-            <p class="caption">Esta é a página com informações da avaliação.</p>
+            <h3 class="header">Avaliações</h3>
           </div>
         </div>
+
+        <!-- Message when user doesnt have assessments -->
+        <div class="row" *ngIf="assessmentsCount<=0">
+          <div class="col s12 center">
+            <h5 class="header">Você não criou nenhuma avaliação!</h5>
+            <p class="caption">
+              Crie uma avaliação clicando no botão "Nova avaliação" e utilize um modelo de avaliação já existente da organização que você é membro, copie de uma avaliação pública ou crie sua própria avaliação.
+            </p>
+          </div>
+        </div>
+
+        <!-- Cards of assessments -->
+        <div class="row"  *ngIf="assessmentsCount>0">
+          <div class="col s12 m6 l6 xl4" *ngFor="let assessment of assessments">
+            <div class="card small darken-1">
+              <div class="card-content">
+                <span class="card-title">{{ assessment.name }}</span>
+                <p>
+                  Organização {{ filterOrgOfProject(assessment.organizationId) }}
+                  <br>
+                  {{ assessment.public ? 'Pública' : 'Privada' }}
+                  <br>
+                  {{ filterTool(assessment.tool) }}
+                  <br>
+                  {{ assessment.questions.length>0 ? (assessment.questions.length + (assessment.questions.length>1 ? ' questões' : ' questão')) : 'Nenhuma questão' }}
+                </p>
+              </div>
+              <div class="card-action light-blue">
+                <a style="color: white;" [routerLink]="['/assessment', assessment._id]" title="Editar avaliação {{ assessment.name }}"><i class="material-icons left">edit</i></a>
+                <a class="modal-trigger" style="color: white;" href="#deleteAssessment" title="Excluir avaliação {{ assessment.name }}" (click)="deleteAssessmentModal(assessment.name, assessment._id)"><i class="material-icons left">delete</i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Button to add assessment -->
+        <div class="row center">
+            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#addAssessment" (click)="addAssessmentModal()"><i class="material-icons left">add</i>Nova avaliação</a>
+            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#copyAssessment" (click)="copyAssessmentModal()"><i class="material-icons left">content_copy</i>Copiar avaliação</a>
+        </div>
+
+        <!-- Modal for new assessment -->
+        <div id="addAssessment" class="modal modal-fixed-footer addAssessment">
+          <div class="modal-content">
+            <h4>Nova avaliação</h4>
+            <p>
+              Preencha as informações para criar uma nova avaliação.
+            </p>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s6">
+                    <i class="material-icons prefix">description</i>
+                    <input #name id="name" type="text" class="validate">
+                    <label for="name">Nome</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s6">
+                    <i class="material-icons prefix">description</i>
+                    <select #orgId id="orgId" class="validate">
+                        <option *ngFor='let org of organizationsList' [value]="org._id">
+                          {{ org.name }}
+                        </option>
+                    </select>
+                    <label for="orgId" class="active">Organização</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s6">
+                    <i class="material-icons prefix">description</i>
+                    <select #tool id="tool" class="validate">
+                        <option *ngFor='let tool of tools' [value]="tool.value">
+                          {{ tool.description }}
+                        </option>
+                    </select>
+                    <label for="tool" class="active">Ferramenta</label>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="addAssessment(name.value, orgId.value, tool.value)">Salvar</a>
+          </div>
+        </div>
+
+        <!-- Modal to delete assessment -->
+        <div id="deleteAssessment" class="modal modal-fixed-footer deleteAssessment">
+          <div class="modal-content">
+            <h4>Excluir avaliação <b>{{ assessmentName }}</b></h4>
+            <p>
+              Você tem certeza que deseja excluir a avaliação?
+              Essa ação não poderá ser desfeita!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <a (click)="assessmentId=''" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light red btn" (click)="deleteAssessment(assessmentId)">Excluir</a>
+          </div>
+        </div>
+
+        <!-- Modal to copy assessment -->
+        <div id="copyAssessment" class="modal modal-fixed-footer copyAssessment">
+          <div class="modal-content">
+            <h4>Copiar avaliação</h4>
+            <p>
+              Copie uma avaliação já existente de uma organização que você é membro ou de uma avaliação pública.
+            </p>
+            <!--<div class="row">
+              <a style="width: 300px;" class="modal-close waves-effect waves-light light-blue btn" (click)="addAssessment('', '', '')">Avaliações da organização<i class="material-icons right">navigate_next</i></a>
+            </div>
+            <div class="row">
+              <a style="width: 300px;" class="modal-close waves-effect waves-light light-blue btn" (click)="addAssessment('', '', '')">Avaliações públicas<i class="material-icons right">navigate_next</i></a>
+            </div>-->
+            <div class="row">
+              <ul class="collapsible">
+                <li class="active">
+                  <div class="collapsible-header waves-effect waves-light light-blue white-text">Avaliações da organização</div>
+                  <div class="collapsible-body">
+                    <span *ngIf="organizationAssessmentsCount<=0">Nenhuma avaliação disponível nas organizações que você é membro.</span>
+                  </div>
+                </li>
+                <li>
+                  <div class="collapsible-header waves-effect waves-light light-blue white-text">Avaliações públicas</div>
+                  <div class="collapsible-body">
+                    <span *ngIf="publicAssessmentsCount<=0">Nenhuma avaliação pública disponível.</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <!--<a class="modal-close waves-effect waves-light light-blue btn" (click)="addAssessment(name.value, orgId.value, tool.value)">Salvar</a>-->
+          </div>
+        </div>
+
       </div>
     </main>
   

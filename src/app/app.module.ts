@@ -23,6 +23,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProjectComponent } from './project/project.component';
 import { OrganizationDetailsComponent } from './organization/organization-details/organization-details.component';
 import { TeamDetailsComponent } from './team/team-details/team-details.component';
+import { AssessmentDetailsComponent } from './assessment/assessment-details/assessment-details.component';
 
 const config = new AuthServiceConfig([
   {
@@ -60,7 +61,8 @@ export function tokenGetter() {
     DashboardComponent,
     ProjectComponent,
     OrganizationDetailsComponent,
-    TeamDetailsComponent
+    TeamDetailsComponent,
+    AssessmentDetailsComponent
   ],
   imports: [
     BrowserModule,
