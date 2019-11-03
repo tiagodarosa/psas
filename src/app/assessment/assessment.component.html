@@ -124,7 +124,7 @@
           <div class="modal-content">
             <h4>Copiar avaliação</h4>
             <p>
-              Copie uma avaliação já existente de uma organização que você é membro ou de uma avaliação pública.
+              Copie uma avaliação já existente de uma organização que você é membro ou de uma avaliação pública. Clique sobre a avaliação desejada para visualizar os detalhes completos e em seguida clique no botão "Copiar".
             </p>
             <!--<div class="row">
               <a style="width: 300px;" class="modal-close waves-effect waves-light light-blue btn" (click)="addAssessment('', '', '')">Avaliações da organização<i class="material-icons right">navigate_next</i></a>
@@ -148,21 +148,15 @@
                         <thead>
                           <tr>
                             <th>Nome</th>
-                            <th>Criado por</th>
                             <th>Ferramenta</th>
                             <th>Questões</th>
-                            <th>Opções</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let assessment of publicAssessments">
+                          <tr class="modal-close" style="cursor: pointer;" *ngFor="let assessment of publicAssessments" [routerLink]="['/assessment', assessment._id]">
                             <td>{{ assessment.name }}</td>
-                            <td>{{ assessment.userCreator }}</td>
                             <td>{{ filterTool(assessment.tool) }}</td>
                             <td>{{ assessment.questions.length }}</td>
-                            <td>
-                              <a class="modal-close" title="Copiar avaliação {{ assessment.name }}" (click)="copyAssessment(assessment._id)"><i class="material-icons left">content_copy</i></a>
-                            </td>
                           </tr>
                         </tbody>
                       </table>

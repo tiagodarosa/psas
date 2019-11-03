@@ -76,7 +76,8 @@
       <!-- Buttons -->
       <div class="row">
         <div class="col s12">
-          <a class="waves-effect waves-light light-blue btn-large" [routerLink]="['/assessment']"><i class="material-icons left">arrow_back</i>Voltar</a>
+          <a style="margin: 4px;" class="waves-effect waves-light light-blue btn-large" [routerLink]="['/assessment']"><i class="material-icons left">arrow_back</i>Voltar</a>
+          <a *ngIf="assessment.public" style="margin: 4px;" class="waves-effect waves-light light-blue btn-large" [routerLink]="['/assessment']"><i class="material-icons left">content_copy</i>Copiar</a>
         </div>
       </div>
 

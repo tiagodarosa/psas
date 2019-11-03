@@ -212,4 +212,10 @@ export class ServicesService {
       map(this.extractData));
   }
 
+  findAssessmentById(id: string) {
+    this.getHttpOptions();
+    return this.http.get(endpoint + '/assessment/' + id, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
 }
