@@ -53,4 +53,15 @@ export class AssessmentDetailsComponent implements OnInit {
     });
   }
 
+  copyAssessment() {
+    this.spinner.show();
+    this.assessment.public = false;
+    this.assessment.userCreator = undefined;
+    this.service.addAssessment(this.assessment).subscribe((data) => {
+      this.router.navigate(['assessment']);
+    }, (error) => {
+      this.router.navigate(['home']);
+    });
+  }
+
 }
