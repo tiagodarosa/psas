@@ -144,6 +144,28 @@
                   <div class="collapsible-header waves-effect waves-light light-blue white-text">Avaliações públicas</div>
                   <div class="collapsible-body">
                     <span *ngIf="publicAssessmentsCount<=0">Nenhuma avaliação pública disponível.</span>
+                    <table class="highlight responsive-table" *ngIf="publicAssessmentsCount>0">
+                        <thead>
+                          <tr>
+                            <th>Nome</th>
+                            <th>Criado por</th>
+                            <th>Ferramenta</th>
+                            <th>Questões</th>
+                            <th>Opções</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let assessment of publicAssessments">
+                            <td>{{ assessment.name }}</td>
+                            <td>{{ assessment.userCreator }}</td>
+                            <td>{{ filterTool(assessment.tool) }}</td>
+                            <td>{{ assessment.questions.length }}</td>
+                            <td>
+                              <a class="modal-close" title="Copiar avaliação {{ assessment.name }}" (click)="copyAssessment(assessment._id)"><i class="material-icons left">content_copy</i></a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                   </div>
                 </li>
               </ul>

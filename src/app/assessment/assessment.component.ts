@@ -116,11 +116,25 @@ export class AssessmentComponent implements OnInit {
   }
 
   copyAssessmentModal() {
+    this.spinner.show();
     $('.modal').modal();
     $('.collapsible').collapsible({ accordion: false });
     $('select').formSelect();
     $('.tabs').tabs();
     $('.copyAssessment').modal('open');
+    this.service.findAllPublicAssessments().subscribe((data) => {
+      const a = Object(data);
+      this.publicAssessmentsCount = Object(a).count;
+      this.publicAssessments = Object(a).assessments;
+      this.spinner.hide();
+    }, (error) => {
+      this.router.navigate(['home']);
+    });
+  }
+
+  copyAssessment(id: string) {
+    console.log(id);
+    this.spinner.hide();
   }
 
 }

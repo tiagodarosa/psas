@@ -182,6 +182,12 @@ export class ServicesService {
       map(this.extractData));
   }
 
+  findAllPublicAssessments() {
+    this.getHttpOptions();
+    return this.http.get(endpoint + '/assessment/findAllPublic', this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
   addAssessment(assessment: object) {
     this.getHttpOptions();
     const a = Object(assessment);
