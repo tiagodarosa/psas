@@ -11,6 +11,7 @@ import { ProjectComponent } from './project/project.component';
 import { TeamComponent } from './team/team.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ApplicationComponent } from './application/application.component';
 import { OrganizationDetailsComponent } from './organization/organization-details/organization-details.component';
 import { TeamDetailsComponent } from './team/team-details/team-details.component';
 import { AssessmentDetailsComponent } from './assessment/assessment-details/assessment-details.component';
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'assessment', component: AssessmentComponent },
   { path: 'assessment/:assessmentId', component: AssessmentDetailsComponent },
+  { path: 'application', component: ApplicationComponent },
   { path: 'organization', component: OrganizationComponent },
   { path: 'organization/:organizationId', component: OrganizationDetailsComponent },
   { path: 'project', component: ProjectComponent },
