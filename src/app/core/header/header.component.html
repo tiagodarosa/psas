@@ -15,11 +15,12 @@
         <li *ngIf="loggedIn"><a class="sidenav-close" routerLink="/home">Olá {{ user.firstName }}</a></li>
         <li *ngIf="loggedIn==false"><a class="sidenav-close" routerLink="/user">Entrar</a></li>
         <li routerLinkActive="active"><a class="sidenav-close" routerLink="/dashboard">Dashboard</a></li>
-        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/organization">Organização</a></li>
-        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/project">Projeto</a></li>
-        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/team">Equipe</a></li>
-        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/assessment">Avaliação</a></li>
-        <li><div class="divider"></div></li>
+        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/organization">Organizações</a></li>
+        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/assessment">Avaliações</a></li>
+        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/project">Projetos</a></li>
+        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/team">Equipes</a></li>
+        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/home">Aplicações</a></li>
+        <!--<li><div class="divider"></div></li>-->
         <li routerLinkActive="active"><a class="sidenav-close" routerLink="/contact">Sobre</a></li>
         <li routerLinkActive="active"><a class="sidenav-close" routerLink="/help">Ajuda</a></li>
         <li *ngIf="loggedIn"><a class="sidenav-close" (click)="signOut()">Sair</a></li>
@@ -32,11 +33,12 @@
 <ul *ngIf="home==false" class="sidenav sidenav-fixed">
   <li class="logo center" style="margin-top: 30px; margin-bottom: 30px;"><a routerLink="/home">PSAS</a></li>
   <li routerLinkActive="active"><a class="waves-effect" routerLink="/dashboard">Dashboard</a></li>
-  <li routerLinkActive="active"><a class="waves-effect" routerLink="/organization">Organização</a></li>
-  <li routerLinkActive="active"><a class="waves-effect" routerLink="/project">Projeto</a></li>
-  <li routerLinkActive="active"><a class="waves-effect" routerLink="/team">Equipe</a></li>
-  <li routerLinkActive="active"><a class="waves-effect" routerLink="/assessment">Avaliação</a></li>
-  <li><div class="divider"></div></li>
+  <li routerLinkActive="active"><a class="waves-effect" routerLink="/organization">Organizações</a></li>
+  <li routerLinkActive="active"><a class="waves-effect" routerLink="/assessment">Avaliações</a></li>
+  <li routerLinkActive="active"><a class="waves-effect" routerLink="/project">Projetos</a></li>
+  <li routerLinkActive="active"><a class="waves-effect" routerLink="/team">Equipes</a></li>
+  <li routerLinkActive="active"><a class="waves-effect" routerLink="/home">Aplicações</a></li>
+  <!--<li><div class="divider"></div></li>-->
   <li routerLinkActive="active"><a class="waves-effect" routerLink="/contact">Sobre</a></li>
   <li routerLinkActive="active"><a class="waves-effect" routerLink="/help">Ajuda</a></li>
 </ul>
