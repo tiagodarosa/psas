@@ -218,4 +218,22 @@ export class ServicesService {
       map(this.extractData));
   }
 
+  updateAssessment(assessment: object) {
+    this.getHttpOptions();
+    const a = Object(assessment);
+    const body = {
+      _id: a._id,
+      _rev: a._rev,
+      name: a.name,
+      organizationId: a.organizationId,
+      userCreator: a.userCreator || this.getUserEmail(),
+      public: a.public || false,
+      tool: a.tool || 'rubric',
+      status: a.status || 'active',
+      questions: a.questions || []
+    };
+    return this.http.put(endpoint + '/assessment/' + body._id, body, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
 }
