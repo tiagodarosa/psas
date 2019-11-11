@@ -31,23 +31,25 @@
           <div class="row">
             <div class="col s12 m4">
               <div class="center promo">
-                <i class="material-icons">edit</i>
+                <i class="material-icons">add_box</i>
+                <!-- <i class="material-icons">note_add</i> -->
                 <p class="promo-caption">Crie</p>
-                <p class="light center promo-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ex dolor, hendrerit vitae rutrum quis, pharetra eu augue. Proin id nunc lacinia, placerat est at, varius ante. Donec nec ipsum nibh. Pellentesque odio magna, convallis at suscipit vel, accumsan sit amet quam.</p>
+                <p class="light center promo-description">Crie avaliações de desempenho personalizadas, baseadas nas competências mais relevantes para a sua empresa e equipe, usando diferentes tipos, estratégias e métodos.</p>
               </div>
             </div>
             <div class="col s12 m4">
               <div class="center promo">
-                <i class="material-icons">people</i>
+                <i class="material-icons">star_half</i>
+                <!-- <i class="material-icons">star_border</i> -->
                 <p class="promo-caption">Avalie</p>
-                <p class="light center promo-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ex dolor, hendrerit vitae rutrum quis, pharetra eu augue. Proin id nunc lacinia, placerat est at, varius ante. Donec nec ipsum nibh. Pellentesque odio magna, convallis at suscipit vel, accumsan sit amet quam.</p>
+                <p class="light center promo-description">Aplique avaliações de desempenho para mensurar atributos e competências da sua equipe. Descubra talentos e identifique pontos de melhora nos seus comapnheiros de equipe.</p>
               </div>
             </div>
             <div class="col s12 m4">
               <div class="center promo">
-                <i class="material-icons">show_chart</i>
+                <i class="material-icons">insert_chart</i>
                 <p class="promo-caption">Veja</p>
-                <p class="light center promo-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ex dolor, hendrerit vitae rutrum quis, pharetra eu augue. Proin id nunc lacinia, placerat est at, varius ante. Donec nec ipsum nibh. Pellentesque odio magna, convallis at suscipit vel, accumsan sit amet quam.</p>
+                <p class="light center promo-description">Analise os resultados das avaliações e acompanhe a evolução da sua equipe através de gráficos e elementos visuais que auxiliam na compreensão geral dos insumos da sua pesquisa.</p>
               </div>
             </div>
           </div>
@@ -56,29 +58,52 @@
     </div>
     <div class="divider"></div>
 
-    <!-- AAA -->
+    <!-- Porque avaliar competencias -->
     <div class="section">
       <div class="row center">
         <h3 class="light header">Porquê avaliar competências?</h3>
-        <p class="col s12 m8 offset-m2 caption promo-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ex dolor, hendrerit vitae rutrum quis, pharetra eu augue. Proin id nunc lacinia, placerat est at, varius ante. Donec nec ipsum nibh.</p>
+        <p class="col s12 m8 offset-m2 caption promo-description">Lorem ipsum dolor sit amet</p>
       </div>
       <div class="row center">
-        <a href="http://materializecss.com/showcase.html" class="btn-large waves-effect light-blue">Mais informações</a>
+          <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#pqAvaliarCompetencias" (click)="pqAvaliarCompetencias()">Mais informações</a>
+          <!-- <a href="http://materializecss.com/showcase.html" class="btn-large waves-effect light-blue">Mais informações</a> -->
       </div>
     </div>
     <div class="divider"></div>
 
-    <!-- AAA -->
+    <!-- Modal - Porque avaliar competencias? -->
+    <div id="pqAvaliarCompetencias" class="modal modal-fixed-footer">
+        <div class="modal-content">
+          <h4>Porquê avaliar competências?</h4>
+          <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-light light-blue btn">Agree</a>        
+        </div>
+      </div>
+
+    <!-- Porque avaliar em pares -->
     <div class="section">
       <div class="row center">
         <h3 class="light header">Porquê avaliar em pares?</h3>
-        <p class="col s12 m8 offset-m2 caption promo-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ex dolor, hendrerit vitae rutrum quis, pharetra eu augue. Proin id nunc lacinia, placerat est at, varius ante. Donec nec ipsum nibh.</p>
+        <p class="col s12 m8 offset-m2 caption promo-description">Lorem ipsum dolor sit amet</p>
       </div>
       <div class="row center">
-        <a href="http://materializecss.com/showcase.html" class="btn-large waves-effect light-blue">Mais informações</a>
+          <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#pqAvaliarPares" (click)="pqAvaliarPares()">Mais informações</a>
       </div>
     </div>
     <div class="divider"></div>
+
+      <!-- Modal - Porque avaliar em pares? -->
+      <div id="pqAvaliarPares" class="modal modal-fixed-footer">
+          <div class="modal-content">
+            <h4>Porquê avaliar em pares?</h4>
+            <p>A bunch of text</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-light light-blue btn">Agree</a>        
+          </div>
+        </div>
 
   </div>
 
