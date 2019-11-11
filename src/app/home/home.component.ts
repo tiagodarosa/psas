@@ -25,4 +25,12 @@ export class HomeComponent implements OnInit {
     this.spinner.hide();
   }
 
+  pqAvaliarCompetencias() {
+    console.log('oi');
+  }
+
+  pqAvaliarPares() {
+    console.log('oi');
+  }
+
 }
