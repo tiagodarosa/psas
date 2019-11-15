@@ -21,7 +21,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/Staticfile.txt"
+              "src/nginx.conf"
             ],
             "styles": [
               "src/styles.css"
