@@ -5,7 +5,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { AuthService, SocialUser } from 'angularx-social-login';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-const endpoint = 'https://61914044.us-south.apiconnect.appdomain.cloud/api/v1';
+const endpoint = 'https://61914044.us-south.apiconnect.appdomain.cloud/psas/v1';
 
 @Injectable({
   providedIn: 'root'

@@ -7,7 +7,7 @@ info:
   contact:
     email: "psas@udesc.br"
 host: "61914044.us-south.apiconnect.appdomain.cloud"
-basePath: "/api/v1"
+basePath: "/psas/v1"
 schemes:
 - "https"
 paths:
