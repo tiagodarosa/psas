@@ -236,4 +236,24 @@ export class ServicesService {
       map(this.extractData));
   }
 
+  findApplicationsFromUser() {
+    this.getHttpOptions();
+    return this.http.get(endpoint + '/application', this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
+  addApplication(name: string, teamId: string, assessmentId: string, type: string, method: string, strategy: string) {
+    const body = {
+      name,
+      teamId,
+      assessmentId,
+      type,
+      method,
+      strategy
+    };
+    console.log(body);
+    this.getHttpOptions();
+    return this.http.post(endpoint + '/application', body, this.httpOptions).pipe(
+      map(this.extractData));
+  }
 }

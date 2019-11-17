@@ -2,16 +2,211 @@
 
     <!--Header-->
     <app-header></app-header>
+
+    <!-- Spinner -->
+    <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
   
     <!-- Main content -->
     <main>
       <div class="container">
+
+        <!-- Title -->
         <div class="row">
           <div class="col s12">
             <h3 class="header">Aplicações</h3>
-            <p class="caption">Esta é a página de aplicações de avaliação.</p>
           </div>
         </div>
+
+        <!-- No application-->
+        <div class="row" *ngIf="applicationsCount<=0">
+          <div class="col s12 center">
+            <h5 class="header">Você não possui nenhuma aplicação ou não está cadastrado em nenhuma aplicação!</h5>
+            <p class="caption">
+              Crie uma aplicação clicando no botão "Nova aplicação" ou solicite para o gestor da organização ou gestor de equipe que você participa para saber quando uma avaliação será aplicada.
+            </p>
+          </div>
+        </div>
+    
+        <!-- Cards of applications -->
+        <div class="row" *ngIf="applicationsCount>0">
+          <div class="col s12">
+            <h5>Aplicações que devo responder</h5>
+          </div>
+        </div>
+        <div class="row" *ngIf="applicationToAnswer.length<=0 && applicationsCount>0">
+          <div class="col s12">
+            <p class="grey-text text-darken-2">Nenhuma aplicação.</p>
+          </div>
+        </div>
+        <div class="row" *ngIf="applicationToAnswer.length>0">
+          <div class="col s12 m6 l6 xl4" *ngFor="let application of applicationToAnswer">
+            <div class="card small darken-1">
+              <div class="card-content">
+                <span class="card-title">{{ application.name }}</span>
+                <p>
+                  Aplicação
+                </p>
+              </div>
+              <div class="card-action light-blue">
+                <a style="color: white;" [routerLink]="['/application', application._id]" title="Editar aplicação {{ application.name }}"><i class="material-icons left">edit</i></a>
+                <a class="modal-trigger" style="color: white;" href="#deleteTeam" title="Excluir aplicação {{ application.name }}" (click)="deleteTeamModal(team._id)"><i class="material-icons left">delete</i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+        <div class="row" *ngIf="applicationsCount>0">
+          <div class="col s12">
+            <h5>Aplicações que criei</h5>
+          </div>
+        </div>
+        <div class="row" *ngIf="myApplications.length<=0 && applicationsCount>0">
+          <div class="col s12">
+            <p class="grey-text text-darken-2">Nenhuma aplicação.</p>
+          </div>
+        </div>
+        <div class="row" *ngIf="myApplications.length>0">
+          <div class="col s12 m6 l6 xl4" *ngFor="let application of myApplications">
+            <div class="card small darken-1">
+              <div class="card-content">
+                <span class="card-title">{{ application.name }}</span>
+                <p>
+                  Aplicação
+                </p>
+              </div>
+              <div class="card-action light-blue">
+                <a style="color: white;" [routerLink]="['/application', application._id]" title="Editar aplicação {{ application.name }}"><i class="material-icons left">edit</i></a>
+                <a class="modal-trigger" style="color: white;" href="#deleteTeam" title="Excluir aplicação {{ application.name }}" (click)="deleteTeamModal(team._id)"><i class="material-icons left">delete</i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row" *ngIf="applicationsCount>0">
+          <div class="col s12">
+            <h5>Aplicações das organizações que sou membro criadas por outras pessoas</h5>
+          </div>
+        </div>
+        <div class="row" *ngIf="applicationFromOrgs.length<=0 && applicationsCount>0">
+          <div class="col s12">
+            <p class="grey-text text-darken-2">Nenhuma aplicação.</p>
+          </div>
+        </div>
+        <div class="row" *ngIf="applicationFromOrgs.length>0">
+          <div class="col s12 m6 l6 xl4" *ngFor="let application of applicationFromOrgs">
+            <div class="card small darken-1">
+              <div class="card-content">
+                <span class="card-title">{{ application.name }}</span>
+                <p>
+                  Aplicação
+                </p>
+              </div>
+              <div class="card-action light-blue">
+                <a style="color: white;" [routerLink]="['/application', application._id]" title="Editar aplicação {{ application.name }}"><i class="material-icons left">edit</i></a>
+                <a class="modal-trigger" style="color: white;" href="#deleteTeam" title="Excluir aplicação {{ application.name }}" (click)="deleteTeamModal(team._id)"><i class="material-icons left">delete</i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <!-- Buttons -->
+        <div class="row">
+          <div class="col s12 center">
+            <a class="waves-effect waves-light light-blue btn-large" (click)="addApplicationModal()"><i class="material-icons left">add</i>Nova aplicação</a>
+          </div>
+        </div>
+
+        <!-- Modal for new application -->
+      <div id="addApplication" class="modal modal-fixed-footer addApplication">
+        <div class="modal-content">
+          <h4>Nova equipe</h4>
+          <p>
+            Informe os dados para criação da aplicação.
+          </p>
+          <div class="row">
+            <form class="col s12">
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">description</i>
+                  <input #name id="name" type="text" class="validate">
+                  <label for="name">Nome</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">description</i>
+                  <label for="team" class="active">Time</label>
+                  <select #team id="team" class="validate">
+                      <option *ngFor='let team of teamList' [value]="team._id">
+                        {{ team.name }}
+                      </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">description</i>
+                  <label for="assessment" class="active">Avaliação</label>
+                  <select #assessment id="assessment" class="validate">
+                      <option *ngFor='let assessment of assessmentList' [value]="assessment._id">
+                        {{ assessment.name }}
+                      </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">description</i>
+                  <label for="type" class="active">Tipo</label>
+                  <select #type id="type" class="validate">
+                      <option *ngFor='let type of types' [value]="type.value">
+                        {{ type.description }}
+                      </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">description</i>
+                  <label for="method" class="active">Método</label>
+                  <select #method id="method" class="validate">
+                      <option *ngFor='let method of methods' [value]="method.value">
+                        {{ method.description }}
+                      </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">description</i>
+                  <label for="strategy" class="active">Estratégia</label>
+                  <select #strategy id="strategy" class="validate">
+                      <option *ngFor='let strategy of strategies' [value]="strategy.value">
+                        {{ strategy.description }}
+                      </option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+          <a class="modal-close waves-effect waves-light light-blue btn" (click)="addApplication(name.value, team.value, assessment.value, type.value, method.value, strategy.value)">Salvar</a>
+        </div>
+      </div>
+
+
+
+
+
       </div>
     </main>
   

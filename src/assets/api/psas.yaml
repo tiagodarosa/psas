@@ -579,18 +579,54 @@ paths:
       - "application"
       summary: "Add a new application"
       description: ""
-      operationId: "addapplication"
+      operationId: "addApplication"
       consumes:
-      - "application/json"
+      - "application/x-www-form-urlencoded"
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Application object that needs to be added to the PSAS"
+      - name: "name"
+        in: "formData"
+        description: "Name of the application"
         required: true
-        schema:
-          $ref: "#/definitions/application"
+        type: "string"
+      - name: "teamId"
+        in: "formData"
+        description: "Id of the team where the assessment will be applied"
+        required: true
+        type: "string"
+      - name: "assessmentId"
+        in: "formData"
+        description: "Id of the assessment"
+        required: true
+        type: "string"
+      - name: "type"
+        in: "formData"
+        description: "Type of the application"
+        required: true
+        type: "string"
+        enum:
+        - "initial"
+        - "summative"
+        - "formative"
+      - name: "method"
+        in: "formData"
+        description: "Method of the application"
+        required: true
+        type: "string"
+        enum:
+        - "ranking"
+        - "nomination"
+        - "classification"
+      - name: "strategy"
+        in: "formData"
+        description: "Strategy of the application"
+        required: true
+        type: "string"
+        enum:
+        - "self"
+        - "co"
+        - "360"
       responses:
         200:
           description: "Successful operation"
@@ -901,12 +937,15 @@ definitions:
   question:
     type: "object"
     required:
+    - "order"
     - "name"
     - "description"
     - "competences"
     - "significance"
     - "items"
     properties:
+      order:
+        type: "number"
       name:
         type: "string"
       description:
@@ -924,10 +963,13 @@ definitions:
   questionItem:
     type: "object"
     required:
+    - "order"
     - "description"
     - "option"
     - "percentage"
     properties:
+      order:
+        type: "number"
       description:
         type: "string"
       option:
@@ -967,14 +1009,10 @@ definitions:
       _rev:
         type: "string"
         readOnly: true
-      teamId:
-        type: "string"
-      teamRev:
-        type: "string"
-      assessmentId:
-        type: "string"
-      assessmentRev:
-        type: "string"
+      team:
+        $ref: "#/definitions/team"
+      assessment:
+        $ref: "#/definitions/assessment"
       type:
         type: "string"
         enum:
