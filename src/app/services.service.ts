@@ -136,6 +136,12 @@ export class ServicesService {
       map(this.extractData));
   }
 
+  findProjectsByOrganizationId(organizationId: string) {
+    this.getHttpOptions();
+    return this.http.get(endpoint + '/project/findByOrganizationId/' + organizationId, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
   findTeamsFromUser() {
     this.getHttpOptions();
     return this.http.get(endpoint + '/team', this.httpOptions).pipe(

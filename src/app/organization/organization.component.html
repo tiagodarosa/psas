@@ -1,110 +1,103 @@
 <div class="body">
 
-    <!--Header-->
-    <app-header></app-header>
+  <!--Header-->
+  <app-header></app-header>
 
-    <!-- Spinner -->
-    <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
-  
-    <!-- Main content -->
-    <main>
-      <div class="container">
-        
-        <!-- Title -->
-        <div class="row">
-          <div class="col s12">
-            <h3 class="header">Organizações</h3>
-            <!--<p class="caption">
-                
-            </p>-->
-          </div>
-        </div>
+  <!-- Spinner -->
+  <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
 
-        <div class="row" *ngIf="organizationsCount<=0">
-          <div class="col s12 center">
-            <h5 class="header">Você não está cadastrado em nenhuma organização!</h5>
-            <p class="caption">
-              Uma organização é o maior conjunto dentro do PSAS, onde você gerencia as competências e pessoas.
-              <br>
-              Os dados de uma organização não podem ser acessados ou vinculados à outra organização, mesmo que você tenha o perfil de acesso de gestor.
-              <br><br>
-              Crie sua organização clicando no botão "Nova organização" ou solicite para o gestor da organização que você deseja participar incluir o seu e-mail <b>{{ email }}</b> como membro da organização.
-            </p>
-          </div>
-        </div>
-
-        <!-- Cards of organizations -->
-        <div class="row">
-          <div class="col s12 m6 l6 xl4" *ngFor="let org of organizationsList">
-            <div class="card small darken-1">
-              <div class="card-content">
-                <span class="card-title">{{ org.name }}</span>
-                <p>
-                  {{ org.users.length }} {{ org.users.length>1 ? 'pessoas' : 'pessoa' }}
-                </p>
-              </div>
-              <div class="card-action light-blue">
-                <a style="color: white;" [routerLink]="['/organization', org._id]" title="Editar organização {{ org.name }}"><i class="material-icons left">edit</i></a>
-                <a class="modal-trigger" style="color: white;" href="#deleteOrganization" title="Excluir organização {{ org.name }}" (click)="deleteOrganizationModal(org._id)"><i class="material-icons left">delete</i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Buttons -->
-        <div class="row">
-          <div class="col s12 center">
-            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newOrganization" (click)="addOrganizationModal()"><i class="material-icons left">add</i>Nova organização</a>
-          </div>
-        </div>
-
-        <!-- Modal for new organization -->
-        <div id="newOrganization" class="modal modal-fixed-footer newOrganization">
-          <div class="modal-content">
-            <h4>Nova organização</h4>
-            <p>
-              Informe o nome da organização. Após a criação, você poderá editar as competências e pessoas da organização.
-              Ao criar uma nova organização, o seu perfil já será incluído como gestor da organização.
-            </p>
-            <div class="row">
-              <form class="col s12">
-                <div class="row">
-                  <div class="input-field col s6">
-                    <i class="material-icons prefix">description</i>
-                    <input #orgName id="organizationName" type="text" class="validate">
-                    <label for="organizationName">Nome</label>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            <a class="modal-close waves-effect waves-light light-blue btn" (click)="addOrganization(orgName.value)">Salvar</a>
-          </div>
-        </div>
-
-        <!-- Modal to delete organization -->
-        <div id="deleteOrganization" class="modal modal-fixed-footer">
-          <div class="modal-content">
-            <h4>Excluir organização <b>{{ organizationName }}</b></h4>
-            <p>
-              Você tem certeza que deseja excluir a organização?
-              Todas as informações relacionadas à organização serão apagadas e nenhuma pessoa terá mais acesso à esta organização.
-              Essa ação não poderá ser desfeita!
-            </p>
-          </div>
-          <div class="modal-footer">
-            <a (click)="organizationId=''" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            <a class="modal-close waves-effect waves-light red btn" (click)="deleteOrganization(organizationId)">Excluir</a>
-          </div>
-        </div>
-
+  <!-- Main content -->
+  <div>
+    
+    <!-- Title -->
+    <div class="row">
+      <div class="col s12">
+        <h3 class="header">Organizações</h3>
+        <!--<p class="caption">
+            
+        </p>-->
       </div>
-    </main>
-  
-    <!-- Footer -->
-    <app-footer></app-footer>
-  
+    </div>
+
+    <div class="row" *ngIf="organizationsCount<=0">
+      <div class="col s12 center">
+        <h5 class="header">Você não está cadastrado em nenhuma organização!</h5>
+        <p class="caption">
+          Uma organização é o maior conjunto dentro do PSAS, onde você gerencia as competências e pessoas.
+          <br>
+          Os dados de uma organização não podem ser acessados ou vinculados à outra organização, mesmo que você tenha o perfil de acesso de gestor.
+          <br><br>
+          Crie sua organização clicando no botão "Nova organização" ou solicite para o gestor da organização que você deseja participar incluir o seu e-mail <b>{{ email }}</b> como membro da organização.
+        </p>
+      </div>
+    </div>
+
+    <!-- Cards of organizations -->
+    <div class="row">
+      <div class="col s12 m6 l6 xl4" *ngFor="let org of organizationsList">
+        <div class="card small darken-1">
+          <div class="card-content" (click)="selectOrganization(org._id)" style="cursor: pointer;">
+            <span class="card-title">{{ org.name }}</span>
+            <p>
+              {{ org.users.length }} {{ org.users.length>1 ? 'pessoas' : 'pessoa' }}
+            </p>
+          </div>
+          <div class="card-action light-blue">
+            <a class="modal-trigger" style="color: white;" href="#deleteOrganization" title="Excluir organização {{ org.name }}" (click)="deleteOrganizationModal(org._id)"><i class="material-icons left">delete</i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="row">
+      <div class="col s12 center">
+        <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newOrganization" (click)="addOrganizationModal()"><i class="material-icons left">add</i>Nova organização</a>
+      </div>
+    </div>
+
+    <!-- Modal for new organization -->
+    <div id="newOrganization" class="modal modal-fixed-footer newOrganization">
+      <div class="modal-content">
+        <h4>Nova organização</h4>
+        <p>
+          Informe o nome da organização. Após a criação, você poderá editar as competências e pessoas da organização.
+          Ao criar uma nova organização, o seu perfil já será incluído como gestor da organização.
+        </p>
+        <div class="row">
+          <form class="col s12">
+            <div class="row">
+              <div class="input-field col s12">
+                <i class="material-icons prefix">description</i>
+                <input #orgName id="organizationName" type="text" class="validate">
+                <label for="organizationName">Nome</label>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a class="modal-close waves-effect waves-light light-blue btn" (click)="addOrganization(orgName.value)">Salvar</a>
+      </div>
+    </div>
+
+    <!-- Modal to delete organization -->
+    <div id="deleteOrganization" class="modal modal-fixed-footer">
+      <div class="modal-content">
+        <h4>Excluir organização <b>{{ organizationName }}</b></h4>
+        <p>
+          Você tem certeza que deseja excluir a organização?
+          Todas as informações relacionadas à organização serão apagadas e nenhuma pessoa terá mais acesso à esta organização.
+          Essa ação não poderá ser desfeita!
+        </p>
+      </div>
+      <div class="modal-footer">
+        <a (click)="organizationId=''" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a class="modal-close waves-effect waves-light red btn" (click)="deleteOrganization(organizationId)">Excluir</a>
+      </div>
+    </div>
+
   </div>
-  
+
+</div>

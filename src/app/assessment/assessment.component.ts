@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ServicesService } from '../services.service';
 import { Router } from '@angular/router';
+import { AuthService } from 'angularx-social-login';
+import { CookieService } from 'ngx-cookie-service';
 declare var $: any;
 
 @Component({
@@ -17,10 +19,12 @@ export class AssessmentComponent implements OnInit {
   publicAssessments = [];
   organizationAssessmentsCount = 0;
   organizationAssessments = [];
-  organizationsCount = 0;
-  organizationsList = [];
   assessmentName = '';
   assessmentId = '';
+  organizationId = '';
+  userEmail = '';
+  userProfile = '';
+  organizationName = '';
 
   assessment = {
     _id: '',
@@ -39,10 +43,24 @@ export class AssessmentComponent implements OnInit {
     {value: 'questionnaire', description: 'Questionário'}
   ];
 
-  constructor(private service: ServicesService, private spinner: NgxSpinnerService, private router: Router) { }
+  constructor(
+    private service: ServicesService,
+    private spinner: NgxSpinnerService,
+    private authService: AuthService,
+    private cookie: CookieService,
+    private router: Router) { }
 
   ngOnInit() {
-    this.getAssessments();
+    this.spinner.show();
+    this.organizationId = this.cookie.get('ORGANIZATIONID');
+    this.organizationName = this.cookie.get('ORGANIZATIONNAME');
+    this.userProfile = this.cookie.get('ORGANIZATIONMEMBERPROFILE');
+    this.authService.authState.subscribe((user) => {
+      this.userEmail = user.email;
+      this.getAssessments();
+    });
+    $('select').formSelect();
+    $('.modal').modal();
   }
 
   getAssessments() {
@@ -50,26 +68,16 @@ export class AssessmentComponent implements OnInit {
     this.service.findAssessmentsFromUser().subscribe((data) => {
       const a = Object(data);
       this.assessmentsCount = Object(a).count;
-      this.assessments = Object(a).assessments;
-      this.service.findOrganizationsFromUser().subscribe((orgs) => {
-        const o = Object(orgs);
-        this.organizationsCount = Object(o).count;
-        this.organizationsList = Object(o).organizationList;
-        this.spinner.hide();
-      }, (error) => {
-        this.router.navigate(['home']);
+      const assess = Object(a).assessments;
+      assess.forEach(a => {
+        if (a.organizationId === this.organizationId) {
+          this.assessments.push(a);
+        }
       });
+      this.spinner.hide();
     }, (error) => {
       this.router.navigate(['home']);
     });
-  }
-
-  filterOrgOfProject(orgId: string) {
-    try  {
-      return this.organizationsList.find(org => org._id === orgId).name;
-    } catch {
-      return '';
-    }
   }
 
   filterTool(tool: string) {
@@ -86,10 +94,10 @@ export class AssessmentComponent implements OnInit {
     $('.addAssessment').modal('open');
   }
 
-  addAssessment(name: string, orgId: string, tool: string) {
+  addAssessment(name: string, tool: string) {
     this.spinner.show();
     this.assessment.name = name;
-    this.assessment.organizationId = orgId;
+    this.assessment.organizationId = this.organizationId;
     this.assessment.tool = tool;
     this.service.addAssessment(this.assessment).subscribe((data) => {
       this.getAssessments();

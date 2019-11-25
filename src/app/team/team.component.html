@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <!-- Cards of organizations -->
+      <!-- Cards of teams 
       <div class="row" *ngIf="projectsList.length>0">
         <div class="col s12 m6 l6 xl4" *ngFor="let team of teamsList">
           <div class="card small darken-1">
@@ -42,17 +42,52 @@
               </p>
             </div>
             <div class="card-action light-blue">
-              <a style="color: white;" [routerLink]="['/team', team._id]" title="Editar equipe {{ team.name }}"><i class="material-icons left">edit</i></a>
-              <a class="modal-trigger" style="color: white;" href="#deleteTeam" title="Excluir equipe {{ team.name }}" (click)="deleteTeamModal(team._id)"><i class="material-icons left">delete</i></a>
+              <a *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'" style="color: white;" [routerLink]="['/team', team._id]" title="Editar equipe {{ team.name }}"><i class="material-icons left">edit</i></a>
+              <a *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'" class="modal-trigger" style="color: white;" href="#deleteTeam" title="Excluir equipe {{ team.name }}" (click)="deleteTeamModal(team._id)"><i class="material-icons left">delete</i></a>
             </div>
           </div>
+        </div>
+      </div>-->
+
+      <!-- Teams -->
+      <div class="row" *ngIf="projectsList.length>0">
+        <div class="col s12">
+          <table class="highlight">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Projeto</th>
+                <th>Membros</th>
+                <th *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">Opções</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let team of teamsList">
+                <td>{{ team.name }}</td>
+                <td>{{ findProjectName(team.projectId) }}</td>
+                <td>{{ team.members.length }}</td>
+                <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
+                  <a [routerLink]="['/team', team._id]" title="Editar equipe {{ team.name }}"><i class="material-icons left">edit</i></a>
+                  <a [routerLink]="['/team', team._id]" title="Editar pessoas da equipe {{ team.name }}"><i class="material-icons left">people</i></a>
+                  <a class="modal-trigger" href="#deleteTeam" title="Excluir equipe {{ team.name }}" (click)="deleteTeamModal(team._id)"><i class="material-icons left">delete</i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
       <!-- Buttons -->
-      <div class="row">
+      <div class="row" *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
         <div class="col s12 center">
           <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#addTeam" (click)="addTeamModal()"><i class="material-icons left">add</i>Nova equipe</a>
+        </div>
+      </div>
+
+      <!-- User without access -->
+      <div class="row" *ngIf="userProfile!='organizationManager' && userProfile!='projectManager' && userProfile!='teamManager'">
+        <div class="col s12 center">
+          <p class="caption">Você não possui acesso para adicionar, alterar ou excluir equipes na organização {{ organizationName }}.</p>
         </div>
       </div>
 
@@ -75,12 +110,12 @@
               <div class="row">
                 <div class="input-field col s6">
                   <i class="material-icons prefix">description</i>
+                  <label for="tProjectId" class="active">Projeto</label>
                   <select #tProjectId id="tProjectId" class="validate">
                       <option *ngFor='let project of projectsList' [value]="project._id">
                         {{ project.name }}
                       </option>
                   </select>
-                  <label for="tProjectId" class="active">Projeto</label>
                 </div>
               </div>
             </form>

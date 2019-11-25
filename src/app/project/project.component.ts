@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ServicesService } from '../services.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from 'angularx-social-login';
 declare var $: any;
 
 @Component({
@@ -13,47 +15,55 @@ export class ProjectComponent implements OnInit {
 
   projectsList = [];
   projectsCount = 0;
+  organizationId = '';
   organizationsList = [];
+  organization = {};
   projectName = '';
+  userEmail = '';
+  userProfile = '';
   projectId = '';
-  projectOrganizationId = '';
 
-  constructor(private service: ServicesService, private spinner: NgxSpinnerService, private router: Router) { }
+  constructor(
+    private service: ServicesService,
+    private authService: AuthService,
+    private spinner: NgxSpinnerService,
+    private cookie: CookieService,
+    private router: Router) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.spinner.show();
-    this.getOrganizationsAndProjects();
+    this.organizationId = this.cookie.get('ORGANIZATIONID');
+    this.authService.authState.subscribe((user) => {
+      this.userEmail = user.email;
+      this.getProjects();
+    });
     $('select').formSelect();
     $('.modal').modal();
   }
 
-  getOrganizationsAndProjects() {
+  getProjects() {
     this.projectsList = [];
     this.projectsCount = 0;
-    this.organizationsList = [];
     this.projectName = '';
     this.projectId = '';
-    this.projectOrganizationId = '';
-    this.service.findOrganizationsFromUser().subscribe((data) => {
-      const organizations = Object(data);
-      this.organizationsList = Object(organizations).organizationList;
-      this.service.findProjectsFromUser().subscribe((dataProject) => {
-        const projects = Object(dataProject);
-        this.projectsList = Object(projects).projects;
-        this.projectsCount = this.projectsList.length;
-        this.spinner.hide();
-      }, (error) => {
-        this.router.navigate(['home']);
-      });
+    this.service.findProjectsByOrganizationId(this.organizationId).subscribe((data) => {
+      const projects = Object(data);
+      this.projectsList = Object(projects).projects;
+      this.projectsCount = this.projectsList.length;
+      this.organization = Object(projects).organization;
+      this.userProfile = this.getUserProfile(this.organization);
+      this.spinner.hide();
     }, (error) => {
       this.router.navigate(['home']);
     });
   }
 
-  filterOrgOfProject(orgId: string) {
-    try  {
-      return this.organizationsList.find(org => org._id === orgId).name;
-    } catch {
+  getUserProfile(organization) {
+    const users = organization.users;
+    const user = users.find(u => u.email === this.userEmail);
+    if (user) {
+      return user.profile;
+    } else {
       return '';
     }
   }
@@ -65,15 +75,15 @@ export class ProjectComponent implements OnInit {
     $('.newProject').modal('open');
   }
 
-  addProject(projectName: string, orgId: string) {
+  addProject(projectName: string) {
     this.spinner.show();
     const project = {
       name: projectName,
-      organizationId: orgId,
+      organizationId: this.organizationId,
       status: 'active'
     };
     this.service.addProject(project).subscribe((data) => {
-      this.getOrganizationsAndProjects();
+      this.getProjects();
     }, (error) => {
       this.router.navigate(['home']);
     });
@@ -90,7 +100,7 @@ export class ProjectComponent implements OnInit {
   deleteProject(projectId: string) {
     this.spinner.show();
     this.service.deleteProject(projectId).subscribe((data) => {
-      this.getOrganizationsAndProjects();
+      this.getProjects();
     }, (error) => {
       this.router.navigate(['home']);
     });
@@ -101,18 +111,17 @@ export class ProjectComponent implements OnInit {
     const project = this.projectsList.find(proj => proj._id === projectId);
     this.projectId = projectId;
     this.projectName = project.name;
-    this.projectOrganizationId = project.organizationId;
     $('.modal').modal();
     $('.editProject').modal('open');
   }
 
-  updateProject(projectId: string, projName: string, orgId: string) {
+  updateProject(projectId: string, projName: string) {
     this.spinner.show();
     const project = this.projectsList.find(proj => proj._id === projectId);
     project.name = projName;
-    project.organizationId = orgId;
+    project.organizationId = this.organizationId;
     this.service.updateProject(project).subscribe((data) => {
-      this.getOrganizationsAndProjects();
+      this.getProjects();
     }, (error) => {
       this.router.navigate(['home']);
     });

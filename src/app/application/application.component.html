@@ -26,34 +26,6 @@
             </p>
           </div>
         </div>
-    
-        <!-- Cards of applications -->
-        <div class="row" *ngIf="applicationsCount>0">
-          <div class="col s12">
-            <h5>Aplicações que devo responder</h5>
-          </div>
-        </div>
-        <div class="row" *ngIf="applicationToAnswer.length<=0 && applicationsCount>0">
-          <div class="col s12">
-            <p class="grey-text text-darken-2">Nenhuma aplicação.</p>
-          </div>
-        </div>
-        <div class="row" *ngIf="applicationToAnswer.length>0">
-          <div class="col s12 m6 l6 xl4" *ngFor="let application of applicationToAnswer">
-            <div class="card small darken-1">
-              <div class="card-content">
-                <span class="card-title">{{ application.name }}</span>
-                <p>
-                  Aplicação
-                </p>
-              </div>
-              <div class="card-action light-blue">
-                <a style="color: white;" [routerLink]="['/application', application._id]" title="Editar aplicação {{ application.name }}"><i class="material-icons left">edit</i></a>
-                <a class="modal-trigger" style="color: white;" href="#deleteTeam" title="Excluir aplicação {{ application.name }}" (click)="deleteTeamModal(team._id)"><i class="material-icons left">delete</i></a>
-              </div>
-            </div>
-          </div>
-        </div>
 
 
 

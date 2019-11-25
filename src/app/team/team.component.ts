@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ServicesService } from '../services.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
+import { AuthService } from 'angularx-social-login';
+import { CookieService } from 'ngx-cookie-service';
 declare var $: any;
 
 @Component({
@@ -18,25 +20,51 @@ export class TeamComponent implements OnInit {
   teamProjectId = '';
   projectsCount = 0;
   projectsList = [];
+  organizationId = '';
+  organizationName = '';
+  userEmail = '';
+  userProfile = '';
 
-  constructor(private service: ServicesService, private spinner: NgxSpinnerService, private router: Router) { }
+  constructor(
+    private service: ServicesService,
+    private spinner: NgxSpinnerService,
+    private authService: AuthService,
+    private cookie: CookieService,
+    private router: Router) { }
 
   ngOnInit() {
     this.spinner.show();
-    this.getTeams();
+    this.organizationId = this.cookie.get('ORGANIZATIONID');
+    this.organizationName = this.cookie.get('ORGANIZATIONNAME');
+    this.userProfile = this.cookie.get('ORGANIZATIONMEMBERPROFILE');
+    this.authService.authState.subscribe((user) => {
+      this.userEmail = user.email;
+      this.getTeams();
+    });
     $('select').formSelect();
     $('.modal').modal();
   }
 
   getTeams() {
+    this.teamsList = [];
+    this.projectsList = [];
     this.service.findTeamsFromUser().subscribe((data) => {
       const teams = Object(data);
-      this.teamsCount = Object(teams).count;
-      this.teamsList = Object(teams).teams;
       this.service.findProjectsFromUser().subscribe((proj) => {
-        const projs = Object(proj);
-        this.projectsCount = Object(projs).count;
-        this.projectsList = Object(projs).projects;
+        const projs = Object(proj).projects;
+        projs.forEach(p => {
+          if (p.organizationId === this.organizationId) {
+            this.projectsList.push(p);
+          }
+        });
+        const tList = Object(teams).teams;
+        tList.forEach(t => {
+          if (this.projectsList.some(p => p._id === t.projectId)) {
+            this.teamsList.push(t);
+          }
+        });
+        this.teamsCount = this.teamsList.length;
+        this.projectsCount = this.projectsList.length;
         this.spinner.hide();
       }, (error) => {
         this.router.navigate(['home']);

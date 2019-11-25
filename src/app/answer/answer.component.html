@@ -1,0 +1,67 @@
+<div class="body">
+
+    <!--Header-->
+    <app-header></app-header>
+  
+    <!-- Spinner -->
+    <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+  
+    <!-- Main content -->
+    <main>
+      <div class="container">
+        
+        <!-- Title -->
+        <div class="row">
+          <div class="col s12">
+            <h3 class="header">Responder avaliação</h3>
+            <p class="caption">Aplicação de avaliações que você deve responder.</p>
+          </div>
+        </div>
+
+        <!-- No applications to answer -->
+        <div class="row" *ngIf="applicationToAnswer.length<=0">
+          <div class="col s12 center">
+            <h5 class="header">Tudo certo! Você não tem avaliações para responder.</h5>
+          </div>
+        </div>
+
+        <!-- Applications to answer -->
+        <div class="row">
+          <div class="col s12">
+            <table class="highlight" *ngIf="applicationToAnswer.length>0">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Tipo</th>
+                  <th>Método</th>
+                  <th>Estratégia</th>
+                  <th>Questões</th>
+                  <th>Avaliado</th>
+                  <th>Opções</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let application of applicationsByUser">
+                  <td>{{ application.applicationName }}</td>
+                  <td>{{ filterType(application.type) }}</td>
+                  <td>{{ filterMethod(application.method) }}</td>
+                  <td>{{ filterStrategy(application.strategy) }}</td>
+                  <td>{{ application.questionsCount }}</td>
+                  <td>{{ filterName(application.userRated) }}</td>
+                  <td>
+                    <a class="modal-trigger" href="#answerApplication" title="Avaliar {{ filterName(application.userRated) }}" (click)="answerApplicationModal(application.applicationId, application.userRated)"><i class="material-icons left">edit</i></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+  
+      </div>
+    </main>
+  
+    <!-- Footer -->
+    <app-footer></app-footer>
+  
+  </div>
+  

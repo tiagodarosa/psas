@@ -1,0 +1,24 @@
+#dropdown1 > ul > li.active, #dropdown2 > ul > li.active, #dropdown3 > ul > li.active {
+    background-color: #03a9f4;
+}
+
+li.active > a > .material-icons {
+    color: white !important;
+}
+
+ul.sidenav-fixed > li.active {
+    background-color: #03a9f4;
+}
+
+a.organization { 
+    font-size: 30px;
+    font-weight: bold;
+}
+
+li.logo:hover {
+    background-color: transparent !important;
+}
+
+li.logo a:hover {
+    background-color: transparent !important;
+}

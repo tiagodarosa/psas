@@ -15,6 +15,10 @@ import { ApplicationComponent } from './application/application.component';
 import { OrganizationDetailsComponent } from './organization/organization-details/organization-details.component';
 import { TeamDetailsComponent } from './team/team-details/team-details.component';
 import { AssessmentDetailsComponent } from './assessment/assessment-details/assessment-details.component';
+import { CompetenceComponent } from './competence/competence.component';
+import { ProfileComponent } from './profile/profile.component';
+import { AttendanceComponent } from './attendance/attendance.component';
+import { AnswerComponent } from './answer/answer.component';
 
 
 const routes: Routes = [
@@ -28,6 +32,10 @@ const routes: Routes = [
   { path: 'assessment/:assessmentId', component: AssessmentDetailsComponent },
   { path: 'application', component: ApplicationComponent },
   { path: 'organization', component: OrganizationComponent },
+  { path: 'competence', component: CompetenceComponent },
+  { path: 'answer', component: AnswerComponent },
+  { path: 'attendance', component: AttendanceComponent },
+  { path: 'profile', component: ProfileComponent },
   { path: 'organization/:organizationId', component: OrganizationDetailsComponent },
   { path: 'project', component: ProjectComponent },
   { path: 'team', component: TeamComponent },

@@ -18,7 +18,7 @@
         </div>
 
         <!-- Message when user doesnt have assessments -->
-        <div class="row" *ngIf="assessmentsCount<=0">
+        <div class="row" *ngIf="assessments.length<=0 && (userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager')">
           <div class="col s12 center">
             <h5 class="header">Você não criou nenhuma avaliação!</h5>
             <p class="caption">
@@ -28,14 +28,12 @@
         </div>
 
         <!-- Cards of assessments -->
-        <div class="row"  *ngIf="assessmentsCount>0">
+        <div class="row"  *ngIf="assessments.length>0">
           <div class="col s12 m6 l6 xl4" *ngFor="let assessment of assessments">
             <div class="card small darken-1">
               <div class="card-content">
                 <span class="card-title">{{ assessment.name }}</span>
                 <p>
-                  Organização {{ filterOrgOfProject(assessment.organizationId) }}
-                  <br>
                   {{ assessment.public ? 'Pública' : 'Privada' }}
                   <br>
                   {{ filterTool(assessment.tool) }}
@@ -52,9 +50,16 @@
         </div>
 
         <!-- Button to add assessment -->
-        <div class="row center">
+        <div class="row center" *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
             <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#addAssessment" (click)="addAssessmentModal()"><i class="material-icons left">add</i>Nova avaliação</a>
             <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#copyAssessment" (click)="copyAssessmentModal()"><i class="material-icons left">content_copy</i>Copiar avaliação</a>
+        </div>
+
+        <!-- User without access -->
+        <div class="row" *ngIf="userProfile!='organizationManager' && userProfile!='projectManager' && userProfile!='teamManager'">
+          <div class="col s12 center">
+            <p class="caption">Você não possui acesso para adicionar, alterar ou excluir avaliações na organização {{ organizationName }}.</p>
+          </div>
         </div>
 
         <!-- Modal for new assessment -->
@@ -75,24 +80,13 @@
                 </div>
                 <div class="row">
                   <div class="input-field col s6">
-                    <i class="material-icons prefix">description</i>
-                    <select #orgId id="orgId" class="validate">
-                        <option *ngFor='let org of organizationsList' [value]="org._id">
-                          {{ org.name }}
-                        </option>
-                    </select>
-                    <label for="orgId" class="active">Organização</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="input-field col s6">
-                    <i class="material-icons prefix">description</i>
+                    <i class="material-icons prefix">build</i>
+                    <label for="tool" class="active">Ferramenta</label>
                     <select #tool id="tool" class="validate">
                         <option *ngFor='let tool of tools' [value]="tool.value">
                           {{ tool.description }}
                         </option>
                     </select>
-                    <label for="tool" class="active">Ferramenta</label>
                   </div>
                 </div>
               </form>
@@ -100,7 +94,7 @@
           </div>
           <div class="modal-footer">
             <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            <a class="modal-close waves-effect waves-light light-blue btn" (click)="addAssessment(name.value, orgId.value, tool.value)">Salvar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="addAssessment(name.value, tool.value)">Salvar</a>
           </div>
         </div>
 

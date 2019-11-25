@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ServicesService } from '../services.service';
 import { AuthService, SocialUser } from 'angularx-social-login';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 declare var $: any;
 
 @Component({
@@ -21,15 +23,20 @@ export class OrganizationComponent implements OnInit {
   email = '';
   user: SocialUser;
 
-  constructor(private authService: AuthService, public service: ServicesService, private spinner: NgxSpinnerService) { }
+  constructor(
+    private authService: AuthService,
+    public service: ServicesService,
+    private router: Router,
+    private cookie: CookieService,
+    private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.spinner.show();
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.email = user.email;
+      this.getOrganizations();
     });
-    this.getOrganizations();
     $('select').formSelect();
     $('.modal').modal();
   }
@@ -100,6 +107,15 @@ export class OrganizationComponent implements OnInit {
     this.organizationName = organization.name;
     this.organizationUsers = organization.users;
     $('.editUsers').modal('open');
+  }
+
+  selectOrganization(organizationId: string) {
+    const organization = this.organizationsList.find(org => org._id === organizationId);
+    const user = Object(organization).users.find(u => u.email === this.email);
+    this.cookie.set('ORGANIZATIONID', organizationId, 15);
+    this.cookie.set('ORGANIZATIONNAME', organization.name, 15);
+    this.cookie.set('ORGANIZATIONMEMBERPROFILE', user.profile, 15);
+    this.router.navigate(['profile']);
   }
 
 }

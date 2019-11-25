@@ -25,6 +25,11 @@ import { OrganizationDetailsComponent } from './organization/organization-detail
 import { TeamDetailsComponent } from './team/team-details/team-details.component';
 import { AssessmentDetailsComponent } from './assessment/assessment-details/assessment-details.component';
 import { ApplicationComponent } from './application/application.component';
+import { CompetenceComponent } from './competence/competence.component';
+import { CookieService } from 'ngx-cookie-service';
+import { ProfileComponent } from './profile/profile.component';
+import { AttendanceComponent } from './attendance/attendance.component';
+import { AnswerComponent } from './answer/answer.component';
 
 const config = new AuthServiceConfig([
   {
@@ -60,7 +65,11 @@ export function tokenGetter() {
     OrganizationDetailsComponent,
     TeamDetailsComponent,
     AssessmentDetailsComponent,
-    ApplicationComponent
+    ApplicationComponent,
+    CompetenceComponent,
+    ProfileComponent,
+    AttendanceComponent,
+    AnswerComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +97,8 @@ export function tokenGetter() {
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig
-    }
+    },
+    CookieService
   ],
   bootstrap: [AppComponent]
 })
