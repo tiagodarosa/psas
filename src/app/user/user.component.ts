@@ -23,7 +23,7 @@ export class UserComponent implements OnInit {
   signInWithGoogle(): void {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((error) => {
       if (error) {
-        this.router.navigate(['dashboard']);
+        this.router.navigate(['organization']);
       } else {
         console.log('An error has occurred while using Google Authorization Service.');
         this.authorizationError = true;
