@@ -30,6 +30,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { ProfileComponent } from './profile/profile.component';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { AnswerComponent } from './answer/answer.component';
+import { MemberComponent } from './member/member.component';
 
 const config = new AuthServiceConfig([
   {
@@ -69,7 +70,8 @@ export function tokenGetter() {
     CompetenceComponent,
     ProfileComponent,
     AttendanceComponent,
-    AnswerComponent
+    AnswerComponent,
+    MemberComponent
   ],
   imports: [
     BrowserModule,

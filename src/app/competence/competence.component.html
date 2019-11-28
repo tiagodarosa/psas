@@ -17,6 +17,18 @@
         </div>
       </div>
 
+      <div class="row" *ngIf="competences.length<=0">
+          <div class="col s12 center">
+            <h5 class="header">Esta organização não possui competências cadastradas!</h5>
+            <p class="caption" *ngIf="userProfile!='organizationManager'">
+              Solicite para um gestor da organização para adicionar, alterar ou excluir competências da organização.
+            </p>
+            <p class="caption" *ngIf="userProfile==='organizationManager'">
+              Adicione uma competência clicando no botão "Nova Competência"!
+            </p>
+          </div>
+        </div>
+
       <!-- Competences -->
       <div class="row">
         <div class="col s12">
@@ -41,9 +53,6 @@
               </tr>
             </tbody>
           </table>
-          <p class="caption" *ngIf="competences.length<=0">
-            Esta organização não possui competências cadastradas.
-          </p>
         </div>
       </div>
 

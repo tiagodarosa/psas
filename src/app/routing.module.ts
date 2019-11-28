@@ -19,6 +19,7 @@ import { CompetenceComponent } from './competence/competence.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { AnswerComponent } from './answer/answer.component';
+import { MemberComponent } from './member/member.component';
 
 
 const routes: Routes = [
@@ -36,6 +37,7 @@ const routes: Routes = [
   { path: 'answer', component: AnswerComponent },
   { path: 'attendance', component: AttendanceComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'member', component: MemberComponent },
   { path: 'organization/:organizationId', component: OrganizationDetailsComponent },
   { path: 'project', component: ProjectComponent },
   { path: 'team', component: TeamComponent },

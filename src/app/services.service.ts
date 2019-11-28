@@ -81,7 +81,6 @@ export class ServicesService {
       competences: org.competences,
       status: org.status
     };
-    console.log(body);
     return this.http.put(endpoint + '/organization/' + org._id, body, this.httpOptions).pipe(
       map(this.extractData));
   }
@@ -257,7 +256,6 @@ export class ServicesService {
       method,
       strategy
     };
-    console.log(body);
     this.getHttpOptions();
     return this.http.post(endpoint + '/application', body, this.httpOptions).pipe(
       map(this.extractData));
