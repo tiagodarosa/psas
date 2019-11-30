@@ -23,6 +23,7 @@ export class AnswerComponent implements OnInit {
   assessmentList = [];
   currentApplication = {};
   currentUserBeingRated = {};
+  currentApplicationValid = false;
 
   types = [
     { value: 'initial', description: 'Diagnóstica' },

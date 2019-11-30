@@ -75,7 +75,7 @@
             </div>
             <!-- Questions -->
             <div class="row">
-                <ul class="collapsible expandable" *ngIf="currentApplication.assessment">
+                <ul class="collapsible expandable" *ngIf="currentApplicationValid">
                   <li *ngFor="let question of currentApplication.assessment.questions; let i = index" class="active">
                     <div class="collapsible-header">{{ i+1 }} - {{ question.name | slice:0:40 }}{{ question.name.length > 40 ? '...' : ''}}</div>
                     <div class="collapsible-body">
@@ -114,7 +114,7 @@
           <!-- Buttons -->
           <div class="modal-footer">
             <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            <a class="modal-close waves-effect waves-light light-blue btn" (click)="addCompetence(competenceName.value, competenceType.value, competenceDescription.value)">Salvar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn">Salvar</a>
           </div>
         </div>
   
