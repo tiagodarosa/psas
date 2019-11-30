@@ -21,6 +21,8 @@ export class AnswerComponent implements OnInit {
   applicationsByUser = [];
   teamList = [];
   assessmentList = [];
+  currentApplication = {};
+  currentUserBeingRated = {};
 
   types = [
     { value: 'initial', description: 'Diagnóstica' },
@@ -56,13 +58,13 @@ export class AnswerComponent implements OnInit {
     });
     $('select').formSelect();
     $('.modal').modal();
+    $('.collapsible').collapsible({ accordion: false });
   }
 
   getApplications() {
     this.service.findApplicationsFromUser().subscribe((data) => {
       const applications = Object(data);
       this.organization = applications.organizations.find(o => o._id === this.organizationId);
-      console.log(this.organization);
       const applicationList = Object(applications).applicationList;
       applicationList.forEach(application => {
         if (this.checkApplicationWaitingForAnswer(application) > 0 && application.organizationId === this.organizationId) {
@@ -99,30 +101,11 @@ export class AnswerComponent implements OnInit {
     const answers = Object(application).answers;
     let missing = 0;
     answers.forEach(answer => {
-      if (answer.userEvaluator === 'tiagodarosa@me.com' && answer.answer === '') {
+      if (answer.userEvaluator === this.userEmail && answer.answer === '') {
         missing++;
       }
     });
     return missing;
-  }
-
-  addApplicationModal() {
-    if (this.assessmentList.length > 0 && this.teamList.length > 0) {
-      $('select').formSelect();
-      $('.modal').modal();
-      $('.addApplication').modal('open');
-    } else {
-      M.toast({html: 'Você não possui avaliações ou times para incluir uma aplicação!'});
-    }
-  }
-
-  addApplication(name: string, teamId: string, assessmentId: string, type: string, method: string, strategy: string) {
-    this.spinner.show();
-    this.service.addApplication(name, teamId, assessmentId, type, method, strategy).subscribe((data) => {
-      this.getApplications();
-    }, (error) => {
-      M.toast({html: 'Erro'});
-    });
   }
 
   filterType(type: string) {
@@ -155,6 +138,17 @@ export class AnswerComponent implements OnInit {
       return members.find(m => m.email === user).name;
     } catch {
       return user;
+    }
+  }
+
+  answerApplicationModal(applicationId: string, userRated: string) {
+    this.currentUserBeingRated = userRated;
+    this.currentApplication = this.applicationToAnswer.find(application => application._id === applicationId);
+    if (Object(this.currentApplication).assessment.questions.length > 0) {
+      $('#comments').val('');
+      M.updateTextFields();
+      $('.collapsible').collapsible({ accordion: false });
+      $('.answerApplication').modal('open');
     }
   }
 
