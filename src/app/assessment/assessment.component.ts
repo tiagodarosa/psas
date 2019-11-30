@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'angularx-social-login';
 import { CookieService } from 'ngx-cookie-service';
 declare var $: any;
+declare var M: any;
 
 @Component({
   selector: 'app-assessment',
@@ -143,6 +144,21 @@ export class AssessmentComponent implements OnInit {
   copyAssessment(id: string) {
     console.log(id);
     this.spinner.hide();
+  }
+
+  assessmentVisibility(assessmentId: string) {
+    this.spinner.show();
+    this.assessment = this.assessments.find(a => a._id === assessmentId);
+    this.assessment.public = !this.assessment.public;
+    this.service.updateAssessment(this.assessment).subscribe((data) => {
+      this.assessment._rev = Object(data).status._rev;
+      this.spinner.hide();
+      M.toast({html: 'Visibilidade da avaliação alterada com sucesso!'});
+    }, (error) => {
+      this.assessment.public = !this.assessment.public;
+      this.spinner.hide();
+      M.toast({html: 'Ocorreu algum erro ao modificar a visibilidade da avaliação. Por favor, tente novamente!'});
+    });
   }
 
 }

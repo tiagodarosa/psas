@@ -49,11 +49,72 @@
                   <td>{{ application.questionsCount }}</td>
                   <td>{{ filterName(application.userRated) }}</td>
                   <td>
-                    <a class="modal-trigger" href="#answerApplication" title="Avaliar {{ filterName(application.userRated) }}" (click)="answerApplicationModal(application.applicationId, application.userRated)"><i class="material-icons left">edit</i></a>
+                    <a style="cursor: pointer;" title="Avaliar {{ filterName(application.userRated) }}" (click)="answerApplicationModal(application.applicationId, application.userRated)"><i class="material-icons left">edit</i></a>
                   </td>
                 </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+
+
+        <!-- Modal to answer assessment -->
+        <div id="answerApplication" class="modal modal-fixed-footer answerApplication">
+          <div class="modal-content">
+            <h4>Avaliando Tiago</h4>
+            <!-- Application info -->
+            <div class="row">
+              <p>
+                Nome do avaliado: Tiago da Rosa Santos<br>
+                Aplicação: Avaliação de exemplo<br>
+                Tipo de aplicação: diagnóstica<br>
+                Método da aplicação: ranking<br>
+                Estratégia: Avaliação 360º<br>
+                Ferramenta: Rúbrica
+              </p>
+            </div>
+            <!-- Questions -->
+            <div class="row">
+                <ul class="collapsible expandable" *ngIf="currentApplication.assessment">
+                  <li *ngFor="let question of currentApplication.assessment.questions; let i = index" class="active">
+                    <div class="collapsible-header">{{ i+1 }} - {{ question.name | slice:0:40 }}{{ question.name.length > 40 ? '...' : ''}}</div>
+                    <div class="collapsible-body">
+                      <p><b>Questão: </b>{{ question.name }}</p>
+                      <p><b>Competência: </b>{{ question.competenceName }}</p>
+                      <!-- Alternatives -->
+                      <div class="row" *ngIf="question.items.length>0">
+                        <div class="col s12 m6 l4 xl3" *ngFor="let item of question.items; let j = index" style="padding: 0;">
+                          <div class="card blue-grey darken-1">
+                            <div class="card-content white-text">
+                              <p><b>Alternativa {{ j+1 }}</b></p>
+                              <p>{{ item.description }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+            </div>
+            <!-- Comments -->
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">comment</i>
+                    <label class="active" for="comments">Comentários</label>
+                    <input #comments id="comments" type="text" class="validate" value="">
+                  </div>
+                </div>
+              </form>
+            </div>
+
+          </div>
+
+          <!-- Buttons -->
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="addCompetence(competenceName.value, competenceType.value, competenceDescription.value)">Salvar</a>
           </div>
         </div>
   

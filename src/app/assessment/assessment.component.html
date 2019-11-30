@@ -27,25 +27,34 @@
           </div>
         </div>
 
-        <!-- Cards of assessments -->
-        <div class="row"  *ngIf="assessments.length>0">
-          <div class="col s12 m6 l6 xl4" *ngFor="let assessment of assessments">
-            <div class="card small darken-1">
-              <div class="card-content">
-                <span class="card-title">{{ assessment.name }}</span>
-                <p>
-                  {{ assessment.public ? 'Pública' : 'Privada' }}
-                  <br>
-                  {{ filterTool(assessment.tool) }}
-                  <br>
-                  {{ assessment.questions.length>0 ? (assessment.questions.length + (assessment.questions.length>1 ? ' questões' : ' questão')) : 'Nenhuma questão' }}
-                </p>
-              </div>
-              <div class="card-action light-blue">
-                <a style="color: white;" [routerLink]="['/assessment', assessment._id]" title="Editar avaliação {{ assessment.name }}"><i class="material-icons left">edit</i></a>
-                <a class="modal-trigger" style="color: white;" href="#deleteAssessment" title="Excluir avaliação {{ assessment.name }}" (click)="deleteAssessmentModal(assessment.name, assessment._id)"><i class="material-icons left">delete</i></a>
-              </div>
-            </div>
+        <!-- Assessments -->
+        <div class="row">
+          <div class="col s12">
+            <table class="highlight" *ngIf="assessments.length>0">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Ferramenta</th>
+                  <th>Autor</th>
+                  <th>Questões</th>
+                  <th *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">Opções</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let assessment of assessments">
+                  <td>{{ assessment.name }}</td>
+                  <td>{{ assessment.tool }}</td>
+                  <td>{{ assessment.userCreator }}</td>
+                  <td>{{ assessment.questions.length }}</td>
+                  <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
+                    <a [routerLink]="['/assessment', assessment._id]" title="Editar avaliação {{ assessment.name }}"><i class="material-icons left">edit</i></a>
+                    <a style="cursor: pointer;" title="{{ assessment.public ? 'Tornar privada a avaliação' : 'Tornar pública a avaliação'}}" (click)="assessmentVisibility(assessment._id)"><i class="material-icons left">{{ assessment.public ? 'visibility_off' : 'visibility'}}</i></a>
+                    <a class="modal-trigger" href="#editMember" title="Copiar avaliação {{ assessment.name }}" (click)="editMemberModal(assessment.name)"><i class="material-icons left">content_copy</i></a>
+                    <a class="modal-trigger" href="#deleteAssessment" title="Excluir avaliação {{ assessment.name }}" (click)="deleteAssessmentModal(assessment.name, assessment._id)"><i class="material-icons left">delete</i></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
