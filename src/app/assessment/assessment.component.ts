@@ -115,7 +115,9 @@ export class AssessmentComponent implements OnInit {
     this.assessment.organizationId = this.organizationId;
     this.assessment.tool = tool;
     this.service.addAssessment(this.assessment).subscribe((data) => {
-      this.getAssessments();
+      this.assessments.push(this.assessment);
+      this.assessments.sort(this.compare);
+      this.spinner.hide();
     }, (error) => {
       this.router.navigate(['home']);
     });
@@ -132,7 +134,9 @@ export class AssessmentComponent implements OnInit {
   deleteAssessment(id: string) {
     this.spinner.show();
     this.service.deleteAssessment(id).subscribe((data) => {
-      this.getAssessments();
+      this.assessments = this.assessments.filter(a => a._id !== id);
+      this.assessments.sort(this.compare);
+      this.spinner.hide();
     }, (error) => {
       this.router.navigate(['home']);
     });
@@ -150,8 +154,30 @@ export class AssessmentComponent implements OnInit {
   }
 
   editAssessment(name: string, tool: string) {
-    console.log(name);
-    console.log(tool);
+    if (this.assessment.name !== name || this.assessment.tool !== tool) {
+      this.spinner.show();
+      this.assessment.name = name;
+      this.assessment.tool = tool;
+      this.service.updateAssessment(this.assessment).subscribe((data) => {
+        const result = Object(data);
+        if (result.status) {
+          const rev = result.status.rev;
+          this.assessment._rev = rev;
+          this.assessments = this.assessments.filter(a => a._id !== this.assessment._id);
+          this.assessments.push(this.assessment);
+          this.assessments.sort(this.compare);
+          this.spinner.hide();
+          M.toast({html: 'Avaliação alterada com sucesso!'});
+        } else {
+          this.spinner.hide();
+          M.toast({html: 'Ocorreu algum erro ao modificar a visibilidade da avaliação. Por favor, tente novamente!'});
+        }
+      }, (error) => {
+        M.toast({html: 'Ocorreu algum erro ao editar a avaliação. Por favor, tente novamente!'});
+      });
+    } else {
+      M.toast({html: 'Avaliação alterada com sucesso!'});
+    }
   }
 
   copyAssessmentModal() {
