@@ -59,7 +59,6 @@ export class AnswerComponent implements OnInit {
     });
     $('select').formSelect();
     $('.modal').modal();
-    $('.collapsible').collapsible({ accordion: false });
   }
 
   getApplications() {
@@ -146,10 +145,21 @@ export class AnswerComponent implements OnInit {
     this.currentUserBeingRated = userRated;
     this.currentApplication = this.applicationToAnswer.find(application => application._id === applicationId);
     if (Object(this.currentApplication).assessment.questions.length > 0) {
+      this.currentApplicationValid = true;
       $('#comments').val('');
       M.updateTextFields();
-      $('.collapsible').collapsible({ accordion: false });
       $('.answerApplication').modal('open');
+    }
+  }
+
+  selectItem(question: number, item: number) {
+    for (let i = 0; i < 10; i++) {
+      const optionId = '#' + question + '' + i;
+      if (i === item) {
+        $(optionId).addClass('light-blue');
+      } else {
+        $(optionId).removeClass('light-blue');
+      }
     }
   }
 
