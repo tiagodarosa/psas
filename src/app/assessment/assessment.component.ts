@@ -64,17 +64,31 @@ export class AssessmentComponent implements OnInit {
     $('.modal').modal();
   }
 
+  compare(a, b) {
+    const nameA = a.name.toUpperCase();
+    const nameB = b.name.toUpperCase();
+    let comparison = 0;
+    if (nameA > nameB) {
+      comparison = 1;
+    } else if (nameA < nameB) {
+      comparison = -1;
+    }
+    return comparison;
+  }
+
   getAssessments() {
+    this.assessments = [];
     this.spinner.show();
     this.service.findAssessmentsFromUser().subscribe((data) => {
-      const a = Object(data);
-      this.assessmentsCount = Object(a).count;
-      const assess = Object(a).assessments;
-      assess.forEach(a => {
-        if (a.organizationId === this.organizationId) {
-          this.assessments.push(a);
+      const result = Object(data);
+      this.assessmentsCount = Object(result).count;
+      const assess = Object(result).assessments;
+      assess.forEach(assessment => {
+        if (assessment.organizationId === this.organizationId) {
+          this.assessments.push(assessment);
         }
       });
+      this.assessments.sort(this.compare);
       this.spinner.hide();
     }, (error) => {
       this.router.navigate(['home']);
@@ -124,6 +138,22 @@ export class AssessmentComponent implements OnInit {
     });
   }
 
+  editAssessmentModal(assessmentId: string) {
+    this.assessmentId = assessmentId;
+    this.assessment = this.assessments.find(a => a._id === assessmentId);
+    $('#editName').val(this.assessment.name);
+    $('#editTool').val(this.assessment.tool);
+    M.updateTextFields();
+    $('.modal').modal();
+    $('select').formSelect();
+    $('.editAssessment').modal('open');
+  }
+
+  editAssessment(name: string, tool: string) {
+    console.log(name);
+    console.log(tool);
+  }
+
   copyAssessmentModal() {
     this.spinner.show();
     $('.modal').modal();
@@ -151,9 +181,19 @@ export class AssessmentComponent implements OnInit {
     this.assessment = this.assessments.find(a => a._id === assessmentId);
     this.assessment.public = !this.assessment.public;
     this.service.updateAssessment(this.assessment).subscribe((data) => {
-      this.assessment._rev = Object(data).status._rev;
-      this.spinner.hide();
-      M.toast({html: 'Visibilidade da avaliação alterada com sucesso!'});
+      const result = Object(data);
+      if (result.status) {
+        const rev = result.status.rev;
+        this.assessment._rev = rev;
+        this.assessments = this.assessments.filter(a => a._id !== assessmentId);
+        this.assessments.push(this.assessment);
+        this.assessments.sort(this.compare);
+        this.spinner.hide();
+        M.toast({html: 'Visibilidade da avaliação alterada com sucesso!'});
+      } else {
+        this.spinner.hide();
+        M.toast({html: 'Ocorreu algum erro ao modificar a visibilidade da avaliação. Por favor, tente novamente!'});
+      }
     }, (error) => {
       this.assessment.public = !this.assessment.public;
       this.spinner.hide();

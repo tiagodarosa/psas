@@ -43,11 +43,12 @@
               <tbody>
                 <tr *ngFor="let assessment of assessments">
                   <td>{{ assessment.name }}</td>
-                  <td>{{ assessment.tool }}</td>
+                  <td>{{ filterTool(assessment.tool) }}</td>
                   <td>{{ assessment.userCreator }}</td>
                   <td>{{ assessment.questions.length }}</td>
                   <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
-                    <a [routerLink]="['/assessment', assessment._id]" title="Editar avaliação {{ assessment.name }}"><i class="material-icons left">edit</i></a>
+                    <a style="cursor: pointer;" title="Editar informações da avaliação {{ assessment.name }}" (click)="editAssessmentModal(assessment._id)"><i class="material-icons left">edit</i></a>
+                    <a style="cursor: pointer;" title="Editar questões da avaliação {{ assessment.name }}" [routerLink]="['/assessment', assessment._id]"><i class="material-icons left">question_answer</i></a>
                     <a style="cursor: pointer;" title="{{ assessment.public ? 'Tornar privada a avaliação' : 'Tornar pública a avaliação'}}" (click)="assessmentVisibility(assessment._id)"><i class="material-icons left">{{ assessment.public ? 'visibility_off' : 'visibility'}}</i></a>
                     <a class="modal-trigger" href="#editMember" title="Copiar avaliação {{ assessment.name }}" (click)="editMemberModal(assessment.name)"><i class="material-icons left">content_copy</i></a>
                     <a class="modal-trigger" href="#deleteAssessment" title="Excluir avaliação {{ assessment.name }}" (click)="deleteAssessmentModal(assessment.name, assessment._id)"><i class="material-icons left">delete</i></a>
@@ -106,6 +107,47 @@
             <a class="modal-close waves-effect waves-light light-blue btn" (click)="addAssessment(name.value, tool.value)">Salvar</a>
           </div>
         </div>
+
+
+        <!-- Modal to edit assessment -->
+        <div id="editAssessment" class="modal modal-fixed-footer editAssessment">
+            <div class="modal-content">
+              <h4>Editar avaliação</h4>
+              <p>
+                Modifique as informações da avaliação.
+              </p>
+              <div class="row">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s6">
+                      <i class="material-icons prefix">description</i>
+                      <input #editName id="editName" type="text" class="validate">
+                      <label for="editName" class="active">Nome</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s6">
+                      <i class="material-icons prefix">build</i>
+                      <label for="editTool" class="active">Ferramenta</label>
+                      <select #editTool id="editTool" class="validate">
+                          <option *ngFor='let tool of tools' [value]="tool.value">
+                            {{ tool.description }}
+                          </option>
+                      </select>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+              <a class="modal-close waves-effect waves-light light-blue btn" (click)="editAssessment(editName.value, editTool.value)">Salvar</a>
+            </div>
+          </div>
+
+
+
+
 
         <!-- Modal to delete assessment -->
         <div id="deleteAssessment" class="modal modal-fixed-footer deleteAssessment">
