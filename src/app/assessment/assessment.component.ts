@@ -26,6 +26,7 @@ export class AssessmentComponent implements OnInit {
   userEmail = '';
   userProfile = '';
   organizationName = '';
+  currentApplicationValid = false;
 
   assessment = {
     _id: '',
