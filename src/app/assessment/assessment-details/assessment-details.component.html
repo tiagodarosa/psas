@@ -17,64 +17,17 @@
         </div>
       </div>
 
-      <!-- Assessment info -->
-      <div class="row">
-        <div class="col s12">
-          <h5>Informações da avaliação</h5>
-          <!--<p class="grey-text text-darken-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ex dolor, hendrerit vitae rutrum quis, pharetra eu augue. Proin id nunc lacinia, placerat est at, varius ante. Donec nec ipsum nibh.</p>-->
-        </div>
-      </div>
-      <div class="row">
-        <form class="col s12">
-          <div class="row">
-            <div class="input-field col s12 m6">
-              <i class="material-icons prefix">description</i>
-              <input id="icon_prefix" type="text" class="validate" value="{{ assessment.name }}">
-              <label class="active" for="icon_prefix">Nome</label>
-            </div>
-            <div class="input-field col s12 m6">
-              <i class="material-icons prefix">location_city</i>
-              <input disabled id="icon_telephone" type="tel" class="validate" value="{{ organization.name }}">
-              <label class="active" for="icon_telephone">Organização</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="input-field col s12 m6">
-              <i class="material-icons prefix">account_circle</i>
-              <input disabled id="icon_prefix" type="text" class="validate" value="{{ assessment.userCreator }}">
-              <label class="active" for="icon_prefix">Autor</label>
-            </div>
-            <div class="input-field col s12 m6">
-              <i class="material-icons prefix">edit</i>
-              <input disabled id="icon_telephone" type="tel" class="validate" value="{{ filterTool(assessment.tool) }}">
-              <label class="active" for="icon_telephone">Ferramenta</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="input-field col s12 m6">
-              <i class="material-icons prefix">pan_tool</i>
-              <label class="active" for="publics">Pública</label>
-              <select #public id="public" class="validate">
-                <option *ngFor='let option of publicOptions' [value]="option.value" [selected]="option.value === assessment.public">
-                  {{ option.description }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </form>
-      </div>
-
       <!-- Questions -->
       <div class="row">
         <div class="col s12">
-            <h5>Questões</h5>
+            <h5>Questões da avaliação</h5>
         </div>
       </div>
       <div class="row">
         <div class="col s12">
           <ul class="collapsible" *ngIf="assessment.questions.length>0">
             <li *ngFor="let question of assessment.questions; let i = index" (click)="collapsible()">
-              <div class="collapsible-header">{{ i+1 }} - {{ question.name | slice:0:40 }}{{ question.name.length > 40 ? '...' : ''}}</div>
+              <div class="collapsible-header">{{ i+1 }} - {{ question.name | slice:0:40 }}{{ question.name.length > 40 ? '...' : ''}}<span class="badge"><i class="material-icons" style="color: #03a9f4;" title="Editar questão" (click)="editQuestionModal(i)">edit</i><i class="material-icons" title="Excluir questão" style="color: #03a9f4;">delete</i></span></div>
               <div class="collapsible-body">
                 <span>
                   <p><b>Questão:</b>{{ question.name }}</p>

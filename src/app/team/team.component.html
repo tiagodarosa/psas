@@ -67,9 +67,10 @@
                 <td>{{ findProjectName(team.projectId) }}</td>
                 <td>{{ team.members.length }}</td>
                 <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
-                  <a [routerLink]="['/team', team._id]" title="Editar equipe {{ team.name }}"><i class="material-icons left">edit</i></a>
-                  <a [routerLink]="['/team', team._id]" title="Editar pessoas da equipe {{ team.name }}"><i class="material-icons left">people</i></a>
-                  <a class="modal-trigger" href="#deleteTeam" title="Excluir equipe {{ team.name }}" (click)="deleteTeamModal(team._id)"><i class="material-icons left">delete</i></a>
+                  <a (click)="editTeamModal(team._id)" style="cursor: pointer;" title="Editar equipe"><i class="material-icons left">edit</i></a>
+                  <a (click)="editMembersModal(team._id)" style="cursor: pointer;" title="Editar membros da equipe"><i class="material-icons left">people</i></a>
+                  <a [routerLink]="['/team', team._id]" title="Editar membros da equipe"><i class="material-icons left">delete</i></a>
+                  <a class="modal-trigger" href="#deleteTeam" title="Excluir equipe" (click)="deleteTeamModal(team._id)"><i class="material-icons left">delete</i></a>
                 </td>
               </tr>
             </tbody>
@@ -126,6 +127,106 @@
           <a class="modal-close waves-effect waves-light light-blue btn" (click)="addTeam(tName.value, tProjectId.value)">Salvar</a>
         </div>
       </div>
+
+
+
+
+      <!-- Modal to edit team -->
+      <div id="editTeam" class="modal modal-fixed-footer editTeam">
+        <div class="modal-content">
+          <h4>Editar equipe</h4>
+          <p>
+            Edite as informações da equipe. As alterações da equipe serão válidas apenas nas novas aplicações.
+          </p>
+          <div class="row">
+            <form class="col s12">
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">description</i>
+                  <input #editName id="editName" type="text" class="validate">
+                  <label for="editName" class="active">Nome</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">description</i>
+                  <label for="editProject" class="active">Projeto</label>
+                  <select #editProject id="editProject" class="validate">
+                      <option *ngFor='let project of projectsList' [value]="project._id">
+                        {{ project.name }}
+                      </option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+          <a class="modal-close waves-effect waves-light light-blue btn" (click)="editTeam(editName.value, editProject.value)">Salvar</a>
+        </div>
+      </div>
+
+
+
+
+
+      <!-- Modal to edit members of a team -->
+      <div id="editMembers" class="modal modal-fixed-footer editMembers">
+        <div class="modal-content">
+          <h4>Editar membros da equipe</h4>
+          <p>
+            Adicione ou remova os membros da equipe. As alterações serão válidas apenas nas novas aplicações.
+          </p>
+          <div class="row">
+            <form class="col s12">
+              <div class="row" *ngIf="membersNotInTeam.length>0">
+                <div class="input-field col s12 m6">
+                  <i class="material-icons prefix">description</i>
+                  <label for="editProject" class="active">Pessoas da organização</label>
+                  <select #addMember id="addMember" class="validate">
+                      <option *ngFor='let user of membersNotInTeam' [value]="user.email">
+                        {{ findName(user.email) }}
+                      </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row" *ngIf="membersNotInTeam.length<=0">
+                <div class="input-field col s12">
+                  <p>Todas as pessoas da organização já estão nesta equipe!</p>
+                </div>
+              </div>
+              <table class="highlight">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Status</th>
+                    <th *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">Opções</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let member of team.members">
+                    <td>{{ findName(member.email) }}</td>
+                    <td>{{ member.email }}</td>
+                    <td>{{ member.status }}</td>
+                    <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
+                      <a (click)="deleteMember(member.email)" style="cursor: pointer;" title="Excluir membro"><i class="material-icons left">delete</i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+          <a class="modal-close waves-effect waves-light light-blue btn" (click)="editTeam(editName.value, editProject.value)">Salvar</a>
+        </div>
+      </div>
+
+
+
 
       <!-- Modal to delete team -->
       <div id="deleteTeam" class="modal modal-fixed-footer deleteTeam">

@@ -47,11 +47,12 @@
                   <td>{{ assessment.userCreator }}</td>
                   <td>{{ assessment.questions.length }}</td>
                   <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
-                    <a style="cursor: pointer;" title="Editar informações da avaliação {{ assessment.name }}" (click)="editAssessmentModal(assessment._id)"><i class="material-icons left">edit</i></a>
-                    <a style="cursor: pointer;" title="Editar questões da avaliação {{ assessment.name }}" [routerLink]="['/assessment', assessment._id]"><i class="material-icons left">question_answer</i></a>
+                    <a style="cursor: pointer;" title="Editar informações da avaliação" (click)="editAssessmentModal(assessment._id)"><i class="material-icons left">edit</i></a>
+                    <!--<a style="cursor: pointer;" title="Editar questões da avaliação" (click)="editAssessmentQuestionsModal(assessment._id)"><i class="material-icons left">question_answer</i></a>-->
+                    <a style="cursor: pointer;" title="Editar questões da avaliação" [routerLink]="['/assessment', assessment._id]"><i class="material-icons left">question_answer</i></a>
                     <a style="cursor: pointer;" title="{{ assessment.public ? 'Tornar privada a avaliação' : 'Tornar pública a avaliação'}}" (click)="assessmentVisibility(assessment._id)"><i class="material-icons left">{{ assessment.public ? 'visibility_off' : 'visibility'}}</i></a>
-                    <a class="modal-trigger" href="#editMember" title="Copiar avaliação {{ assessment.name }}" (click)="editMemberModal(assessment.name)"><i class="material-icons left">content_copy</i></a>
-                    <a class="modal-trigger" href="#deleteAssessment" title="Excluir avaliação {{ assessment.name }}" (click)="deleteAssessmentModal(assessment.name, assessment._id)"><i class="material-icons left">delete</i></a>
+                    <a class="modal-trigger" href="#editMember" title="Copiar avaliação" (click)="editMemberModal(assessment.name)"><i class="material-icons left">content_copy</i></a>
+                    <a class="modal-trigger" href="#deleteAssessment" title="Excluir avaliação" (click)="deleteAssessmentModal(assessment.name, assessment._id)"><i class="material-icons left">delete</i></a>
                   </td>
                 </tr>
               </tbody>
@@ -171,12 +172,6 @@
             <p>
               Copie uma avaliação já existente de uma organização que você é membro ou de uma avaliação pública. Clique sobre a avaliação desejada para visualizar os detalhes completos e em seguida clique no botão "Copiar".
             </p>
-            <!--<div class="row">
-              <a style="width: 300px;" class="modal-close waves-effect waves-light light-blue btn" (click)="addAssessment('', '', '')">Avaliações da organização<i class="material-icons right">navigate_next</i></a>
-            </div>
-            <div class="row">
-              <a style="width: 300px;" class="modal-close waves-effect waves-light light-blue btn" (click)="addAssessment('', '', '')">Avaliações públicas<i class="material-icons right">navigate_next</i></a>
-            </div>-->
             <div class="row">
               <ul class="collapsible">
                 <li class="active">
@@ -215,6 +210,74 @@
             <!--<a class="modal-close waves-effect waves-light light-blue btn" (click)="addAssessment(name.value, orgId.value, tool.value)">Salvar</a>-->
           </div>
         </div>
+
+
+
+
+        <!-- Modal to edit questions of assessment -->
+        <div id="editAssessmentQuestions" class="modal modal-fixed-footer editAssessmentQuestions">
+          <div class="modal-content">
+            <h4>Editar questões da avaliação</h4>
+            <!-- Application info -->
+            <div class="row">
+              <p>
+                Nome do avaliado: Tiago da Rosa Santos<br>
+                Aplicação: Avaliação de exemplo<br>
+                Tipo de aplicação: diagnóstica<br>
+                Método da aplicação: ranking<br>
+                Estratégia: Avaliação 360º<br>
+                Ferramenta: Rúbrica
+              </p>
+            </div>
+            <!-- Questions -->
+            <div class="row">
+              <ul class="collapsible expandable" *ngIf="currentApplicationValid">
+                <li *ngFor="let question of currentApplication.assessment.questions; let i = index" onclick="$('.collapsible').collapsible({ accordion: false });">
+                  <div class="collapsible-header">{{ i+1 }} - {{ question.name | slice:0:40 }}{{ question.name.length > 40 ? '...' : ''}}</div>
+                  <div class="collapsible-body">
+                    <p><b>Questão: </b>{{ question.name }}</p>
+                    <p><b>Competência: </b>{{ question.competenceName }}</p>
+                    <!-- Alternatives -->
+                    <div class="row" *ngIf="question.items.length>0">
+                      <div class="col s12 m6 l4 xl3" *ngFor="let item of question.items; let j = index" style="padding: 0;">
+                        <div class="card" style="cursor: pointer;" id="{{ i + '' + j}}" (click)="selectItem(i,j)">
+                          <div class="card-content">
+                            <p><b>Alternativa {{ j+1 }}</b></p>
+                            <p>{{ item.description }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <!-- Comments -->
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">comment</i>
+                    <label class="active" for="comments">Comentários</label>
+                    <input #comments id="comments" type="text" class="validate" value="">
+                  </div>
+                </div>
+              </form>
+            </div>
+
+          </div>
+
+          <!-- Buttons -->
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn">Salvar</a>
+          </div>
+        </div>
+
+
+
+
+
 
       </div>
     </main>

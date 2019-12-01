@@ -227,4 +227,19 @@ export class AssessmentComponent implements OnInit {
     });
   }
 
+
+  editAssessmentQuestionsModal(assessmentId: string) {
+    this.assessmentId = assessmentId;
+    this.assessment = this.assessments.find(a => a._id === assessmentId);
+    // $('#editName').val(this.assessment.name);
+    // $('#editTool').val(this.assessment.tool);
+    M.updateTextFields();
+    $('.modal').modal();
+    $('select').formSelect();
+    $('.editAssessmentQuestions').modal('open');
+  }
+
+
+
+
 }

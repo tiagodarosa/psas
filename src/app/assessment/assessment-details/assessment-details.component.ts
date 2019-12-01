@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServicesService } from 'src/app/services.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { AuthService } from 'angularx-social-login';
+import { CookieService } from 'ngx-cookie-service';
 declare var $: any;
 
 @Component({
@@ -56,18 +58,30 @@ export class AssessmentDetailsComponent implements OnInit {
   ];
 
   currentQuestion = null;
+  organizationId = '';
+  organizationName = '';
+  userProfile = '';
+  userEmail = '';
 
   constructor(
     private route: ActivatedRoute,
     private service: ServicesService,
     private spinner: NgxSpinnerService,
+    private authService: AuthService,
+    private cookie: CookieService,
     private router: Router) { }
 
   ngOnInit() {
     this.spinner.show();
-    this.route.paramMap.subscribe(params => {
-      this.assessment._id = params.get('assessmentId');
-      this.getAssessment();
+    this.organizationId = this.cookie.get('ORGANIZATIONID');
+    this.organizationName = this.cookie.get('ORGANIZATIONNAME');
+    this.userProfile = this.cookie.get('ORGANIZATIONMEMBERPROFILE');
+    this.authService.authState.subscribe((user) => {
+      this.userEmail = user.email;
+      this.route.paramMap.subscribe(params => {
+        this.assessment._id = params.get('assessmentId');
+        this.getAssessment();
+      });
     });
   }
 

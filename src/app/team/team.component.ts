@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'angularx-social-login';
 import { CookieService } from 'ngx-cookie-service';
 declare var $: any;
+declare var M: any;
 
 @Component({
   selector: 'app-team',
@@ -22,8 +23,21 @@ export class TeamComponent implements OnInit {
   projectsList = [];
   organizationId = '';
   organizationName = '';
+  organization = {
+    users: []
+  };
   userEmail = '';
   userProfile = '';
+  team = {
+    _id: '',
+    _rev: '',
+    name: '',
+    projectId: '',
+    projectName: '',
+    status: '',
+    members: [],
+  };
+  membersNotInTeam = [];
 
   constructor(
     private service: ServicesService,
@@ -49,29 +63,38 @@ export class TeamComponent implements OnInit {
     this.teamsList = [];
     this.projectsList = [];
     this.service.findTeamsFromUser().subscribe((data) => {
-      const teams = Object(data);
-      this.service.findProjectsFromUser().subscribe((proj) => {
-        const projs = Object(proj).projects;
-        projs.forEach(p => {
-          if (p.organizationId === this.organizationId) {
-            this.projectsList.push(p);
-          }
-        });
-        const tList = Object(teams).teams;
-        tList.forEach(t => {
-          if (this.projectsList.some(p => p._id === t.projectId)) {
-            this.teamsList.push(t);
-          }
-        });
-        this.teamsCount = this.teamsList.length;
-        this.projectsCount = this.projectsList.length;
-        this.spinner.hide();
-      }, (error) => {
-        this.router.navigate(['home']);
+      const projs = Object(data).projects;
+      projs.forEach(p => {
+        if (p.organizationId === this.organizationId) {
+          this.projectsList.push(p);
+        }
       });
+      const tList = Object(data).teams;
+      tList.forEach(t => {
+        if (this.projectsList.some(p => p._id === t.projectId)) {
+          this.teamsList.push(t);
+        }
+      });
+      this.teamsCount = this.teamsList.length;
+      this.projectsCount = this.projectsList.length;
+      this.teamsList.sort(this.compare);
+      this.organization.users = Object(data).organizations.find(org => org._id === this.organizationId).users;
+      this.spinner.hide();
     }, (error) => {
       this.router.navigate(['home']);
     });
+  }
+
+  findName(email: string) {
+    try {
+      if (email) {
+        return this.organization.users.find(u => u.email === email).name || '';
+      } else {
+        return '';
+      }
+    } catch {
+      return email;
+    }
   }
 
   findProjectName(projectId: string) {
@@ -111,6 +134,76 @@ export class TeamComponent implements OnInit {
     }, (error) => {
       this.router.navigate(['home']);
     });
+  }
+
+  editTeamModal(teamId: string) {
+    this.teamId = teamId;
+    this.team = this.teamsList.find(team => team._id === teamId);
+    $('#editName').val(this.team.name);
+    $('#editProject').val(this.team.projectId);
+    M.updateTextFields();
+    $('.modal').modal();
+    $('select').formSelect();
+    $('.editTeam').modal('open');
+  }
+
+  compare(a, b) {
+    const nameA = a.name.toUpperCase();
+    const nameB = b.name.toUpperCase();
+    let comparison = 0;
+    if (nameA > nameB) {
+      comparison = 1;
+    } else if (nameA < nameB) {
+      comparison = -1;
+    }
+    return comparison;
+  }
+
+  editTeam(name: string, projectId: string) {
+    if (this.team.name !== name || this.team.projectId !== projectId) {
+      if (name !== '') {
+        this.spinner.show();
+        this.team.name = name;
+        this.team.projectId = projectId;
+        this.team.projectName = this.projectsList.find(p => p._id === projectId).name;
+        this.service.updateTeam(this.teamId, this.team).subscribe((data) => {
+          const result = Object(data);
+          if (result.status) {
+            const rev = result.status.rev;
+            this.team._rev = rev;
+            this.teamsList = this.teamsList.filter(t => t._id !== this.teamId);
+            this.teamsList.push(this.team);
+            this.teamsList.sort(this.compare);
+            this.spinner.hide();
+            M.toast({html: 'Equipe alterada com sucesso!'});
+          } else {
+            this.spinner.hide();
+            M.toast({html: 'Ocorreu algum erro ao editar a equipe. Por favor, tente novamente!'});
+          }
+        }, (error) => {
+          M.toast({html: 'Ocorreu algum erro ao editar a equipe. Por favor, tente novamente!'});
+        });
+      } else {
+        M.toast({html: 'Favor preencher todos os campos!'});
+      }
+    } else {
+      M.toast({html: 'Equipe alterada com sucesso!'});
+    }
+  }
+
+
+  editMembersModal(teamId: string) {
+    this.teamId = teamId;
+    this.team = this.teamsList.find(team => team._id === teamId);
+    this.membersNotInTeam = this.team.members;
+    this.organization.users.forEach(user => {
+      this.membersNotInTeam = this.membersNotInTeam.filter(member => member.email !== user.email);
+    });
+    console.log(this.membersNotInTeam);
+    M.updateTextFields();
+    $('.modal').modal();
+    $('select').formSelect();
+    $('.editMembers').modal('open');
   }
 
 }
