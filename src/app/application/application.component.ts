@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ServicesService } from '../services.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
+import { AuthService } from 'angularx-social-login';
+import { CookieService } from 'ngx-cookie-service';
 declare var $: any;
 declare var M: any;
 
@@ -38,13 +40,82 @@ export class ApplicationComponent implements OnInit {
     { value: '360', description: 'Avaliação 360º' }
   ];
 
-  constructor(private service: ServicesService, private spinner: NgxSpinnerService, private router: Router) { }
+  status = [
+    { value: 'active', description: 'Em andamento' },
+    { value: 'inactive', description: 'Interrompida' },
+    { value: 'closed', description: 'Encerrada' }
+  ];
+
+  organizationId = '';
+  organizationName = '';
+  userProfile = '';
+  userEmail = '';
+
+  constructor(
+    private service: ServicesService,
+    private spinner: NgxSpinnerService,
+    private authService: AuthService,
+    private cookie: CookieService,
+    private router: Router) { }
 
   ngOnInit() {
     this.spinner.show();
-    this.getApplications();
+    this.organizationId = this.cookie.get('ORGANIZATIONID');
+    this.organizationName = this.cookie.get('ORGANIZATIONNAME');
+    this.userProfile = this.cookie.get('ORGANIZATIONMEMBERPROFILE');
+    this.authService.authState.subscribe((user) => {
+      this.userEmail = user.email;
+      this.getApplications();
+    });
     $('select').formSelect();
     $('.modal').modal();
+  }
+
+  filterType(type: string) {
+    try  {
+      return this.types.find(t => t.value === type).description;
+    } catch {
+      return type;
+    }
+  }
+
+  filterMethod(method: string) {
+    try  {
+      return this.methods.find(t => t.value === method).description;
+    } catch {
+      return method;
+    }
+  }
+
+  filterStatus(status: string) {
+    try  {
+      return this.status.find(t => t.value === status).description;
+    } catch {
+      return status;
+    }
+  }
+
+  filterPercentage(application: object) {
+    try {
+      const totalAnswers = Object(application).answers.length;
+      let totalAnswered = 0;
+      totalAnswers.forEach(answer => {
+        if (answer.answer === '') {
+          totalAnswered++;
+        }
+      });
+      return (totalAnswers * 100) / totalAnswered;
+    } catch {
+      return 0;
+    }
+  }
+
+  filterStrategy(strategy: string) {
+    try  {
+      return this.strategies.find(t => t.value === strategy).description;
+    } catch {
+      return strategy;
+    }
   }
 
   getApplications() {
@@ -107,6 +178,13 @@ export class ApplicationComponent implements OnInit {
     } else {
       M.toast({html: 'Você não possui avaliações ou times para incluir uma aplicação!'});
     }
+  }
+
+  attendanceModal(applicationId: string) {
+    $('select').formSelect();
+    $('.modal').modal();
+    $('.attendance').modal('open');
+    console.log(applicationId);
   }
 
   addApplication(name: string, teamId: string, assessmentId: string, type: string, method: string, strategy: string) {

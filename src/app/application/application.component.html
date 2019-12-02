@@ -13,7 +13,7 @@
         <!-- Title -->
         <div class="row">
           <div class="col s12">
-            <h3 class="header">Aplicações</h3>
+            <h3 class="header">Aplicar avaliação</h3>
           </div>
         </div>
 
@@ -28,65 +28,38 @@
         </div>
 
 
-
-
-
-        <div class="row" *ngIf="applicationsCount>0">
+        <!-- Applications -->
+        <div class="row">
           <div class="col s12">
-            <h5>Aplicações que criei</h5>
+            <table class="highlight" *ngIf="applicationsCount>0">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Equipe</th>
+                  <th>Tipo</th>
+                  <th>Método</th>
+                  <th>Estratégia</th>
+                  <th>Status</th>
+                  <th *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">Opções</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let application of myApplications">
+                  <td>{{ application.name }}</td>
+                  <td>{{ application.team.name }}</td>
+                  <td>{{ filterType(application.type) }}</td>
+                  <td>{{ filterMethod(application.method) }}</td>
+                  <td>{{ filterStrategy(application.strategy) }}</td>
+                  <td>{{ filterStatus(application.status) }}{{ application.status === 'active' ? ' - ' + filterPercentage(application) + '%' : '' }}</td>
+                  <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
+                    <a *ngIf="application.status === 'active'" style="cursor: pointer;" title="Acompanhar aplicação" (click)="attendanceModal(application._id)"><i class="material-icons left">insert_chart</i></a>
+                    <a style="cursor: pointer;" title="Excluir aplicação" (click)="deleteApplicationModal(application._id)"><i class="material-icons left">delete</i></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-        <div class="row" *ngIf="myApplications.length<=0 && applicationsCount>0">
-          <div class="col s12">
-            <p class="grey-text text-darken-2">Nenhuma aplicação.</p>
-          </div>
-        </div>
-        <div class="row" *ngIf="myApplications.length>0">
-          <div class="col s12 m6 l6 xl4" *ngFor="let application of myApplications">
-            <div class="card small darken-1">
-              <div class="card-content">
-                <span class="card-title">{{ application.name }}</span>
-                <p>
-                  Aplicação
-                </p>
-              </div>
-              <div class="card-action light-blue">
-                <a style="color: white;" [routerLink]="['/application', application._id]" title="Editar aplicação {{ application.name }}"><i class="material-icons left">edit</i></a>
-                <a class="modal-trigger" style="color: white;" href="#deleteTeam" title="Excluir aplicação {{ application.name }}" (click)="deleteTeamModal(team._id)"><i class="material-icons left">delete</i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="row" *ngIf="applicationsCount>0">
-          <div class="col s12">
-            <h5>Aplicações das organizações que sou membro criadas por outras pessoas</h5>
-          </div>
-        </div>
-        <div class="row" *ngIf="applicationFromOrgs.length<=0 && applicationsCount>0">
-          <div class="col s12">
-            <p class="grey-text text-darken-2">Nenhuma aplicação.</p>
-          </div>
-        </div>
-        <div class="row" *ngIf="applicationFromOrgs.length>0">
-          <div class="col s12 m6 l6 xl4" *ngFor="let application of applicationFromOrgs">
-            <div class="card small darken-1">
-              <div class="card-content">
-                <span class="card-title">{{ application.name }}</span>
-                <p>
-                  Aplicação
-                </p>
-              </div>
-              <div class="card-action light-blue">
-                <a style="color: white;" [routerLink]="['/application', application._id]" title="Editar aplicação {{ application.name }}"><i class="material-icons left">edit</i></a>
-                <a class="modal-trigger" style="color: white;" href="#deleteTeam" title="Excluir aplicação {{ application.name }}" (click)="deleteTeamModal(team._id)"><i class="material-icons left">delete</i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
 
         <!-- Buttons -->
         <div class="row">
@@ -98,7 +71,7 @@
         <!-- Modal for new application -->
       <div id="addApplication" class="modal modal-fixed-footer addApplication">
         <div class="modal-content">
-          <h4>Nova equipe</h4>
+          <h4>Nova aplicação de avaliação</h4>
           <p>
             Informe os dados para criação da aplicação.
           </p>
@@ -114,7 +87,7 @@
               <div class="row">
                 <div class="input-field col s6">
                   <i class="material-icons prefix">description</i>
-                  <label for="team" class="active">Time</label>
+                  <label for="team" class="active">Equipe</label>
                   <select #team id="team" class="validate">
                       <option *ngFor='let team of teamList' [value]="team._id">
                         {{ team.name }}
@@ -174,6 +147,20 @@
           <a class="modal-close waves-effect waves-light light-blue btn" (click)="addApplication(name.value, team.value, assessment.value, type.value, method.value, strategy.value)">Salvar</a>
         </div>
       </div>
+
+
+        <!-- Modal for attendance of application -->
+        <div id="attendance" class="modal modal-fixed-footer attendance">
+          <div class="modal-content">
+            <h4>Acompanhar aplicação</h4>
+            <p>
+              Em desenvolvimento.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Fechar</a>
+          </div>
+        </div>
 
 
 
