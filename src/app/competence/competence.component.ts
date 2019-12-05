@@ -18,11 +18,9 @@ export class CompetenceComponent implements OnInit {
   userProfile = '';
   competences = [];
   competenceName = '';
-  competenceNameEdit2 = '';
   competenceType = '';
-  competenceTypeEdit2 = '';
   competenceDescription = '';
-  competenceDescriptionEdit2 = '';
+  temporaryName = '';
   organization = {
     _rev: '',
     name: '',
@@ -30,6 +28,8 @@ export class CompetenceComponent implements OnInit {
     competences: [],
     status: ''
   };
+  organizationId = '';
+  organizationName = '';
   competenceTypes = [
     { value: 'knowledge', description: 'Conhecimento' },
     { value: 'ability', description: 'Habilidade' },
@@ -45,6 +45,9 @@ export class CompetenceComponent implements OnInit {
 
   ngOnInit() {
     this.spinner.show();
+    this.organizationId = this.cookie.get('ORGANIZATIONID');
+    this.organizationName = this.cookie.get('ORGANIZATIONNAME');
+    this.userProfile = this.cookie.get('ORGANIZATIONMEMBERPROFILE');
     this.authService.authState.subscribe((user) => {
       this.userEmail = user.email;
       this.getCompetences();
@@ -52,26 +55,26 @@ export class CompetenceComponent implements OnInit {
   }
 
   getCompetences() {
-    const organizationId = this.cookie.get('ORGANIZATIONID');
-    this.service.findOrganizationById(organizationId).subscribe((data) => {
+    this.service.findOrganizationById(this.organizationId).subscribe((data) => {
       this.organization = Object(data);
-      this.userProfile = this.getUserProfile(this.organization);
       this.competences = this.organization.competences || [];
-      console.log(this.organization);
+      this.competences.sort(this.compare);
       this.spinner.hide();
     }, (error) => {
       this.spinner.hide();
     });
   }
 
-  getUserProfile(organization) {
-    const users = organization.users;
-    const user = users.find(u => u.email === this.userEmail);
-    if (user) {
-      return user.profile;
-    } else {
-      return '';
+  compare(a, b) {
+    const nameA = a.name.toUpperCase();
+    const nameB = b.name.toUpperCase();
+    let comparison = 0;
+    if (nameA > nameB) {
+      comparison = 1;
+    } else if (nameA < nameB) {
+      comparison = -1;
     }
+    return comparison;
   }
 
   addCompetenceModal() {
@@ -82,17 +85,14 @@ export class CompetenceComponent implements OnInit {
 
   editCompetenceModal(competenceName: string) {
     const comp = this.competences.find(c => c.name === competenceName);
-    this.competenceNameEdit2 = competenceName;
-    this.competenceTypeEdit2 = comp.type;
-    this.competenceDescriptionEdit2 = comp.description;
-    $('select').formSelect();
-    M.updateTextFields();
+    this.temporaryName = competenceName;
+    $('#competenceNameEdit').val(competenceName);
+    $('#competenceTypeEdit').val(comp.type);
+    $('#competenceDescriptionEdit').val(comp.description);
     $('.modal').modal();
     $('select').formSelect();
-    M.updateTextFields();
-    $('.modal').modal();
-    $('.editCompetence').modal();
     $('.editCompetence').modal('open');
+    M.updateTextFields();
   }
 
   filterCompetenceType(competenceType: string) {
@@ -115,7 +115,10 @@ export class CompetenceComponent implements OnInit {
         };
         this.organization.competences.push(competence);
         this.service.updateOrganization(this.organization).subscribe((data) => {
-          this.getCompetences();
+          this.competences = this.organization.competences;
+          this.competences.sort(this.compare);
+          this.spinner.hide();
+          M.toast({html: 'Competência adicionada com sucesso!'});
         }, (error) => {
           this.router.navigate(['home']);
         });
@@ -127,11 +130,10 @@ export class CompetenceComponent implements OnInit {
     if (competenceName === '' || competenceType === '' || competenceDescription === '') {
       M.toast({html: `Você deve preencher todos os campos obrigatórios.`});
     } else {
-      const comp = this.organization.competences.find(c => c.name === this.competenceNameEdit2);
+      const comp = this.organization.competences.find(c => c.name === this.temporaryName);
       if (comp) {
-        M.toast({html: `Já existe uma competência cadastrada com o nome '${competenceName}'.`});
-      } else {
         this.spinner.show();
+        this.organization.competences = this.organization.competences.filter(c => c.name !== this.temporaryName);
         const competence = {
           name: competenceName,
           type: competenceType,
@@ -139,33 +141,38 @@ export class CompetenceComponent implements OnInit {
         };
         this.organization.competences.push(competence);
         this.service.updateOrganization(this.organization).subscribe((data) => {
-          this.getCompetences();
+          this.competences = this.organization.competences;
+          this.competences.sort(this.compare);
+          this.temporaryName = '';
+          this.spinner.hide();
+          M.toast({html: 'Competência atualizada com sucesso!'});
         }, (error) => {
           this.router.navigate(['home']);
         });
+      } else {
+        M.toast({html: `Ocorreu algum erro. Por favor, tente novamente!`});
       }
     }
   }
 
   deleteCompetenceModal(competenceName: string) {
-    this.competenceName = competenceName;
+    this.temporaryName = competenceName;
     $('.modal').modal();
     $('select').formSelect();
     $('.deleteCompetence').modal('open');
   }
 
   deleteCompetence() {
-    const comp = this.organization.competences.find(c => c.name === this.competenceName);
+    const comp = this.organization.competences.find(c => c.name === this.temporaryName);
     if (comp) {
       this.spinner.show();
-      for (let i = 0; i < this.organization.competences.length; i++) {
-        if (this.organization.competences[i].name === this.competenceName) {
-          this.organization.competences.splice(i, 1);
-          break;
-        }
-      }
+      this.organization.competences = this.organization.competences.filter(c => c.name !== this.temporaryName);
       this.service.updateOrganization(this.organization).subscribe((data) => {
-        this.getCompetences();
+        this.competences = this.organization.competences;
+        this.competences.sort(this.compare);
+        this.temporaryName = '';
+        this.spinner.hide();
+        M.toast({html: 'Competência excluída com sucesso!'});
       }, (error) => {
         this.router.navigate(['home']);
       });

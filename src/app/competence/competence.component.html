@@ -47,7 +47,7 @@
                 <td>{{ filterCompetenceType(competence.type) }}</td>
                 <td>{{ competence.description }}</td>
                 <td *ngIf="userProfile==='organizationManager'">
-                  <!--<a style="cursor: pointer;" title="Editar competência {{ competence.name }}" (click)="editCompetenceModal(competence.name)"><i class="material-icons left">edit</i></a>-->
+                  <a style="cursor: pointer;" title="Editar competência {{ competence.name }}" (click)="editCompetenceModal(competence.name)"><i class="material-icons left">edit</i></a>
                   <a class="modal-trigger" href="#deleteCompetence" title="Excluir competência {{ competence.name }}" (click)="deleteCompetenceModal(competence.name)"><i class="material-icons left">delete</i></a>
                 </td>
               </tr>
@@ -76,11 +76,12 @@
           <h4>Excluir competência</h4>
           <p>
             Você realmente deseja excluir a competência? Essa ação não poderá ser desfeita.
+            Todas as avaliações e histórico de avaliações que utilizaram essa competência não serão alterados.
           </p>
         </div>
         <div class="modal-footer">
           <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-          <!--<a class="modal-close waves-effect waves-light red btn" (click)="deleteCompetence(email)">Excluir</a>-->
+          <a class="modal-close waves-effect waves-light red btn" (click)="deleteCompetence()">Excluir</a>
         </div>
       </div>
 
@@ -135,7 +136,7 @@
       <!-- Modal to edit competence -->
       <div id="editCompetence" class="modal modal-fixed-footer editCompetence">
           <div class="modal-content">
-            <h4>Editar competência {{ competenceNameEdit2 }}</h4>
+            <h4>Editar competência</h4>
             <p>
               Atualize as informações da competência.
             </p>
@@ -145,7 +146,7 @@
                   <div class="input-field col s12 m6">
                     <i class="material-icons prefix">grain</i>
                     <label class="active" for="competenceNameEdit">Nome</label>
-                    <input #competenceNameEdit id="competenceNameEdit" type="text" class="validate" value="{{ competenceNameEdit2 }}">
+                    <input #competenceNameEdit id="competenceNameEdit" type="text" class="validate" value="">
                   </div>
                 </div>
                 <div class="row">
@@ -153,7 +154,7 @@
                     <i class="material-icons prefix">Tipo</i>
                     <label class="active" for="competenceTypeEdit">Tipo</label>
                     <select #competenceTypeEdit id="competenceTypeEdit" class="validate">
-                        <option *ngFor='let type of competenceTypes' [value]="type.value" [selected]="type.value === competenceTypeEdit2">
+                        <option *ngFor='let type of competenceTypes' [value]="type.value">
                           {{ type.description }}
                         </option>
                     </select>
@@ -163,7 +164,7 @@
                   <div class="input-field col s12 m6">
                     <i class="material-icons prefix">description</i>
                     <label class="active" for="competenceDescriptionEdit">Descrição</label>
-                    <input #competenceDescriptionEdit id="competenceDescriptionEdit" type="text" class="validate" value="{{ competenceDescriptionEdit2 }}">
+                    <input #competenceDescriptionEdit id="competenceDescriptionEdit" type="text" class="validate" value="">
                   </div>
                 </div>
               </form>
