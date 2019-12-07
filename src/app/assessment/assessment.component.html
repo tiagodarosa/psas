@@ -51,7 +51,7 @@
                     <!--<a style="cursor: pointer;" title="Editar questões da avaliação" (click)="editAssessmentQuestionsModal(assessment._id)"><i class="material-icons left">question_answer</i></a>-->
                     <a style="cursor: pointer;" title="Editar questões da avaliação" [routerLink]="['/assessment', assessment._id]"><i class="material-icons left">question_answer</i></a>
                     <a style="cursor: pointer;" title="{{ assessment.public ? 'Tornar privada a avaliação' : 'Tornar pública a avaliação'}}" (click)="assessmentVisibility(assessment._id)"><i class="material-icons left">{{ assessment.public ? 'visibility_off' : 'visibility'}}</i></a>
-                    <a class="modal-trigger" href="#editMember" title="Copiar avaliação" (click)="editMemberModal(assessment.name)"><i class="material-icons left">content_copy</i></a>
+                    <a style="cursor: pointer;" title="Copiar avaliação" (click)="copyAssessmentById(assessment._id)"><i class="material-icons left">content_copy</i></a>
                     <a class="modal-trigger" href="#deleteAssessment" title="Excluir avaliação" (click)="deleteAssessmentModal(assessment.name, assessment._id)"><i class="material-icons left">delete</i></a>
                   </td>
                 </tr>
@@ -153,15 +153,15 @@
         <!-- Modal to delete assessment -->
         <div id="deleteAssessment" class="modal modal-fixed-footer deleteAssessment">
           <div class="modal-content">
-            <h4>Excluir avaliação <b>{{ assessmentName }}</b></h4>
+            <h4>Excluir avaliação</h4>
             <p>
               Você tem certeza que deseja excluir a avaliação?
               Essa ação não poderá ser desfeita!
             </p>
           </div>
           <div class="modal-footer">
-            <a (click)="assessmentId=''" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            <a class="modal-close waves-effect waves-light red btn" (click)="deleteAssessment(assessmentId)">Excluir</a>
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light red btn" (click)="deleteAssessment()">Excluir</a>
           </div>
         </div>
 
@@ -174,13 +174,13 @@
             </p>
             <div class="row">
               <ul class="collapsible">
-                <li class="active">
+                <!--<li class="active">
                   <div class="collapsible-header waves-effect waves-light light-blue white-text">Avaliações da organização</div>
                   <div class="collapsible-body">
                     <span *ngIf="organizationAssessmentsCount<=0">Nenhuma avaliação disponível nas organizações que você é membro.</span>
                   </div>
-                </li>
-                <li>
+                </li>-->
+                <li class="active">
                   <div class="collapsible-header waves-effect waves-light light-blue white-text">Avaliações públicas</div>
                   <div class="collapsible-body">
                     <span *ngIf="publicAssessmentsCount<=0">Nenhuma avaliação pública disponível.</span>

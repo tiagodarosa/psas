@@ -115,13 +115,43 @@ export class AssessmentComponent implements OnInit {
     this.assessment.name = name;
     this.assessment.organizationId = this.organizationId;
     this.assessment.tool = tool;
+    this.assessment.userCreator = this.userEmail;
+    this.assessment.questions = [];
     this.service.addAssessment(this.assessment).subscribe((data) => {
+      this.assessment._id = Object(data).status.id;
+      this.assessment._rev = Object(data).status.rev;
       this.assessments.push(this.assessment);
       this.assessments.sort(this.compare);
       this.spinner.hide();
     }, (error) => {
       this.router.navigate(['home']);
     });
+  }
+
+  copyAssessmentById(assessmentId) {
+    const copy = this.assessments.filter(a => a._id === assessmentId)[0];
+    this.assessment.name = Object(copy).name + ' (cópia)';
+    this.assessment.organizationId = Object(copy).organizationId;
+    this.assessment.userCreator = this.userEmail;
+    this.assessment.public = false;
+    this.assessment.tool = Object(copy).tool;
+    this.assessment.status = 'active';
+    this.assessment.questions = Object(copy).questions;
+    if (this.assessment.organizationId !== '') {
+      this.spinner.show();
+      this.service.addAssessment(this.assessment).subscribe((data) => {
+        this.assessment._id = Object(data).status.id;
+        this.assessment._rev = Object(data).status.rev;
+        this.assessments.push(this.assessment);
+        this.assessments.sort(this.compare);
+        this.spinner.hide();
+        M.toast({html: 'Avaliação copiada com sucesso!'});
+      }, (error) => {
+        this.router.navigate(['home']);
+      });
+    } else {
+      M.toast({html: 'Ocorreu algum erro ao copiar a avaliação. Por favor, tente novamente!'});
+    }
   }
 
   deleteAssessmentModal(name: string, id: string) {
@@ -132,10 +162,10 @@ export class AssessmentComponent implements OnInit {
     $('.deleteAssessment').modal('open');
   }
 
-  deleteAssessment(id: string) {
+  deleteAssessment() {
     this.spinner.show();
-    this.service.deleteAssessment(id).subscribe((data) => {
-      this.assessments = this.assessments.filter(a => a._id !== id);
+    this.service.deleteAssessment(this.assessmentId).subscribe((data) => {
+      this.assessments = this.assessments.filter(a => a._id !== this.assessmentId);
       this.assessments.sort(this.compare);
       this.spinner.hide();
     }, (error) => {

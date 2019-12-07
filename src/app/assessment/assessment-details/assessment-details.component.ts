@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from 'angularx-social-login';
 import { CookieService } from 'ngx-cookie-service';
 declare var $: any;
+declare var M: any;
 
 @Component({
   selector: 'app-assessment-details',
@@ -105,7 +106,8 @@ export class AssessmentDetailsComponent implements OnInit {
         this.organization.users = result.users;
         this.organization.status = result.status;
         this.spinner.hide();
-        console.log(this.assessment);
+        $('select').formSelect();
+        console.log(this.organization);
       }, (error) => {
         this.router.navigate(['home']);
       });
@@ -135,14 +137,16 @@ export class AssessmentDetailsComponent implements OnInit {
     });
   }
 
-  addQuestionModal() {
-    this.q.name = '';
-    this.q.description = '';
-    this.q.competenceName = '';
-    this.q.significance = 0;
-    $('.modal').modal();
-    $('select').formSelect();
-    $('.addEditQuestion').modal('open');
+  addQuestion() {
+    const newQuestion = {
+      order: this.assessment.questions.length,
+      competenceName: '',
+      description: '',
+      items: [],
+      name: '',
+      significance: 0
+    };
+    this.assessment.questions.push(newQuestion);
   }
 
   editQuestionModal(question: number) {
@@ -158,6 +162,8 @@ export class AssessmentDetailsComponent implements OnInit {
 
   collapsible() {
     $('.collapsible').collapsible();
+    $('select').formSelect();
+    M.updateTextFields();
   }
 
   deleteAlternative(question: number, item: number) {
@@ -168,21 +174,14 @@ export class AssessmentDetailsComponent implements OnInit {
     this.assessment.questions.splice(question, 1);
   }
 
-  addAlternativeModal(question: number) {
-    this.alternative.description = '';
-    this.alternative.option = '';
-    this.alternative.percentage = 0;
-    this.currentQuestion = question;
-    $('.modal').modal();
-    $('.addEditAlternative').modal('open');
-  }
-
-  addAlternative(description: string, percentage: number) {
-    this.alternative.description = description;
-    this.alternative.option = '';
-    this.alternative.percentage = percentage;
-    this.assessment.questions[this.currentQuestion].items.push(this.alternative);
-    this.currentQuestion = null;
+  addAlternative(question: number) {
+    const newAlternative = {
+      order: this.assessment.questions[question].items.length,
+      description: '',
+      option: '',
+      percentage: ''
+    };
+    this.assessment.questions[question].items.push(newAlternative);
   }
 
   addEditQuestion(qname: string, competence: string, sig: number) {
@@ -203,6 +202,27 @@ export class AssessmentDetailsComponent implements OnInit {
     }, (error) => {
       this.router.navigate(['home']);
     });
+  }
+
+  changeQuestionName(question: number) {
+    const field = '#questionName' + question;
+    this.assessment.questions[question].name = $(field).val();
+  }
+
+  changeQuestionSignificance(question: number) {
+    const field = '#significance' + question;
+    this.assessment.questions[question].significance = $(field).val();
+  }
+
+  changeQuestionItemPercentage(question: number, item: number) {
+    const field = '#itemPercentage' + question + item;
+    this.assessment.questions[question].items[item].percentage = $(field).val();
+  }
+
+  changeQuestionItemDescription(question: number, item: number) {
+    const field = '#itemDescription' + question + item;
+    this.assessment.questions[question].items[item].description = $(field).val();
+    console.log(field);
   }
 
 }

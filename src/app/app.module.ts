@@ -31,6 +31,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { AnswerComponent } from './answer/answer.component';
 import { MemberComponent } from './member/member.component';
+import { FormsModule } from '@angular/forms';
 
 const config = new AuthServiceConfig([
   {
@@ -93,7 +94,8 @@ export function tokenGetter() {
         blacklistedRoutes: []
       }
     }),
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    FormsModule
   ],
   providers: [
     {
