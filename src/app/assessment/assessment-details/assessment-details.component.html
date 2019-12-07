@@ -113,36 +113,6 @@
       </div>
 
 
-      <!-- Modal to add or edit alternative -->
-      <div id="addEditAlternative" class="modal modal-fixed-footer addEditAlternative">
-        <div class="modal-content">
-          <h4>Adicionar ou editar alternativa na questão</h4>
-          <div class="row">
-            <form class="col s12">
-              <div class="row">
-                <div class="input-field col s12 m6">
-                  <i class="material-icons prefix">description</i>
-                  <input #description id="description" type="text" class="validate" value="{{ alternative.description }}">
-                  <label for="description">Descrição</label>
-                </div>
-              </div>
-              <div class="row">
-                <div class="input-field col s12 m6">
-                  <i class="material-icons prefix">format_list_numbered</i>
-                  <input #percentage id="percentage" type="number" class="validate" value="{{ alternative.percentage }}">
-                  <label for="percentage" class="active">Porcentagem</label>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-          <a class="modal-close waves-effect waves-light light-blue btn" (click)="addAlternative(description.value, percentage.value)">Salvar</a>
-        </div>
-      </div>
-
-
     </div>
   </main>
 
