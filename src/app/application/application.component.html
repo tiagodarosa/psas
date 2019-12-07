@@ -52,7 +52,7 @@
                   <td>{{ filterStrategy(application.strategy) }}</td>
                   <td>{{ filterStatus(application.status) }}{{ application.status === 'active' ? ' - ' + filterPercentage(application) + '%' : '' }}</td>
                   <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
-                    <a *ngIf="application.status === 'active'" style="cursor: pointer;" title="Acompanhar aplicação" (click)="attendanceModal(application._id)"><i class="material-icons left">insert_chart</i></a>
+                    <a *ngIf="application.status === 'active'" style="cursor: pointer;" title="Acompanhar aplicação" (click)="attendanceModal(application._id)"><i class="material-icons left">show_chart</i></a>
                     <a style="cursor: pointer;" title="Excluir aplicação" (click)="deleteApplicationModal(application._id)"><i class="material-icons left">delete</i></a>
                   </td>
                 </tr>

@@ -97,14 +97,15 @@ export class ApplicationComponent implements OnInit {
 
   filterPercentage(application: object) {
     try {
-      const totalAnswers = Object(application).answers.length;
+      const totalAnswers = Object(application).answers;
+      console.log(totalAnswers);
       let totalAnswered = 0;
       totalAnswers.forEach(answer => {
-        if (answer.answer === '') {
+        if (answer.answer !== '') {
           totalAnswered++;
         }
       });
-      return (totalAnswers * 100) / totalAnswered;
+      return (totalAnswered * 100) / totalAnswers.length;
     } catch {
       return 0;
     }
