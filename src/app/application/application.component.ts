@@ -16,9 +16,7 @@ export class ApplicationComponent implements OnInit {
 
   applicationsCount = 0;
   applicationList = [];
-  applicationToAnswer = [];
   myApplications = [];
-  applicationFromOrgs = [];
   teamList = [];
   assessmentList = [];
   applicationToDelete = '';
@@ -99,7 +97,6 @@ export class ApplicationComponent implements OnInit {
   filterPercentage(application: object) {
     try {
       const totalAnswers = Object(application).answers;
-      console.log(totalAnswers);
       let totalAnswered = 0;
       totalAnswers.forEach(answer => {
         if (answer.answer !== '') {
@@ -122,20 +119,13 @@ export class ApplicationComponent implements OnInit {
 
   getApplications() {
     this.myApplications = [];
-    this.applicationFromOrgs = [];
-    this.applicationToAnswer = [];
     this.service.findApplicationsFromUser().subscribe((data) => {
       const applications = Object(data);
       this.applicationsCount = Object(applications).count;
       this.applicationList = Object(applications).applicationList;
       this.applicationList.forEach(application => {
-        if (application.userCreator === 'tiagodarosa@me.com') {
+        if (application.organizationId === this.organizationId) {
           this.myApplications.push(application);
-        } else {
-          this.applicationFromOrgs.push(application);
-        }
-        if (this.checkApplicationWaitingForAnswer(application) > 0) {
-          this.applicationToAnswer.push(application);
         }
       });
       this.spinner.hide();
@@ -146,30 +136,35 @@ export class ApplicationComponent implements OnInit {
     });
   }
 
-  checkApplicationWaitingForAnswer(application: object) {
-    const answers = Object(application).answers;
-    let missing = 0;
-    answers.forEach(answer => {
-      if (answer.userEvaluator === 'tiagodarosa@me.com' && answer.answer === '') {
-        missing++;
-      }
-    });
-    return missing;
-  }
-
   getTeams() {
-    this.service.findTeamsFromUser().subscribe((data) => {
-      const teams = Object(data);
-      this.teamList = Object(teams).teams;
-    }, (error) => {
-      M.toast({html: 'Não foi possível buscar seus times.'});
+    this.service.findProjectsByOrganizationId(this.organizationId).subscribe((projects) => {
+      const projs = Object(projects).projects;
+      console.log(projs);
+      this.service.findTeamsFromUser().subscribe((data) => {
+        const teams = Object(data).teams;
+        teams.forEach(team => {
+          projs.forEach(proj => {
+            if (team.projectId === proj._id) {
+              this.teamList.push(team);
+            }
+          });
+        });
+        console.log(this.teamList);
+      }, (error) => {
+        M.toast({html: 'Não foi possível buscar seus times.'});
+      });
     });
   }
 
   getAssessments() {
     this.service.findAssessmentsFromUser().subscribe((data) => {
-      const assessments = Object(data);
-      this.assessmentList = Object(assessments).assessments;
+      this.assessmentList = [];
+      const assessments = Object(data).assessments;
+      assessments.forEach(assessment => {
+        if (assessment.organizationId === this.organizationId) {
+          this.assessmentList.push(assessment);
+        }
+      });
     }, (error) => {
       M.toast({html: 'Não foi possível buscar suas avaliações.'});
     });
@@ -189,7 +184,6 @@ export class ApplicationComponent implements OnInit {
     $('select').formSelect();
     $('.modal').modal();
     $('.attendance').modal('open');
-    console.log(applicationId);
   }
 
   addApplication(name: string, teamId: string, assessmentId: string, type: string, method: string, strategy: string) {
@@ -218,7 +212,6 @@ export class ApplicationComponent implements OnInit {
         this.getApplications();
       }, (error) => {
         this.spinner.hide();
-        console.log(error);
         M.toast({html: 'Ocorreu algum erro ao tentar excluir a aplicação. Por favor, tente novamente!'});
       });
     } else {
