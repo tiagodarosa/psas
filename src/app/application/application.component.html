@@ -162,6 +162,21 @@
           </div>
         </div>
 
+        <!-- Modal to delete application -->
+        <div id="deleteApplication" class="modal modal-fixed-footer deleteApplication">
+          <div class="modal-content">
+            <h4>Excluir aplicação</h4>
+            <p>
+              Você tem certeza que deseja excluir a aplicação da avaliação?
+              Essa ação não poderá ser desfeita!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light red btn" (click)="deleteApplication()">Excluir</a>
+          </div>
+        </div>
+
 
 
 

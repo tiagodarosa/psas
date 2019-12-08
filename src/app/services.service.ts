@@ -260,4 +260,10 @@ export class ServicesService {
     return this.http.post(endpoint + '/application', body, this.httpOptions).pipe(
       map(this.extractData));
   }
+
+  deleteApplication(id: string) {
+    this.getHttpOptions();
+    return this.http.delete(endpoint + '/application/' + id, this.httpOptions).pipe(
+      map(this.extractData));
+  }
 }

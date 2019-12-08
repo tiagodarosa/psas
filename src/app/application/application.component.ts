@@ -21,6 +21,7 @@ export class ApplicationComponent implements OnInit {
   applicationFromOrgs = [];
   teamList = [];
   assessmentList = [];
+  applicationToDelete = '';
 
   types = [
     { value: 'initial', description: 'Diagnóstica' },
@@ -120,6 +121,9 @@ export class ApplicationComponent implements OnInit {
   }
 
   getApplications() {
+    this.myApplications = [];
+    this.applicationFromOrgs = [];
+    this.applicationToAnswer = [];
     this.service.findApplicationsFromUser().subscribe((data) => {
       const applications = Object(data);
       this.applicationsCount = Object(applications).count;
@@ -195,6 +199,31 @@ export class ApplicationComponent implements OnInit {
     }, (error) => {
       M.toast({html: 'Erro'});
     });
+  }
+
+  deleteApplicationModal(applicationId: string) {
+    if (applicationId !== '') {
+      this.applicationToDelete = applicationId;
+      $('.modal').modal();
+      $('.deleteApplication').modal('open');
+    } else {
+      M.toast({html: 'Ocorreu algum erro ao tentar excluir a aplicação. Por favor, tente novamente!'});
+    }
+  }
+
+  deleteApplication() {
+    if (this.applicationToDelete !== '') {
+      this.spinner.show();
+      this.service.deleteApplication(this.applicationToDelete).subscribe((data) => {
+        this.getApplications();
+      }, (error) => {
+        this.spinner.hide();
+        console.log(error);
+        M.toast({html: 'Ocorreu algum erro ao tentar excluir a aplicação. Por favor, tente novamente!'});
+      });
+    } else {
+      M.toast({html: 'Ocorreu algum erro ao tentar excluir a aplicação. Por favor, tente novamente!'});
+    }
   }
 
 }
