@@ -28,7 +28,7 @@ export class AnswerComponent implements OnInit {
     strategy: '',
     answers: []
   };
-  currentUserBeingRated = {};
+  currentUserBeingRated = '';
   currentApplicationValid = false;
   answers = [];
 
