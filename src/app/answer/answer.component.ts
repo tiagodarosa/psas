@@ -21,7 +21,13 @@ export class AnswerComponent implements OnInit {
   applicationsByUser = [];
   teamList = [];
   assessmentList = [];
-  currentApplication = {};
+  currentApplication = {
+    name: '',
+    type: '',
+    method: '',
+    strategy: '',
+    answers: []
+  };
   currentUserBeingRated = {};
   currentApplicationValid = false;
   answers = [];
