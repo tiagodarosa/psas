@@ -41,6 +41,7 @@ export class ApplicationComponent implements OnInit {
 
   status = [
     { value: 'active', description: 'Em andamento' },
+    { value: 'complete', description: 'Concluída' },
     { value: 'inactive', description: 'Interrompida' },
     { value: 'closed', description: 'Encerrada' }
   ];
@@ -103,7 +104,7 @@ export class ApplicationComponent implements OnInit {
           totalAnswered++;
         }
       });
-      return (totalAnswered * 100) / totalAnswers.length;
+      return Math.round((totalAnswered * 100) / totalAnswers.length);
     } catch {
       return 0;
     }
@@ -123,6 +124,7 @@ export class ApplicationComponent implements OnInit {
       const applications = Object(data);
       this.applicationsCount = Object(applications).count;
       this.applicationList = Object(applications).applicationList;
+      console.log(this.applicationList);
       this.applicationList.forEach(application => {
         if (application.organizationId === this.organizationId) {
           this.myApplications.push(application);
@@ -139,7 +141,6 @@ export class ApplicationComponent implements OnInit {
   getTeams() {
     this.service.findProjectsByOrganizationId(this.organizationId).subscribe((projects) => {
       const projs = Object(projects).projects;
-      console.log(projs);
       this.service.findTeamsFromUser().subscribe((data) => {
         const teams = Object(data).teams;
         teams.forEach(team => {
@@ -149,7 +150,6 @@ export class ApplicationComponent implements OnInit {
             }
           });
         });
-        console.log(this.teamList);
       }, (error) => {
         M.toast({html: 'Não foi possível buscar seus times.'});
       });

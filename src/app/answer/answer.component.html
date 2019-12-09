@@ -61,16 +61,15 @@
         <!-- Modal to answer assessment -->
         <div id="answerApplication" class="modal modal-fixed-footer answerApplication">
           <div class="modal-content">
-            <h4>Avaliando Tiago</h4>
+            <h4>Avaliando {{ filterName(currentUserBeingRated) }}</h4>
             <!-- Application info -->
             <div class="row">
               <p>
-                Nome do avaliado: Tiago da Rosa Santos<br>
-                Aplicação: Avaliação de exemplo<br>
-                Tipo de aplicação: diagnóstica<br>
-                Método da aplicação: ranking<br>
-                Estratégia: Avaliação 360º<br>
-                Ferramenta: Rúbrica
+                Nome do avaliado: {{ filterName(currentUserBeingRated) }} <br>
+                Aplicação: {{ currentApplication.name }}<br>
+                Tipo de aplicação: {{ filterType(currentApplication.type) }}<br>
+                Método da aplicação: {{ filterMethod(currentApplication.method) }}<br>
+                Estratégia: {{ filterStrategy(currentApplication.strategy) }}<br>
               </p>
             </div>
             <!-- Questions -->
@@ -86,7 +85,6 @@
                       <div class="col s12 m6 l4 xl3" *ngFor="let item of question.items; let j = index" style="padding: 0;">
                         <div class="card" style="cursor: pointer;" id="{{ i + '' + j}}" (click)="selectItem(i,j)">
                           <div class="card-content">
-                            <p><b>Alternativa {{ j+1 }}</b></p>
                             <p>{{ item.description }}</p>
                           </div>
                         </div>
@@ -114,7 +112,7 @@
           <!-- Buttons -->
           <div class="modal-footer">
             <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            <a class="modal-close waves-effect waves-light light-blue btn">Salvar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="saveAnswers()">Salvar</a>
           </div>
         </div>
   

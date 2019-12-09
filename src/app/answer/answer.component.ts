@@ -24,6 +24,7 @@ export class AnswerComponent implements OnInit {
   currentApplication = {};
   currentUserBeingRated = {};
   currentApplicationValid = false;
+  answers = [];
 
   types = [
     { value: 'initial', description: 'Diagnóstica' },
@@ -62,6 +63,11 @@ export class AnswerComponent implements OnInit {
   }
 
   getApplications() {
+    this.applicationToAnswer = [];
+    this.applicationsByUser = [];
+    this.teamList = [];
+    this.assessmentList = [];
+    this.answers = []
     this.service.findApplicationsFromUser().subscribe((data) => {
       const applications = Object(data);
       this.organization = applications.organizations.find(o => o._id === this.organizationId);
@@ -142,6 +148,7 @@ export class AnswerComponent implements OnInit {
   }
 
   answerApplicationModal(applicationId: string, userRated: string) {
+    this.answers = [];
     this.currentUserBeingRated = userRated;
     this.currentApplication = this.applicationToAnswer.find(application => application._id === applicationId);
     if (Object(this.currentApplication).assessment.questions.length > 0) {
@@ -153,14 +160,31 @@ export class AnswerComponent implements OnInit {
   }
 
   selectItem(question: number, item: number) {
-    for (let i = 0; i < 10; i++) {
+    const ue = this.userEmail;
+    const ur = this.currentUserBeingRated;
+    const ca = Object(this.currentApplication);
+    const iv = ca.assessment.questions[question].items[item].percentage;
+    const an = ca.answers.find(a => a.userEvaluator === ue && a.userRated === ur && a.questionOrder === question);
+    for (let i = 0; i < 20; i++) {
       const optionId = '#' + question + '' + i;
       if (i === item) {
         $(optionId).addClass('light-blue');
+        an.answer = iv;
+        this.answers = this.answers.filter(a => a.questionOrder !== question);
+        this.answers.push(an);
       } else {
         $(optionId).removeClass('light-blue');
       }
     }
+  }
+
+  saveAnswers() {
+    this.spinner.show();
+    this.service.saveAnswers(Object(this.currentApplication)._id, this.answers).subscribe((data) => {
+      this.getApplications();
+    }, (error) => {
+      this.router.navigate(['home']);
+    });
   }
 
 }

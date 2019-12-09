@@ -266,4 +266,13 @@ export class ServicesService {
     return this.http.delete(endpoint + '/application/' + id, this.httpOptions).pipe(
       map(this.extractData));
   }
+
+  saveAnswers(applicationId: string, answersArray) {
+    this.getHttpOptions();
+    const body = {
+      answers: answersArray
+    };
+    return this.http.put(endpoint + '/application/saveAnswers/' + applicationId, body, this.httpOptions).pipe(
+      map(this.extractData));
+  }
 }
