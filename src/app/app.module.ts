@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable } from '@angular/core';
 import { JwtModule } from '@auth0/angular-jwt';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { AppComponent } from './app.component';
@@ -46,6 +46,19 @@ export function provideConfig() {
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
+}
+
+@Injectable()
+export class NoCacheHeadersInterceptor implements HttpInterceptor {
+    intercept(req: HttpRequest<any>, next: HttpHandler) {
+        const authReq = req.clone({
+            setHeaders: {
+                'Cache-Control': 'no-cache',
+                 Pragma: 'no-cache'
+            }
+        });
+        return next.handle(authReq);
+    }
 }
 
 @NgModule({
@@ -101,6 +114,11 @@ export function tokenGetter() {
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NoCacheHeadersInterceptor,
+      multi: true
     },
     CookieService
   ],
