@@ -69,7 +69,7 @@
                 <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
                   <a (click)="editTeamModal(team._id)" style="cursor: pointer;" title="Editar equipe"><i class="material-icons left">edit</i></a>
                   <a (click)="editMembersModal(team._id)" style="cursor: pointer;" title="Editar membros da equipe"><i class="material-icons left">people</i></a>
-                  <a [routerLink]="['/team', team._id]" title="Editar membros da equipe"><i class="material-icons left">delete</i></a>
+                  <!--<a [routerLink]="['/team', team._id]" title="Editar membros da equipe"><i class="material-icons left">delete</i></a>-->
                   <a class="modal-trigger" href="#deleteTeam" title="Excluir equipe" (click)="deleteTeamModal(team._id)"><i class="material-icons left">delete</i></a>
                 </td>
               </tr>
@@ -102,15 +102,15 @@
           <div class="row">
             <form class="col s12">
               <div class="row">
-                <div class="input-field col s6">
+                <div class="input-field col s12 m12 l6">
                   <i class="material-icons prefix">description</i>
                   <input #tName id="tName" type="text" class="validate">
                   <label for="tName">Nome</label>
                 </div>
               </div>
               <div class="row">
-                <div class="input-field col s6">
-                  <i class="material-icons prefix">description</i>
+                <div class="input-field col s12 m12 l6">
+                  <i class="material-icons prefix">folder</i>
                   <label for="tProjectId" class="active">Projeto</label>
                   <select #tProjectId id="tProjectId" class="validate">
                       <option *ngFor='let project of projectsList' [value]="project._id">
@@ -141,15 +141,15 @@
           <div class="row">
             <form class="col s12">
               <div class="row">
-                <div class="input-field col s6">
+                <div class="input-field col s12 m12 l6">
                   <i class="material-icons prefix">description</i>
                   <input #editName id="editName" type="text" class="validate">
                   <label for="editName" class="active">Nome</label>
                 </div>
               </div>
               <div class="row">
-                <div class="input-field col s6">
-                  <i class="material-icons prefix">description</i>
+                <div class="input-field col s12 m12 l6">
+                  <i class="material-icons prefix">folder</i>
                   <label for="editProject" class="active">Projeto</label>
                   <select #editProject id="editProject" class="validate">
                       <option *ngFor='let project of projectsList' [value]="project._id">
@@ -181,7 +181,7 @@
           <div class="row">
             <form class="col s12">
               <div class="row" *ngIf="membersNotInTeam.length>0">
-                <div class="input-field col s12 m6">
+                <div class="input-field col s12">
                   <i class="material-icons prefix">description</i>
                   <label for="editProject" class="active">Pessoas da organização</label>
                   <select #addMember id="addMember" class="validate">

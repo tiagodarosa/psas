@@ -77,7 +77,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     // Set 10 seconds interval to update data again and again
     // const source = interval(5000);
-    this.spinner.show();
+    this.spinner.hide();
     const apiLink = 'https://api.myjson.com/bins/13lnf4';
 
     /*this.subscription = source.subscribe(val => this.getApiResponse(apiLink).then(
@@ -99,7 +99,7 @@ export class DashboardComponent implements OnInit {
         console.log('Something went wrong.');
       })
     );*/
-    this.getApiResponse(apiLink);
+    // this.getApiResponse(apiLink);
   }
 
   getApiResponse(url) {
