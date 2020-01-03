@@ -144,7 +144,7 @@ export class DashboardComponent implements OnInit {
     $('.highcharts-credits').hide();*/
 
 
-    Highcharts.chart('competences', {
+    /*Highcharts.chart('competences', {
       chart: {
           type: 'packedbubble',
           height: '90%',
@@ -225,7 +225,7 @@ export class DashboardComponent implements OnInit {
     });
     $('.highcharts-credits').hide();
 
-  }
+  }*/
 
   /*getApiResponse(url) {
     return this.http.get(url, {})
@@ -247,5 +247,5 @@ export class DashboardComponent implements OnInit {
         }
       );
   }*/
+  }
 }
-
