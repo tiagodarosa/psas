@@ -221,7 +221,7 @@ export class CompetenceComponent implements OnInit {
     }
     this.countCompetences();
     this.spinner.hide();
-    let graphOptions = {
+    const graphOptions: any = {
       chart: {
         type: 'variablepie',
         backgroundColor: 'transparent'
