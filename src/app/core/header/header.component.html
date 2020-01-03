@@ -1,5 +1,5 @@
 <!-- Navbar -->
-<div>
+<div class="navbar-fixed">
   <nav>
     <div class="nav-wrapper light-blue">
       <a *ngIf="sidenav==true" href="#" data-target="slide-out" class="sidenav-trigger" onclick="M.Sidenav.init(document.querySelectorAll('.sidenav'));"><i class="material-icons">menu</i></a>
@@ -9,10 +9,10 @@
         <li *ngFor="let org of organizations"><a href="#!">{{ org.name }}</a></li>
       </ul>-->
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li *ngIf="loggedIn"><a routerLink="/dashboard">Olá {{ user.firstName }}</a></li>
-        <li *ngIf="loggedIn==false"><a routerLink="/user">Entrar</a></li>
-        <li><a routerLink="/help">Ajuda</a></li>
-        <li *ngIf="loggedIn"><a (click)="signOut()">Sair</a></li>
+        <li *ngIf="loggedIn" style="pointer-events: none;"><a style="cursor: default;">Olá {{ user.firstName }}</a></li>
+        <li *ngIf="loggedIn==false"><a routerLink="/user" style="font-weight: bold;">Entrar</a></li>
+        <li><a routerLink="/help" style="font-weight: bold;">Ajuda</a></li>
+        <li *ngIf="loggedIn"><a (click)="signOut()" style="font-weight: bold;">Sair</a></li>
       </ul>
       <!-- Sidenav medium and down -->
       <!--<ul class="sidenav" id="slide-out">

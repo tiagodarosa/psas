@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as Highcharts from 'highcharts';
 import { AuthService } from 'angularx-social-login';
 import { ServicesService } from '../services.service';
 import { Router } from '@angular/router';
@@ -6,6 +7,16 @@ import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
 declare var $: any;
 declare var M: any;
+
+
+declare var require: any;
+const Boost = require('highcharts/modules/boost');
+const noData = require('highcharts/modules/no-data-to-display');
+const More = require('highcharts/highcharts-more');
+Boost(Highcharts);
+noData(Highcharts);
+More(Highcharts);
+
 
 @Component({
   selector: 'app-competence',
@@ -35,6 +46,10 @@ export class CompetenceComponent implements OnInit {
     { value: 'ability', description: 'Habilidade' },
     { value: 'attitude', description: 'Atitude' }
   ];
+  knowledgeCount = 0;
+  abilityCount = 0;
+  attitudeCount = 0;
+  cardsVisible = true;
 
   constructor(
     private authService: AuthService,
@@ -49,6 +64,7 @@ export class CompetenceComponent implements OnInit {
     this.organizationName = this.cookie.get('ORGANIZATIONNAME');
     this.userProfile = this.cookie.get('ORGANIZATIONMEMBERPROFILE');
     this.authService.authState.subscribe((user) => {
+      console.log(user);
       this.userEmail = user.email;
       this.getCompetences();
     });
@@ -59,9 +75,21 @@ export class CompetenceComponent implements OnInit {
       this.organization = Object(data);
       this.competences = this.organization.competences || [];
       this.competences.sort(this.compare);
+      this.updateGraphs();
       this.spinner.hide();
     }, (error) => {
       this.spinner.hide();
+    });
+  }
+
+  countCompetences() {
+    this.knowledgeCount = 0;
+    this.abilityCount = 0;
+    this.attitudeCount = 0;
+    this.competences.forEach(competence => {
+      if (competence.type === 'knowledge') { this.knowledgeCount++; }
+      if (competence.type === 'ability') { this.abilityCount++; }
+      if (competence.type === 'attitude') { this.attitudeCount++; }
     });
   }
 
@@ -100,6 +128,7 @@ export class CompetenceComponent implements OnInit {
   }
 
   addCompetence(competenceName: string, competenceType: string, competenceDescription: string) {
+    this.cardsVisible = true;
     if (competenceName === '' || competenceType === '' || competenceDescription === '') {
       M.toast({html: `Você deve preencher todos os campos obrigatórios.`});
     } else {
@@ -117,6 +146,7 @@ export class CompetenceComponent implements OnInit {
         this.service.updateOrganization(this.organization).subscribe((data) => {
           this.competences = this.organization.competences;
           this.competences.sort(this.compare);
+          this.updateGraphs();
           this.spinner.hide();
           M.toast({html: 'Competência adicionada com sucesso!'});
         }, (error) => {
@@ -144,6 +174,7 @@ export class CompetenceComponent implements OnInit {
           this.competences = this.organization.competences;
           this.competences.sort(this.compare);
           this.temporaryName = '';
+          this.updateGraphs();
           this.spinner.hide();
           M.toast({html: 'Competência atualizada com sucesso!'});
         }, (error) => {
@@ -171,6 +202,7 @@ export class CompetenceComponent implements OnInit {
         this.competences = this.organization.competences;
         this.competences.sort(this.compare);
         this.temporaryName = '';
+        this.updateGraphs();
         this.spinner.hide();
         M.toast({html: 'Competência excluída com sucesso!'});
       }, (error) => {
@@ -179,6 +211,116 @@ export class CompetenceComponent implements OnInit {
     } else {
       M.toast({html: `Ocorreu algum erro ao excluir a competência.`});
     }
+  }
+
+  updateGraphs() {
+    if (this.competences.length <= 0) {
+      this.cardsVisible = false;
+    } else {
+      this.cardsVisible = true;
+    }
+    this.countCompetences();
+    this.spinner.hide();
+    let graphOptions = {
+      chart: {
+        type: 'variablepie',
+        backgroundColor: 'transparent'
+      },
+      title: {
+        text: null
+      },
+      tooltip: {
+        enabled: true,
+        useHTML: true,
+        headerFormat: '',
+        pointFormat: '<b>{point.name}</b>'
+      },
+      series: [{
+        minPointSize: 10,
+        innerSize: '60%',
+        zMin: 0,
+        name: 'competences',
+        showInLegend: false,
+        states: {
+          hover: {
+              enabled: true
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        data: []
+      }]
+    };
+    const knowledgeData = [{
+        name: 'Conhecimentos',
+        y: this.knowledgeCount * 100 / this.competences.length,
+        z: 25,
+        sliced: false,
+        color: '#448AFF'
+      }, {
+        name: 'Habilidades',
+        y: this.abilityCount * 100 / this.competences.length,
+        z: 25,
+        sliced: false,
+        color: '#4CAF50'
+      }, {
+        name: 'Atitudes',
+        y: this.attitudeCount * 100 / this.competences.length,
+        z: 25,
+        sliced: false,
+        color: '#FF9800'
+    }];
+    const abilityData = [{
+      name: 'Conhecimentos',
+      y: this.knowledgeCount * 100 / this.competences.length,
+      z: 5,
+      color: 'rgba(150,100,50,0.1)',
+      enabled: false
+    }, {
+      name: 'Habilidades',
+      y: this.abilityCount * 100 / this.competences.length,
+      z: 25,
+      sliced: true,
+      color: '#4CAF50'
+    }, {
+      name: 'Atitudes',
+      y: this.attitudeCount * 100 / this.competences.length,
+      z: 5,
+      color: 'rgba(150,100,50,0.1)',
+      enabled: false
+    }];
+    const attitudeData = [{
+      name: 'Conhecimentos',
+      y: this.knowledgeCount * 100 / this.competences.length,
+      z: 5,
+      color: 'rgba(150,100,50,0.1)',
+      enabled: false
+    }, {
+      name: 'Habilidades',
+      y: this.abilityCount * 100 / this.competences.length,
+      z: 5,
+      color: 'rgba(150,100,50,0.1)',
+      enabled: false
+    }, {
+      name: 'Atitudes',
+      y: this.attitudeCount * 100 / this.competences.length,
+      z: 25,
+      sliced: true,
+      color: '#FF9800'
+    }];
+
+    graphOptions.series[0].data = knowledgeData;
+    Highcharts.chart('knowledge', graphOptions);
+    $('.highcharts-credits').hide();
+
+    graphOptions.series[0].data = abilityData;
+    Highcharts.chart('ability', graphOptions);
+    $('.highcharts-credits').hide();
+
+    graphOptions.series[0].data = attitudeData;
+    Highcharts.chart('attitude', graphOptions);
+    $('.highcharts-credits').hide();
   }
 
 }

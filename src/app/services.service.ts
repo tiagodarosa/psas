@@ -275,4 +275,10 @@ export class ServicesService {
     return this.http.put(endpoint + '/application/saveAnswers/' + applicationId, body, this.httpOptions).pipe(
       map(this.extractData));
   }
+
+  findProfile(organizationId: string) {
+    this.getHttpOptions();
+    return this.http.get(endpoint + '/dashboard/findProfile/' + organizationId, this.httpOptions).pipe(
+      map(this.extractData));
+  }
 }

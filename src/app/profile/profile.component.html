@@ -14,7 +14,112 @@
       <div class="row">
         <div class="col s12">
           <h3 class="header">Meu perfil</h3>
-          <p class="caption">Esta página está em desenvolvimento :)</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12 m6" style="cursor: pointer;" routerLink="/application">
+          <div class="card-panel white" style="height: 300px;">
+            <h6>Competências em destaque</h6>
+            <h5 *ngFor="let competence of topThreeCompetences">
+              {{ competence.questionCompetence }}
+            </h5>
+            <h5 *ngIf="topThreeCompetences.length<=0">Sem avaliações para determinar competências em destaque</h5>
+          </div>
+        </div>
+        <div class="col s12 m6" style="cursor: pointer;" routerLink="/application">
+          <div class="card-panel white" style="height: 300px;">
+            <h6>Recomendações</h6>
+            <h5>Você ainda não recebeu recomendações</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col s12">
+          <h3 class="header">Comparação dos resultados de avaliação</h3>
+          <h5 *ngIf="topThreeCompetences.length<=0">Sem avaliações para calcular os resultados comparativos</h5>
+        </div>
+      </div>
+      <!--<div class="row">
+        <div class="col s12" style="cursor: pointer;" routerLink="/application">
+          <div class="card-panel white" style="height: 300px;">
+            <h6>Avaliações</h6>
+            <h5>15 aplicações</h5>
+            <h5>100% das pessoas participando</h5>
+            <h5>4 avaliações não respondidas</h5>
+          </div>
+        </div>
+      </div>-->
+      <div class="row">
+        <div class="col s12">
+          <!--<div class="card">
+            <div class="card-tabs">
+              <ul class="tabs tabs-fixed-width">
+                <li class="tab"><a class="active black-text" href="#test4">Projeto</a></li>
+                <li class="tab"><a href="#test5">Equipe</a></li>
+              </ul>
+            </div>
+            <div class="card-content">
+              <div id="test4">Test 1</div>
+              <div id="test5">Test 2</div>
+            </div>
+          </div>-->
+          <div class="row">
+            <div class="input-field col s12 m6">
+              <select #project (change)="comparativeResultsByProject(project.value)">
+                <option value="" selected>Todos</option>
+                <option *ngFor="let project of projects" [value]="project._id">
+                  {{ project.name }}
+                </option>
+              </select>
+              <label>Projeto</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <select>
+                <option value="" selected>Todas</option>
+                <option *ngFor="let team of teams" [value]="team._id">
+                  {{ team.name }}
+                </option>
+              </select>
+              <label>Equipe</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12">
+              <div class="card-panel white" style="height: 500px;">
+                <div id="results"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col s12">
+          <h3 class="header">Histórico</h3>
+          <h5 *ngIf="topThreeCompetences.length<=0">Sem avaliações para exibir no histórico</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <select #history (change)="historyChartCompetence(history.value)">
+            <option value="Todas" selected>Todas</option>
+            <option *ngFor="let competence of spotlightCompetences" [value]="competence.questionCompetence">
+              {{ competence.questionCompetence }}
+            </option>
+          </select>
+          <label>Competência</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel white" style="height: 500px;">
+            <div id="history"></div>
+          </div>
         </div>
       </div>
 

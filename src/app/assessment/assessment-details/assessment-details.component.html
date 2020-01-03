@@ -42,8 +42,8 @@
                       <div class="input-field col s12 m6">
                         <i class="material-icons prefix">grain</i>
                         <label class="active" for="{{ 'competenceName' + i }}">Competência</label>
-                        <select name="{{ 'competenceName' + i }}" id="{{ 'competenceName' + i }}" class="validate">
-                          <option *ngFor="let competence of organization.competences" [value]="competence.name">
+                        <select name="{{ 'competenceName' + i }}" id="{{ 'competenceName' + i }}" class="validate" (change)="changeQuestionCompetence(i)">
+                          <option *ngFor="let competence of organization.competences" [value]="competence.name" [selected]="competence.name===question.competenceName">
                             {{ competence.name }}
                           </option>
                         </select>

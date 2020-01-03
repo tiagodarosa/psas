@@ -86,6 +86,12 @@ export class AssessmentDetailsComponent implements OnInit {
     });
   }
 
+  initializeComponents() {
+    setTimeout(this.initializeComponents, 200);
+    $('select').formSelect();
+    $('.collapsible').collapsible();
+  }
+
   getAssessment() {
     this.service.findAssessmentById(this.assessment._id).subscribe((data) => {
       const a = Object(data).assessment;
@@ -107,7 +113,7 @@ export class AssessmentDetailsComponent implements OnInit {
         this.organization.status = result.status;
         this.spinner.hide();
         $('select').formSelect();
-        console.log(this.organization);
+        this.initializeComponents();
       }, (error) => {
         this.router.navigate(['home']);
       });
@@ -140,13 +146,14 @@ export class AssessmentDetailsComponent implements OnInit {
   addQuestion() {
     const newQuestion = {
       order: this.assessment.questions.length,
-      competenceName: '',
+      competenceName: this.organization.competences[0].name,
       description: '',
       items: [],
       name: '',
       significance: 0
     };
     this.assessment.questions.push(newQuestion);
+    this.initializeComponents();
   }
 
   editQuestionModal(question: number) {
@@ -162,7 +169,6 @@ export class AssessmentDetailsComponent implements OnInit {
 
   collapsible() {
     $('.collapsible').collapsible();
-    $('select').formSelect();
     M.updateTextFields();
   }
 
@@ -207,6 +213,13 @@ export class AssessmentDetailsComponent implements OnInit {
   changeQuestionName(question: number) {
     const field = '#questionName' + question;
     this.assessment.questions[question].name = $(field).val();
+  }
+
+  changeQuestionCompetence(question: number) {
+    const field = '#competenceName' + question;
+    this.assessment.questions[question].competenceName = $(field).val();
+    console.log(field);
+    console.log(this.assessment.questions[question].competenceName);
   }
 
   changeQuestionSignificance(question: number) {

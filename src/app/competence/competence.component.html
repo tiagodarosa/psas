@@ -18,16 +18,56 @@
       </div>
 
       <div class="row" *ngIf="competences.length<=0">
-          <div class="col s12 center">
-            <h5 class="header">Esta organização não possui competências cadastradas!</h5>
-            <p class="caption" *ngIf="userProfile!='organizationManager'">
-              Solicite para um gestor da organização para adicionar, alterar ou excluir competências da organização.
-            </p>
-            <p class="caption" *ngIf="userProfile==='organizationManager'">
-              Adicione uma competência clicando no botão "Nova Competência"!
-            </p>
+        <div class="col s12 center">
+          <h5 class="header">Esta organização não possui competências cadastradas!</h5>
+          <p class="caption" *ngIf="userProfile!='organizationManager'">
+            Solicite para um gestor da organização para adicionar, alterar ou excluir competências da organização.
+          </p>
+          <p class="caption" *ngIf="userProfile==='organizationManager'">
+            Adicione uma competência clicando no botão "Nova Competência"!
+          </p>
+        </div>
+      </div>
+
+      <!-- Cards
+      <div class="row" *ngIf="cardsVisible">
+        <div class="col s12 m4">
+          <div class="card-panel white" style="height: 300px;">
+            <h6>Conhecimentos</h6>
+            <div id="knowledge" style="height: 90%;"></div>
           </div>
         </div>
+        <div class="col s12 m4">
+          <div class="card-panel white" style="height: 300px;">
+            <h6>Habilidades</h6>
+            <div id="ability" style="height: 90%;"></div>
+          </div>
+        </div>
+        <div class="col s12 m4">
+          <div class="card-panel white" style="height: 300px;">
+            <h6>Atitudes</h6>
+            <div id="attitude" style="height: 90%;"></div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- Cards -->
+      <div class="row" *ngIf="cardsVisible">
+        <div class="col s12 m4">
+          <div class="card-panel white" style="height: 300px;">
+            <h6>Distribuição</h6>
+            <div id="knowledge" style="height: 90%;"></div>
+          </div>
+        </div>
+        <div class="col s12 m8">
+          <div class="card-panel white" style="height: 300px;">
+            <h6>Visão geral</h6>
+            <h4>{{ knowledgeCount>0 ? (knowledgeCount>1 ? knowledgeCount + ' conhecimentos' : knowledgeCount + ' conhecimento') : 'Nenhum conhecimento'}}</h4>
+            <h4>{{ abilityCount>0 ? (abilityCount>1 ? abilityCount + ' habilidades' : abilityCount + ' habilidade') : 'Nenhuma habilidade'}}</h4>
+            <h4>{{ attitudeCount>0 ? (attitudeCount>1 ? attitudeCount + ' atitudes' : attitudeCount + ' atitude') : 'Nenhuma atitude'}}</h4>
+          </div>
+        </div>
+      </div>
 
       <!-- Competences -->
       <div class="row">
