@@ -14,7 +14,8 @@
     <!-- Title -->
     <div class="row">
       <div class="col s12">
-        <h3 class="header">Organizações</h3>
+        <!--<h3 class="header">Organizações</h3>-->
+        <h3 class="header"><a [routerLink]="['/home']">Home</a> > Organizações</h3>
         <!--<p class="caption">
             
         </p>-->
@@ -42,6 +43,9 @@
             <span class="card-title">{{ org.name }}</span>
             <p>
               {{ org.users.length }} {{ org.users.length>1 ? 'pessoas' : 'pessoa' }}
+            </p>
+            <p>
+              {{ org.competences.length>0 ? (org.competences.length>1 ? org.competences.length + ' competências' : org.competences.length + ' competência') : ('Nenhuma competência cadastrada') }}
             </p>
           </div>
           <div class="card-action light-blue">
