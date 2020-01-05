@@ -39,13 +39,13 @@
           <table class="highlight" *ngIf="projectsList.length>0">
             <thead>
               <tr>
-                <th>Nome</th>
+                <th style="width: 80%;">Nome</th>
                 <th *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">Opções</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let project of projectsList">
-                <td>{{ project.name }}</td>
+                <td (click)="editProjectModal(project._id)">{{ project.name }}</td>
                 <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">
                   <a class="modal-trigger" href="#editProject" title="Editar projeto {{ project.name }}" (click)="editProjectModal(project._id)"><i class="material-icons left">edit</i></a>
                   <a class="modal-trigger" href="#deleteProject" title="Excluir projeto {{ project.name }}" (click)="deleteProjectModal(project._id)"><i class="material-icons left">delete</i></a>
@@ -107,8 +107,8 @@
                 <div class="row">
                   <div class="input-field col s12 m6">
                     <i class="material-icons prefix">description</i>
-                    <input #projNameEdit id="projNameEdit" type="text" class="validate" value="{{ projectName }}">
                     <label for="projNameEdit" class="active">Nome</label>
+                    <input #projNameEdit id="projNameEdit" type="text" class="validate" value="{{ projectName }}">
                   </div>
                 </div>
               </form>

@@ -186,9 +186,12 @@
                   <label for="editProject" class="active">Pessoas da organização</label>
                   <select #addMember id="addMember" class="validate">
                       <option *ngFor='let user of membersNotInTeam' [value]="user.email">
-                        {{ findName(user.email) }}
+                        {{ findName(user.email) }} - {{ user.email }}
                       </option>
                   </select>
+                </div>
+                <div class="col s12">
+                  <a class="waves-effect waves-light light-blue btn" (click)="addMemberToTeam(addMember.value)">Adicionar</a>
                 </div>
               </div>
               <div class="row" *ngIf="membersNotInTeam.length<=0">
@@ -206,12 +209,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let member of team.members">
+                  <tr *ngFor="let member of temporaryTeamMembers">
                     <td>{{ findName(member.email) }}</td>
                     <td>{{ member.email }}</td>
                     <td>{{ member.status }}</td>
                     <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
-                      <a (click)="deleteMember(member.email)" style="cursor: pointer;" title="Excluir membro"><i class="material-icons left">delete</i></a>
+                      <a (click)="deleteMemberOfTeam(member.email)" style="cursor: pointer;" title="Excluir membro"><i class="material-icons left">delete</i></a>
                     </td>
                   </tr>
                 </tbody>
@@ -221,7 +224,7 @@
         </div>
         <div class="modal-footer">
           <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-          <a class="modal-close waves-effect waves-light light-blue btn" (click)="editTeam(editName.value, editProject.value)">Salvar</a>
+          <a class="modal-close waves-effect waves-light light-blue btn" (click)="editTeamMembers()">Salvar</a>
         </div>
       </div>
 

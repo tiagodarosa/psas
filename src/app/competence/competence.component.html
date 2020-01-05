@@ -83,9 +83,9 @@
             </thead>
             <tbody>
               <tr *ngFor="let competence of competences">
-                <td>{{ competence.name }}</td>
-                <td>{{ filterCompetenceType(competence.type) }}</td>
-                <td>{{ competence.description }}</td>
+                <td (click)="editCompetenceModal(competence.name)">{{ competence.name }}</td>
+                <td (click)="editCompetenceModal(competence.name)">{{ filterCompetenceType(competence.type) }}</td>
+                <td (click)="editCompetenceModal(competence.name)">{{ competence.description }}</td>
                 <td *ngIf="userProfile==='organizationManager'">
                   <a style="cursor: pointer;" title="Editar competência {{ competence.name }}" (click)="editCompetenceModal(competence.name)"><i class="material-icons left">edit</i></a>
                   <a class="modal-trigger" href="#deleteCompetence" title="Excluir competência {{ competence.name }}" (click)="deleteCompetenceModal(competence.name)"><i class="material-icons left">delete</i></a>

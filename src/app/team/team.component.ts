@@ -38,6 +38,7 @@ export class TeamComponent implements OnInit {
     members: [],
   };
   membersNotInTeam = [];
+  temporaryTeamMembers = [];
 
   constructor(
     private service: ServicesService,
@@ -191,19 +192,77 @@ export class TeamComponent implements OnInit {
     }
   }
 
+  initializeComponents() {
+    setTimeout(this.initializeComponents, 200);
+    $('select').formSelect();
+  }
+
+  addMemberToTeam(email: string) {
+    this.temporaryTeamMembers.push(this.organization.users.find(user => user.email === email));
+    this.checkMembersNotInTeam(this.temporaryTeamMembers);
+    $('select').formSelect();
+    M.updateTextFields();
+    this.initializeComponents();
+  }
+
+  deleteMemberOfTeam(email: string) {
+    console.log(email);
+    this.temporaryTeamMembers = this.temporaryTeamMembers.filter(user => user.email !== email);
+    // this.temporaryTeamMembers.push(this.organization.users.find(user => user.email === email));
+    this.checkMembersNotInTeam(this.temporaryTeamMembers);
+    $('select').formSelect();
+    M.updateTextFields();
+    this.initializeComponents();
+  }
+
+  checkMembersNotInTeam(teamMembers) {
+    this.membersNotInTeam = [];
+    this.organization.users.forEach(user => {
+      if (!teamMembers.find(member => member.email === user.email)) {
+        this.membersNotInTeam.push(user);
+      }
+    });
+  }
+
+  editTeamMembers() {
+    console.log(this.temporaryTeamMembers);
+    if (this.temporaryTeamMembers.length > 0) {
+      this.spinner.show();
+      this.team.members = this.temporaryTeamMembers;
+      this.service.updateTeam(this.teamId, this.team).subscribe((data) => {
+        this.temporaryTeamMembers = [];
+        const result = Object(data);
+        if (result.status) {
+          const rev = result.status.rev;
+          this.team._rev = rev;
+          this.teamsList = this.teamsList.filter(t => t._id !== this.teamId);
+          this.teamsList.push(this.team);
+          this.teamsList.sort(this.compare);
+          this.spinner.hide();
+          M.toast({html: 'Equipe alterada com sucesso!'});
+        } else {
+          this.spinner.hide();
+          M.toast({html: 'Ocorreu algum erro ao editar a equipe. Por favor, tente novamente!'});
+        }
+      }, (error) => {
+        M.toast({html: 'Ocorreu algum erro ao editar a equipe. Por favor, tente novamente!'});
+      });
+    } else {
+      M.toast({html: 'A equipe deve ter pelo menos um membro!'});
+    }
+  }
 
   editMembersModal(teamId: string) {
+    this.temporaryTeamMembers = [];
     this.teamId = teamId;
     this.team = this.teamsList.find(team => team._id === teamId);
-    this.membersNotInTeam = this.team.members;
-    this.organization.users.forEach(user => {
-      this.membersNotInTeam = this.membersNotInTeam.filter(member => member.email !== user.email);
-    });
-    console.log(this.membersNotInTeam);
+    this.temporaryTeamMembers = JSON.parse(JSON.stringify(this.team.members));
+    this.checkMembersNotInTeam(this.temporaryTeamMembers);
+    $('select').formSelect();
     M.updateTextFields();
     $('.modal').modal();
-    $('select').formSelect();
     $('.editMembers').modal('open');
+    this.initializeComponents();
   }
 
 }

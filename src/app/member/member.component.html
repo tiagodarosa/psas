@@ -44,9 +44,9 @@
               </thead>
               <tbody>
                 <tr *ngFor="let member of members">
-                  <td>{{ member.name }}</td>
-                  <td>{{ member.email }}</td>
-                  <td>{{ filterUserProfile(member.profile) }}</td>
+                  <td (click)="editMemberModal(member.email)">{{ member.name }}</td>
+                  <td (click)="editMemberModal(member.email)">{{ member.email }}</td>
+                  <td (click)="editMemberModal(member.email)">{{ filterUserProfile(member.profile) }}</td>
                   <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">
                     <a class="modal-trigger" href="#editMember" title="Editar informações de {{ member.name }}" (click)="editMemberModal(member.email)"><i class="material-icons left">edit</i></a>
                     <a style="cursor: pointer;" title="Excluir {{ member.name }}" (click)="deleteMemberModal(member.email)"><i class="material-icons left">delete</i></a>

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from 'angularx-social-login';
 declare var $: any;
+declare var M: any;
 
 @Component({
   selector: 'app-project',
@@ -39,6 +40,7 @@ export class ProjectComponent implements OnInit {
     });
     $('select').formSelect();
     $('.modal').modal();
+    M.AutoInit();
   }
 
   getProjects() {
@@ -71,6 +73,7 @@ export class ProjectComponent implements OnInit {
   addProjectModal() {
     this.projectName = '';
     $('select').formSelect();
+    M.updateTextFields();
     $('.modal').modal();
     $('.newProject').modal('open');
   }
@@ -111,6 +114,8 @@ export class ProjectComponent implements OnInit {
     const project = this.projectsList.find(proj => proj._id === projectId);
     this.projectId = projectId;
     this.projectName = project.name;
+    $('#projNameEdit').val(project.name);
+    M.updateTextFields();
     $('.modal').modal();
     $('.editProject').modal('open');
   }
