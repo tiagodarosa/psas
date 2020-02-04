@@ -65,6 +65,7 @@ export class TeamComponent implements OnInit {
     this.projectsList = [];
     this.service.findTeamsFromUser().subscribe((data) => {
       const projs = Object(data).projects;
+      console.log(projs);
       projs.forEach(p => {
         if (p.organizationId === this.organizationId) {
           this.projectsList.push(p);
@@ -208,7 +209,6 @@ export class TeamComponent implements OnInit {
   deleteMemberOfTeam(email: string) {
     console.log(email);
     this.temporaryTeamMembers = this.temporaryTeamMembers.filter(user => user.email !== email);
-    // this.temporaryTeamMembers.push(this.organization.users.find(user => user.email === email));
     this.checkMembersNotInTeam(this.temporaryTeamMembers);
     $('select').formSelect();
     M.updateTextFields();

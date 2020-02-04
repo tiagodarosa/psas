@@ -206,12 +206,15 @@ export class ProfileComponent implements OnInit {
 
   updateHistoryChart(competences) {
     const competenceSeries = [];
+    console.log(competences);
     competences.forEach(competence => {
       const tempData = [];
       competence.values.forEach(element => {
         const d = new Date(element.date).getUTCDate();
         const m = new Date(element.date).getUTCMonth();
         const y = new Date(element.date).getUTCFullYear();
+        const h = new Date(element.date).getUTCHours();
+        const min = new Date(element.date).getUTCMinutes();
         tempData.push([Date.UTC(y, m, d), element.value]);
       });
       this.historySelectedCompetences.push(competence.questionCompetence);
@@ -233,8 +236,9 @@ export class ProfileComponent implements OnInit {
       xAxis: {
         type: 'datetime',
         dateTimeLabelFormats: { // don't display the dummy year
+            minute: '%H:%M',
             month: '%e/%m',
-            year: '%b'
+            year: '%Y'
         },
         title: {
             text: 'Data'
@@ -247,7 +251,7 @@ export class ProfileComponent implements OnInit {
       },
       tooltip: {
         headerFormat: '<b>{series.name}</b><br>',
-        pointFormat: 'Atingiu {point.y:.0f}% em {point.x:%e/%m/%y}: '
+        pointFormat: 'Atingiu {point.y:.0f}% em {point.x:%e/%m/%Y}'
       },
       plotOptions: {
           area: {

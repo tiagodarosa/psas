@@ -94,7 +94,7 @@ export class AnswerComponent implements OnInit {
     const answers = Object(application).answers;
     const assessment = Object(application).assessment;
     answers.forEach(answer => {
-      if (answer.userEvaluator === this.userEmail && answer.questionOrder === 0) {
+      if (answer.userEvaluator === this.userEmail && answer.questionOrder === 0 && answer.answer === '') {
         const item = {
           applicationId: Object(application)._id,
           type: Object(application).type,
