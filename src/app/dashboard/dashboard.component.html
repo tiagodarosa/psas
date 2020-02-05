@@ -15,59 +15,37 @@
       <div class="row">
         <div class="col s12">
           <h3 class="header">Perfil da organização</h3>
-          <p class="caption">Esta página está em desenvolvimento :)</p>
+          <p class="caption">Informações sobre a organização.</p>
         </div>
       </div>
 
-      <!-- Cards 
-      <div class="row">
-        <div class="col s12 m4" style="cursor: pointer;" routerLink="/competence">
-          <div class="card-panel white" style="height: 300px;">
-            <h6>Competências</h6>
-            <div id="competences" style="height: 100%;"></div>
-          </div>
-        </div>
-        <div class="col s12 m4" style="cursor: pointer;" routerLink="/application">
-          <div class="card-panel white" style="height: 300px;">
-            <h6>Avaliações</h6>
-            <h5>15 aplicações</h5>
-            <h5>100% das pessoas participando</h5>
-            <h5>4 avaliações não respondidas</h5>
-          </div>
-        </div>
-        <div class="col s12 m4">
-          <div class="card-panel white" style="height: 300px;">
-            <h6>Recomendações</h6>
-            <h5>Nenhuma recomendação</h5>
-          </div>
-        </div>
-      </div>
 
+      <!-- Comparative -->
       <div class="divider"></div>
       <div class="row">
         <div class="col s12">
-          <h3 class="header">Resultados de avaliação</h3>
+          <h3 class="header">Comparação dos resultados de avaliação</h3>
+          <h5 *ngIf="answers.length<=0">Sem avaliações para calcular os resultados comparativos</h5>
         </div>
       </div>
-
       <div class="row">
         <div class="col s12">
           <div class="row">
             <div class="input-field col s12 m6">
-              <select>
-                <option value="0" selected>Option 0</option>
-                <option value="1">Option 1</option>
-                <option value="2">Option 2</option>
-                <option value="3">Option 3</option>
+              <select #project (change)="comparativeResultsByProject(project.value)">
+                <option value="" selected>Todos</option>
+                <option *ngFor="let project of projects" [value]="project._id">
+                  {{ project.name }}
+                </option>
               </select>
               <label>Projeto</label>
             </div>
             <div class="input-field col s12 m6">
-              <select>
-                <option value="0" selected>Option 0</option>
-                <option value="1">Option 1</option>
-                <option value="2">Option 2</option>
-                <option value="3">Option 3</option>
+              <select #team (change)="comparativeResultsByTeam(team.value)">
+                <option value="" selected>Todas</option>
+                <option *ngFor="let team of teams" [value]="team._id">
+                  {{ team.name }}
+                </option>
               </select>
               <label>Equipe</label>
             </div>
@@ -82,22 +60,7 @@
         </div>
       </div>
 
-      <div class="divider"></div>
-      <div class="row">
-        <div class="col s12">
-          <h3 class="header">Destaques por competência</h3>
-        </div>
-      </div>-->
-
-      
-
-
-
-      <div class="row">
-        <div class="col s12">
-          <div id="teste"></div>
-        </div>
-      </div>
+    
 
     </div>
 

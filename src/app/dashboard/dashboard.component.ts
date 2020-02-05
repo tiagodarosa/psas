@@ -28,47 +28,6 @@ VariablePie(Highcharts);
 })
 export class DashboardComponent implements OnInit {
 
-
-  public options: any = {
-    chart: {
-      type: 'scatter',
-      height: 400
-    },
-    title: {
-      text: null
-    },
-    credits: {
-      enabled: false
-    },
-    tooltip: {
-      formatter() {
-        return 'x: ' + Highcharts.dateFormat('%e %b %y %H:%M:%S', this.x) + 'y: ' + this.y.toFixed(2);
-      }
-    },
-    xAxis: {
-      type: 'datetime',
-      labels: {
-        formatter() {
-          return Highcharts.dateFormat('%e %b %y', this.value);
-        }
-      }
-    },
-    series: [
-      {
-        name: 'Normal',
-        turboThreshold: 500000,
-        data: []
-      },
-      {
-        name: 'Abnormal',
-        turboThreshold: 500000,
-        data: []
-      }
-    ]
-  };
-
-  subscription: Subscription;
-
   constructor(
     private service: ServicesService,
     private spinner: NgxSpinnerService,
@@ -77,175 +36,225 @@ export class DashboardComponent implements OnInit {
     private http: HttpClient,
     private router: Router) { }
 
+
+  organizationId = '';
+  organizationName = '';
+  userProfile = '';
+  userEmail = '';
+  spotlightCompetences = [];
+  historySelectedCompetences = [];
+  teams = [];
+  answers = [];
+  projects = [];
+  applications = [];
+  topThreeCompetences = [];
+  resultsChart = {
+    categories: [],
+    series: []
+  };
+
   ngOnInit() {
-    // Set 10 seconds interval to update data again and again
-    // const source = interval(5000);
-    this.spinner.hide();
-    const apiLink = 'https://api.myjson.com/bins/13lnf4';
-    M.AutoInit();
-
-    /*this.subscription = source.subscribe(val => this.getApiResponse(apiLink).then(
-      data => {
-        const updatedNormalData = [];
-        const updatedAbnormalData = [];
-        Object(data).forEach(row => {
-          const tempRow = [
-            new Date(row.timestamp),
-            row.value
-          ];
-          row.Normal === 1 ? updatedNormalData.push(tempRow) : updatedAbnormalData.push(tempRow);
-        });
-        this.options.series[0].data = updatedNormalData;
-        this.options.series[1].data = updatedAbnormalData;
-        Highcharts.chart('teste', this.options);
-      },
-      error => {
-        console.log('Something went wrong.');
-      })
-    );*/
-    // this.getApiResponse(apiLink);
-
-    /*Highcharts.chart('competences', {
-      chart: {
-        type: 'variablepie',
-        backgroundColor: 'transparent'
-      },
-      title: {
-        text: null
-      },
-      tooltip: {
-        headerFormat: '',
-        pointFormat: '<span style="color:{point.color}"></span> <b> {point.name}</b><br/>{point.y}%'
-      },
-      series: [{
-          minPointSize: 10,
-          innerSize: '60%',
-          zMin: 0,
-          name: 'countries',
-          showInLegend: false,
-          dataLabels: {
-            enabled: false
-          },
-          data: [{
-              name: 'Conhecimentos',
-              y: 33,
-              z: 10
-          }, {
-              name: 'Habilidades',
-              y: 33,
-              z: 10
-          }, {
-              name: 'Atitudes',
-              y: 34,
-              z: 10
-          }]
-      }]
+    this.spinner.show();
+    this.organizationId = this.cookie.get('ORGANIZATIONID');
+    this.organizationName = this.cookie.get('ORGANIZATIONNAME');
+    this.userProfile = this.cookie.get('ORGANIZATIONMEMBERPROFILE');
+    this.authService.authState.subscribe((user) => {
+      if (user) {
+        this.userEmail = user.email;
+        this.findProfile();
+      } else {
+        this.router.navigate(['home']);
+      }
     });
-    $('.highcharts-credits').hide();*/
+    M.AutoInit();
+    $('.indicator').addClass('light-blue');
+    $('select').formSelect();
+  }
 
+  initializeComponents() {
+    setTimeout(this.initializeComponents, 200);
+    $('select').formSelect();
+  }
 
-    /*Highcharts.chart('competences', {
+  updateTeams() {
+    this.teams = [];
+    const tempIds = [];
+    this.applications.forEach(app => {
+      if (!tempIds.includes(app.team._id)) {
+        tempIds.push(app.team._id);
+        this.teams.push({ name: app.team.name, _id: app.team._id, projectId: app.team.projectId });
+      }
+    });
+  }
+
+  updateProjects(projects) {
+    this.projects = [];
+    const tempIds = [];
+    this.teams.forEach(team => {
+      if (!tempIds.includes(team.projectId)) {
+        tempIds.push(team.projectId);
+        projects.forEach(proj => {
+          if (proj._id === team.projectId) {
+            this.projects.push({ name: proj.name, _id: proj._id });
+          }
+        });
+      }
+    });
+  }
+
+  findProfile() {
+    this.service.findOrganizationProfile(this.organizationId).subscribe((data) => {
+      this.spotlightCompetences = [];
+      this.answers = Object(data).answers;
+      this.applications = Object(data).applications;
+      this.updateTeams();
+      // this.historyChartCompetence('');
+      let compTempArray = [];
+      this.answers.forEach(answer => {
+        compTempArray.push(answer.questionCompetence);
+        if (!this.spotlightCompetences.includes(answer.questionCompetence)) {
+          this.spotlightCompetences.push(answer.questionCompetence);
+        }
+      });
+      // this.selectTopThreeCompetences(Object(data));
+      this.service.findProjectsFromUser().subscribe((proj) => {
+        // this.updateTeamsList(Object(data).applications, Object(proj).projects);
+        this.updateProjects(Object(proj).projects);
+        this.initializeComponents();
+        this.resultChartComparative(this.spotlightCompetences, this.answers, '', '');
+        this.spinner.hide();
+      }, (error) => {
+        this.router.navigate(['home']);
+      });
+    }, (error) => {
+      this.router.navigate(['home']);
+    });
+  }
+
+  resultChartComparative(spotCompetences, answers, project, team) {
+    const categories = [];
+    const userResultsData = [];
+    const otherResultsData = [];
+    const temporary = [];
+    this.resultsChart = {
+      categories: [],
+      series: []
+    };
+
+    // Filtra todas as equipes
+    let tempTeams = [];
+    if (team === '') {
+      this.answers.forEach(answer => {
+        if (!tempTeams.includes(answer.teamId)) {
+          tempTeams.push(answer.teamId);
+        }
+      });
+    } else {
+      tempTeams.push(team);
+    }
+
+    // Para cada time monta a soma da competencia
+    // tslint:disable-next-line: only-arrow-functions
+    tempTeams.forEach(function(t, i) {
+      temporary[i] = { teamId: t , competences: []};
+      spotCompetences.forEach(c => {
+        let temp3 = 0;
+        let count3 = 0;
+        answers.forEach(a => {
+          if (a.teamId === t && a.questionCompetence === c && a.answer !== '') {
+            temp3 = temp3 + ((a.answer * 100) / 100);
+            count3++;
+          }
+        });
+        temporary[i].competences.push({ competence: c, mean: (temp3 / count3)});
+      });
+    });
+    console.log(temporary);
+    this.resultsChart.categories = spotCompetences;
+
+    temporary.forEach(temp => {
+      const competenceValues = [];
+      temp.competences.forEach(c => {
+        competenceValues.push(c.mean);
+      });
+      this.resultsChart.series.push( {
+        name: this.findTeamName(temp.teamId),
+        data: competenceValues,
+        pointPlacement: 'on'
+      });
+    });
+
+    this.updateResultsChart();
+  }
+
+  comparativeResultsByTeam(teamId) {
+    console.log(teamId);
+    this.resultChartComparative(this.spotlightCompetences, this.answers, '', teamId);
+  }
+
+  findTeamName(teamId) {
+    let teamName = teamId;
+    this.applications.forEach(app => {
+      if (app.team._id === teamId) {
+        teamName = app.team.name;
+      }
+    });
+    return teamName;
+  }
+
+  updateResultsChart() {
+    Highcharts.chart('results', {
       chart: {
-          type: 'packedbubble',
-          height: '90%',
-          backgroundColor: 'transparent'
+          polar: true,
+          type: 'line',
+          height: '450px',
       },
       title: {
-          text: null
+          text: null,
+          x: -80
+      },
+      pane: {
+          size: '80%'
+      },
+      xAxis: {
+          categories: this.resultsChart.categories,
+          tickmarkPlacement: 'on',
+          lineWidth: 0
+      },
+      yAxis: {
+          gridLineInterpolation: 'polygon',
+          lineWidth: 0,
+          min: 0
       },
       tooltip: {
-          useHTML: true,
-          pointFormat: '<b>{point.name}:</b> {point.value}m CO<sub>2</sub>'
+          shared: true,
+          pointFormat: '<span style="color:{series.color}">{series.name}: {point.y:,.0f}%<br/>'
       },
-      plotOptions: {
-          packedbubble: {
-              minSize: '20%',
-              maxSize: '100%',
-              zMin: 0,
-              zMax: 1000,
-              layoutAlgorithm: {
-                  gravitationalConstant: 0.05,
-                  splitSeries: true,
-                  seriesInteraction: false,
-                  dragBetweenSeries: true,
-                  parentNodeLimit: true
+      legend: {
+          align: 'right',
+          verticalAlign: 'middle',
+          layout: 'vertical'
+      },
+      series: this.resultsChart.series,
+      responsive: {
+          rules: [{
+              condition: {
+                  maxWidth: 500
               },
-              dataLabels: {
-                  enabled: true,
-                  format: '{point.name}',
-                  filter: {
-                      property: 'y',
-                      operator: '>',
-                      value: 250
+              chartOptions: {
+                  legend: {
+                      align: 'center',
+                      verticalAlign: 'bottom',
+                      layout: 'horizontal'
                   },
-                  style: {
-                      color: 'black',
-                      textOutline: 'none',
-                      fontWeight: 'normal'
+                  pane: {
+                      size: '70%'
                   }
               }
-          }
-      },
-      series: [{
-          name: 'Conhecimentos',
-          showInLegend: false,
-          color: '#448AFF',
-          data: [{
-              name: 'Java',
-              value: 767.1
-          }, {
-              name: 'Trabalho em equipe',
-              value: 20.7
           }]
-      }, {
-          name: 'Habilidades',
-          showInLegend: false,
-          color: '#4CAF50',
-          data: [{
-              name: 'Rapidez',
-              value: 8.2
-          },
-          {
-              name: 'Cameroon',
-              value: 9.2
-          }]
-      }, {
-          name: 'Atitudes',
-          showInLegend: false,
-          color: '#FF9800',
-          data: [{
-              name: 'Cordialidade',
-              value: 409.4
-          },
-          {
-              name: 'New Zealand',
-              value: 34.1
-          }]
-      }]
+      }
     });
     $('.highcharts-credits').hide();
-
-  }*/
-
-  /*getApiResponse(url) {
-    return this.http.get(url, {})
-      .toPromise().then(res => {
-        // return res;
-        const updatedNormalData = [];
-        const updatedAbnormalData = [];
-        Object(res).forEach(row => {
-          const tempRow = [
-            new Date(row.timestamp),
-            row.value
-          ];
-          row.Normal === 1 ? updatedNormalData.push(tempRow) : updatedAbnormalData.push(tempRow);
-        });
-        this.options.series[0].data = updatedNormalData;
-        this.options.series[1].data = updatedAbnormalData;
-        Highcharts.chart('teste', this.options);
-        this.spinner.hide();
-        }
-      );
-  }*/
   }
+
 }

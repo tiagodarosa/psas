@@ -281,4 +281,11 @@ export class ServicesService {
     return this.http.get(endpoint + '/dashboard/findProfile/' + organizationId, this.httpOptions).pipe(
       map(this.extractData));
   }
+
+  findOrganizationProfile(organizationId: string) {
+    this.getHttpOptions();
+    return this.http.get(endpoint + '/dashboard/findOrganizationProfile/' + organizationId, this.httpOptions).pipe(
+      map(this.extractData));
+  }
+
 }
