@@ -41,9 +41,12 @@ export class DashboardComponent implements OnInit {
   organizationName = '';
   userProfile = '';
   userEmail = '';
+  userName = '';
   spotlightCompetences = [];
   historySelectedCompetences = [];
   teams = [];
+  people = [];
+  peopleList = [];
   answers = [];
   projects = [];
   applications = [];
@@ -61,6 +64,7 @@ export class DashboardComponent implements OnInit {
     this.authService.authState.subscribe((user) => {
       if (user) {
         this.userEmail = user.email;
+        this.userName = user.name;
         this.findProfile();
       } else {
         this.router.navigate(['home']);
@@ -102,13 +106,39 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  findName(email) {
+    let name = email;
+    this.applications.forEach(a => {
+      a.team.members.forEach(m => {
+        if (m.email === email) {
+          name = m.name || email;
+        }
+      });
+    });
+    if (name === this.userEmail) {
+      name = this.userName;
+    }
+    return name;
+  }
+
+  updatePeople() {
+    this.people = [];
+    const tempEmail = [];
+    this.answers.forEach(a => {
+      if (!tempEmail.includes(a.userRated)) {
+        tempEmail.push(a.userRated);
+        this.people.push({ name: this.findName(a.userRated), email: a.userRated });
+      }
+    });
+    this.peopleList = this.people;
+  }
+
   findProfile() {
     this.service.findOrganizationProfile(this.organizationId).subscribe((data) => {
       this.spotlightCompetences = [];
       this.answers = Object(data).answers;
       this.applications = Object(data).applications;
       this.updateTeams();
-      // this.historyChartCompetence('');
       let compTempArray = [];
       this.answers.forEach(answer => {
         compTempArray.push(answer.questionCompetence);
@@ -120,8 +150,10 @@ export class DashboardComponent implements OnInit {
       this.service.findProjectsFromUser().subscribe((proj) => {
         // this.updateTeamsList(Object(data).applications, Object(proj).projects);
         this.updateProjects(Object(proj).projects);
+        this.updatePeople();
         this.initializeComponents();
         this.resultChartComparative(this.spotlightCompetences, this.answers, '', '');
+        this.historyChartCompetence('', '', '', '');
         this.spinner.hide();
       }, (error) => {
         this.router.navigate(['home']);
@@ -130,6 +162,163 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['home']);
     });
   }
+
+
+
+  historyChartCompetence(project, team, person, competence) {
+    if (competence === '') {
+      this.updateHistoryChart(project, team, person, competence);
+    } else {
+      const comp = this.spotlightCompetences.find(c => c.questionCompetence === competence);
+      if (comp) {
+        this.updateHistoryChart(project, team, person, competence);
+      } else {
+        this.updateHistoryChart(project, team, person, competence);
+      }
+    }
+  }
+
+  filterHistoryTeam(project, team, person, competence) {
+    this.peopleList = [];
+    if (team === '') {
+      this.peopleList = this.people;
+    } else {
+      const tempEmail = [];
+      this.answers.forEach(a => {
+        if (a.teamId === team) {
+          if (!tempEmail.includes(a.userRated)) {
+            tempEmail.push(a.userRated);
+            this.peopleList.push({ name: this.findName(a.userRated), email: a.userRated });
+          }
+        }
+      });
+    }
+    this.initializeComponents();
+    this.updateHistoryChart(project, team, person, competence);
+  }
+
+  updateHistoryChart(project, team, person, competence) {
+    let testando = [];
+    if (person !== '') {
+      this.answers.forEach(a => {
+        if (a.userRated === person) {
+          testando.push(a);
+        }
+      });
+    } else {
+      testando = this.answers;
+    }
+
+    const temporary = [];
+    const dates = [];
+    this.answers.forEach(a => {
+      if (!dates.includes(a.endDate)) {
+        dates.push(a.endDate);
+      }
+    });
+    this.spotlightCompetences.forEach(function(c, i) {
+      temporary[i] = { name: c, showInLegend: true, data: [] };
+      dates.forEach(d => {
+        let value = 0;
+        let count = 0;
+        let day = 0;
+        let month = 0;
+        let year = 0;
+        testando.forEach(a => {
+          if (a.questionCompetence === c && a.answer !== '' && a.endDate === d) {
+            day = new Date(a.endDate).getUTCDate();
+            month = new Date(a.endDate).getUTCMonth();
+            year = new Date(a.endDate).getUTCFullYear();
+            value = value + ((a.answer * 100) / 100);
+            count++;
+          }
+        });
+        temporary[i].data.push([Date.UTC(year, month, day), (value / count)]);
+      });
+    });
+
+    let competenceSeries = [];
+    if (competence !== '') {
+      temporary.forEach(t => {
+        if (t.name === competence) {
+          competenceSeries.push(t);
+        }
+      });
+    } else {
+      competenceSeries = temporary;
+    }
+    /*competences.forEach(competence => {
+      const tempData = [];
+      competence.values.forEach(element => {
+        const d = new Date(element.date).getUTCDate();
+        const m = new Date(element.date).getUTCMonth();
+        const y = new Date(element.date).getUTCFullYear();
+        const h = new Date(element.date).getUTCHours();
+        const min = new Date(element.date).getUTCMinutes();
+        tempData.push([Date.UTC(y, m, d), element.value]);
+      });
+      this.historySelectedCompetences.push(competence.questionCompetence);
+      competenceSeries.push({
+        name: competence.questionCompetence,
+        showInLegend: true,
+        data: tempData
+      });
+    });*/
+    Highcharts.chart('history', {
+      chart: {
+        type: 'area',
+        height: '450px',
+        backgroundColor: 'transparent'
+      },
+      title: {
+        text: null
+      },
+      xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: { // don't display the dummy year
+            minute: '%H:%M',
+            month: '%e/%m',
+            year: '%Y'
+        },
+        title: {
+            text: 'Data'
+        }
+      },
+      yAxis: {
+          title: {
+              text: 'Porcentagem'
+          }
+      },
+      tooltip: {
+        headerFormat: '<b>{series.name}</b><br>',
+        pointFormat: 'Atingiu {point.y:.0f}% em {point.x:%e/%m/%Y}'
+      },
+      plotOptions: {
+          area: {
+              marker: {
+                  enabled: false,
+                  symbol: 'circle',
+                  radius: 2,
+                  states: {
+                      hover: {
+                          enabled: true
+                      }
+                  }
+              }
+          }
+      },
+      series: competenceSeries
+    });
+    $('.highcharts-credits').hide();
+  }
+
+
+
+
+
+
+
+
 
   resultChartComparative(spotCompetences, answers, project, team) {
     const categories = [];
@@ -169,7 +358,6 @@ export class DashboardComponent implements OnInit {
         temporary[i].competences.push({ competence: c, mean: (temp3 / count3)});
       });
     });
-    console.log(temporary);
     this.resultsChart.categories = spotCompetences;
 
     temporary.forEach(temp => {
@@ -188,7 +376,6 @@ export class DashboardComponent implements OnInit {
   }
 
   comparativeResultsByTeam(teamId) {
-    console.log(teamId);
     this.resultChartComparative(this.spotlightCompetences, this.answers, '', teamId);
   }
 

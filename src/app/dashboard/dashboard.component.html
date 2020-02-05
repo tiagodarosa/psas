@@ -61,6 +61,68 @@
       </div>
 
     
+      <!-- History -->
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col s12">
+          <h3 class="header">Histórico</h3>
+          <h5 *ngIf="answers.length<=0">Sem avaliações para exibir no histórico</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div class="row">
+            <div class="input-field col s12 m6">
+              <select #HProject (change)="updateHistoryChart(HProject.value, HTeam.value, HPerson.value, HCompetence.value)">
+                <option value="" selected>Todos</option>
+                <option *ngFor="let project of projects" [value]="project._id">
+                  {{ project.name }}
+                </option>
+              </select >
+              <label>Projeto</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <select #HTeam (change)="filterHistoryTeam(HProject.value, HTeam.value, HPerson.value, HCompetence.value)">
+                <option value="" selected>Todas</option>
+                <option *ngFor="let team of teams" [value]="team._id">
+                  {{ team.name }}
+                </option>
+              </select>
+              <label>Equipe</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12 m6">
+              <select name="HPerson" id="HPerson" #HPerson (change)="updateHistoryChart(HProject.value, HTeam.value, HPerson.value, HCompetence.value)">
+                <option value="" selected>Todas</option>
+                <option *ngFor="let person of peopleList" [value]="person.email">
+                  {{ person.name }}
+                </option>
+              </select>
+              <label>Pessoas</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <select #HCompetence (change)="updateHistoryChart(HProject.value, HTeam.value, HPerson.value, HCompetence.value)">
+                <option value="" selected>Todas</option>
+                <option *ngFor="let competence of spotlightCompetences" [value]="competence">
+                  {{ competence }}
+                </option>
+              </select>
+              <label>Competências</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel white" style="height: 500px;">
+            <div id="history"></div>
+          </div>
+        </div>
+      </div>
+
+
+
 
     </div>
 
