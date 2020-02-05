@@ -32,7 +32,7 @@
         <div class="col s12">
           <div class="row">
             <div class="input-field col s12 m6">
-              <select #project (change)="comparativeResultsByProject(project.value)">
+              <select>
                 <option value="" selected>Todos</option>
                 <option *ngFor="let project of projects" [value]="project._id">
                   {{ project.name }}
