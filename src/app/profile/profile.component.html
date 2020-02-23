@@ -28,8 +28,11 @@
         </div>
         <div class="col s12 m6" style="cursor: pointer;" routerLink="/application">
           <div class="card-panel white" style="height: 300px;">
-            <h6>Recomendações</h6>
-            <h5>Você ainda não recebeu recomendações</h5>
+            <h6>Competências que preciso aperfeiçoar</h6>
+            <h5 *ngFor="let competence of threeCompetencesToImprove">
+              {{ competence.questionCompetence }}
+            </h5>
+            <h5 *ngIf="threeCompetencesToImprove.length<=0">Sem avaliações para determinar as competências que você precisa aperfeiçoar</h5>
           </div>
         </div>
       </div>

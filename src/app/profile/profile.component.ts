@@ -45,6 +45,7 @@ export class ProfileComponent implements OnInit {
   answers = [];
   projects = [];
   topThreeCompetences = [];
+  threeCompetencesToImprove = [];
   resultsChart = {
     categories: [],
     series: []
@@ -78,7 +79,6 @@ export class ProfileComponent implements OnInit {
       this.spotlightCompetences = Object(data).spotlightCompetences;
       this.answers = Object(data).answers;
       this.historyChartCompetence('');
-      console.log(data);
       this.selectTopThreeCompetences(Object(data));
       this.service.findProjectsFromUser().subscribe((proj) => {
         this.updateTeamsList(Object(data).applications, Object(proj).projects);
@@ -112,7 +112,6 @@ export class ProfileComponent implements OnInit {
       otherResultsData.push(temp / count);
     });
     this.resultsChart.categories = categories;
-    console.log(otherResultsData);
 
     this.resultsChart.series = [{
         name: 'Você',
@@ -140,10 +139,18 @@ export class ProfileComponent implements OnInit {
 
   selectTopThreeCompetences(profile) {
     if (profile) {
+      let temp = [];
       this.topThreeCompetences = profile.spotlightCompetences;
+      temp = profile.spotlightCompetences;
       this.topThreeCompetences.sort(this.sortCompetencesByMean);
+      temp.sort(this.sortCompetencesByMean);
       this.topThreeCompetences = this.topThreeCompetences.slice(0, 3);
-      console.log(this.topThreeCompetences);
+      if (temp.length > 6) {
+        temp.reverse();
+        this.threeCompetencesToImprove = temp.slice(0, 3);
+      } else {
+        this.threeCompetencesToImprove = [];
+      }
     }
   }
 
@@ -181,7 +188,6 @@ export class ProfileComponent implements OnInit {
   }
 
   comparativeResultsByProject(project: string) {
-    console.log(project);
     const ans = [];
     this.answers.forEach(answer => {
       if (answer.projectId === project && answer !== '') {
@@ -206,7 +212,6 @@ export class ProfileComponent implements OnInit {
 
   updateHistoryChart(competences) {
     const competenceSeries = [];
-    console.log(competences);
     competences.forEach(competence => {
       const tempData = [];
       competence.values.forEach(element => {
@@ -224,6 +229,23 @@ export class ProfileComponent implements OnInit {
         data: tempData
       });
     });
+    competenceSeries.forEach(c => {
+      let tempData2 = [];
+      let temp = [];
+      c.data.forEach(d => {
+        const index = temp.findIndex(t => t.date === d[0]);
+        if (index === -1) {
+          temp.push({date: d[0], values: [d[1]]});
+        } else {
+          temp[index].values.push(d[1]);
+        }
+      });
+      temp.forEach(t => {
+        tempData2.push([t.date, t.values.reduce((a, b) => a + b, 0) / t.values.length]);
+      });
+      c.data = tempData2;
+    });
+    console.log(competenceSeries);
     Highcharts.chart('history', {
       chart: {
         type: 'area',
@@ -276,7 +298,7 @@ export class ProfileComponent implements OnInit {
     Highcharts.chart('results', {
       chart: {
           polar: true,
-          type: 'line',
+          type: 'area',
           height: '450px',
       },
       title: {

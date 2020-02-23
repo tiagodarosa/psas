@@ -11,15 +11,13 @@ declare var $: any;
 declare var M: any;
 
 declare var require: any;
-let Boost = require('highcharts/modules/boost');
-let noData = require('highcharts/modules/no-data-to-display');
+// let Boost = require('highcharts/modules/boost');
+// let noData = require('highcharts/modules/no-data-to-display');
 let More = require('highcharts/highcharts-more');
-let VariablePie = require('highcharts/modules/variable-pie');
 
-Boost(Highcharts);
-noData(Highcharts);
+// Boost(Highcharts);
+// noData(Highcharts);
 More(Highcharts);
-VariablePie(Highcharts);
 
 @Component({
   selector: 'app-dashboard',
@@ -154,6 +152,7 @@ export class DashboardComponent implements OnInit {
         this.initializeComponents();
         this.resultChartComparative(this.spotlightCompetences, this.answers, '', '');
         this.historyChartCompetence('', '', '', '');
+        this.updateHighlightsChart('', '', '');
         this.spinner.hide();
       }, (error) => {
         this.router.navigate(['home']);
@@ -247,23 +246,6 @@ export class DashboardComponent implements OnInit {
     } else {
       competenceSeries = temporary;
     }
-    /*competences.forEach(competence => {
-      const tempData = [];
-      competence.values.forEach(element => {
-        const d = new Date(element.date).getUTCDate();
-        const m = new Date(element.date).getUTCMonth();
-        const y = new Date(element.date).getUTCFullYear();
-        const h = new Date(element.date).getUTCHours();
-        const min = new Date(element.date).getUTCMinutes();
-        tempData.push([Date.UTC(y, m, d), element.value]);
-      });
-      this.historySelectedCompetences.push(competence.questionCompetence);
-      competenceSeries.push({
-        name: competence.questionCompetence,
-        showInLegend: true,
-        data: tempData
-      });
-    });*/
     Highcharts.chart('history', {
       chart: {
         type: 'area',
@@ -311,6 +293,204 @@ export class DashboardComponent implements OnInit {
     });
     $('.highcharts-credits').hide();
   }
+
+
+
+
+
+
+
+
+
+
+
+  updateHighlightsChart(project, team, competence) {
+    const temporary = [];
+    const k = this.answers;
+
+    const pep = [];
+    this.answers.forEach(a => {
+      if (!pep.includes(a.userRated)) {
+        pep.push(a.userRated);
+      }
+    });
+
+    this.teams.forEach(function(c, i) {
+      temporary[i] = { name: c.name, data: [] };
+      pep.forEach(p => {
+        let value = 0;
+        let count = 0;
+        k.forEach(a => {
+          if (a.teamId === c._id && a.answer !== '' && a.userRated === p) {
+            value = value + ((a.answer * 100) / 100);
+            count++;
+          }
+        });
+        temporary[i].data.push({ name: p, value: (value / count)});
+      });
+    });
+
+    let competenceSeries = [];
+    if (competence !== '') {
+      temporary.forEach(t => {
+        if (t.name === competence) {
+          competenceSeries.push(t);
+        }
+      });
+    } else {
+      competenceSeries = temporary;
+    }
+
+    console.log(competenceSeries);
+    /*Highcharts.chart('highlights', {
+      chart: {
+          type: 'packedbubble',
+          height: '460px'
+      },
+      title: {
+          text: ''
+      },
+      tooltip: {
+          useHTML: true,
+          pointFormat: '<b>{point.name}:</b> {point.value}'
+      },
+      plotOptions: {
+          packedbubble: {
+              minSize: '20%',
+              maxSize: '100%',
+              zMin: 0,
+              zMax: 1000,
+              layoutAlgorithm: {
+                  gravitationalConstant: 0.05,
+                  splitSeries: 'true',
+                  seriesInteraction: false,
+                  dragBetweenSeries: true,
+                  parentNodeLimit: true
+              },
+              dataLabels: {
+                  enabled: true,
+                  format: '{point.name}',
+                  filter: {
+                      property: 'y',
+                      operator: '>',
+                      value: 250
+                  },
+                  style: {
+                      color: 'black',
+                      textOutline: 'none',
+                      fontWeight: 'normal'
+                  }
+              }
+          }
+      },
+      series: [{
+          name: 'Oceania',
+          data: [{
+              name: 'Australia',
+              value: 409.4
+          },
+          {
+              name: 'New Zealand',
+              value: 34.1
+          },
+          {
+              name: 'Papua New Guinea',
+              value: 7.1
+          }]
+      }, {
+          name: 'North America',
+          data: [{
+              name: 'Costa Rica',
+              value: 7.6
+          },
+          {
+              name: 'Honduras',
+              value: 8.4
+          },
+          {
+              name: 'Jamaica',
+              value: 8.3
+          },
+          {
+              name: 'Panama',
+              value: 10.2
+          },
+          {
+              name: 'Guatemala',
+              value: 12
+          },
+          {
+              name: 'Dominican Republic',
+              value: 23.4
+          },
+          {
+              name: 'Cuba',
+              value: 30.2
+          },
+          {
+              name: 'USA',
+              value: 5334.5
+          }, {
+              name: 'Canada',
+              value: 566
+          }, {
+              name: 'Mexico',
+              value: 456.3
+          }]
+      }, {
+          name: 'South America',
+          data: [{
+              name: 'El Salvador',
+              value: 7.2
+          },
+          {
+              name: 'Uruguay',
+              value: 8.1
+          },
+          {
+              name: 'Bolivia',
+              value: 17.8
+          },
+          {
+              name: 'Trinidad and Tobago',
+              value: 34
+          },
+          {
+              name: 'Ecuador',
+              value: 43
+          },
+          {
+              name: 'Chile',
+              value: 78.6
+          },
+          {
+              name: 'Peru',
+              value: 52
+          },
+          {
+              name: 'Colombia',
+              value: 74.1
+          },
+          {
+              name: 'Brazil',
+              value: 501.1
+          }, {
+              name: 'Argentina',
+              value: 199
+          },
+          {
+              name: 'Venezuela',
+              value: 195.2
+          }]
+      }],
+      series: competenceSeries
+    });*/
+    $('.highcharts-credits').hide();
+  }
+
+
+
+
 
 
 
@@ -393,7 +573,7 @@ export class DashboardComponent implements OnInit {
     Highcharts.chart('results', {
       chart: {
           polar: true,
-          type: 'line',
+          type: 'area',
           height: '450px',
       },
       title: {
