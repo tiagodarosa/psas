@@ -246,6 +246,23 @@ export class DashboardComponent implements OnInit {
     } else {
       competenceSeries = temporary;
     }
+    competenceSeries.forEach(c => {
+      let tempData2 = [];
+      let temp = [];
+      c.data.forEach(d => {
+        const index = temp.findIndex(t => t.date === d[0]);
+        if (index === -1) {
+          temp.push({date: d[0], values: [d[1]]});
+        } else {
+          temp[index].values.push(d[1]);
+        }
+      });
+      temp.forEach(t => {
+        tempData2.push([t.date, t.values.reduce((a, b) => a + b, 0) / t.values.length]);
+      });
+      c.data = tempData2;
+    });
+    console.log(competenceSeries);
     Highcharts.chart('history', {
       chart: {
         type: 'area',
@@ -341,7 +358,6 @@ export class DashboardComponent implements OnInit {
       competenceSeries = temporary;
     }
 
-    console.log(competenceSeries);
     /*Highcharts.chart('highlights', {
       chart: {
           type: 'packedbubble',

@@ -245,7 +245,6 @@ export class ProfileComponent implements OnInit {
       });
       c.data = tempData2;
     });
-    console.log(competenceSeries);
     Highcharts.chart('history', {
       chart: {
         type: 'area',
