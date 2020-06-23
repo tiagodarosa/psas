@@ -152,7 +152,7 @@ export class DashboardComponent implements OnInit {
         this.initializeComponents();
         this.resultChartComparative(this.spotlightCompetences, this.answers, '', '');
         this.historyChartCompetence('', '', '', '');
-        this.updateHighlightsChart('', '', '');
+        // this.updateHighlightsChart('', '', '');
         this.spinner.hide();
       }, (error) => {
         this.router.navigate(['home']);
@@ -332,7 +332,7 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    this.teams.forEach(function(c, i) {
+    /*this.teams.forEach(function(c, i) {
       temporary[i] = { name: c.name, data: [] };
       pep.forEach(p => {
         let value = 0;
@@ -345,7 +345,7 @@ export class DashboardComponent implements OnInit {
         });
         temporary[i].data.push({ name: p, value: (value / count)});
       });
-    });
+    });*/
 
     let competenceSeries = [];
     if (competence !== '') {
@@ -358,7 +358,7 @@ export class DashboardComponent implements OnInit {
       competenceSeries = temporary;
     }
 
-    /*Highcharts.chart('highlights', {
+    Highcharts.chart('highlights', {
       chart: {
           type: 'packedbubble',
           height: '460px'
@@ -400,107 +400,36 @@ export class DashboardComponent implements OnInit {
           }
       },
       series: [{
-          name: 'Oceania',
+          name: 'Equipe 1',
           data: [{
-              name: 'Australia',
-              value: 409.4
+              name: 'Tiago Santos',
+              value: 7.4
           },
           {
-              name: 'New Zealand',
-              value: 34.1
+              name: 'André',
+              value: 400
           },
           {
-              name: 'Papua New Guinea',
-              value: 7.1
+              name: 'Nicoli',
+              value: 8
           }]
       }, {
-          name: 'North America',
+          name: 'Equipe 2',
           data: [{
-              name: 'Costa Rica',
+              name: 'Tiago Santos',
               value: 7.6
           },
           {
-              name: 'Honduras',
-              value: 8.4
+              name: 'Leonardo',
+              value: 280
           },
           {
-              name: 'Jamaica',
+              name: 'Ernest',
               value: 8.3
-          },
-          {
-              name: 'Panama',
-              value: 10.2
-          },
-          {
-              name: 'Guatemala',
-              value: 12
-          },
-          {
-              name: 'Dominican Republic',
-              value: 23.4
-          },
-          {
-              name: 'Cuba',
-              value: 30.2
-          },
-          {
-              name: 'USA',
-              value: 5334.5
-          }, {
-              name: 'Canada',
-              value: 566
-          }, {
-              name: 'Mexico',
-              value: 456.3
-          }]
-      }, {
-          name: 'South America',
-          data: [{
-              name: 'El Salvador',
-              value: 7.2
-          },
-          {
-              name: 'Uruguay',
-              value: 8.1
-          },
-          {
-              name: 'Bolivia',
-              value: 17.8
-          },
-          {
-              name: 'Trinidad and Tobago',
-              value: 34
-          },
-          {
-              name: 'Ecuador',
-              value: 43
-          },
-          {
-              name: 'Chile',
-              value: 78.6
-          },
-          {
-              name: 'Peru',
-              value: 52
-          },
-          {
-              name: 'Colombia',
-              value: 74.1
-          },
-          {
-              name: 'Brazil',
-              value: 501.1
-          }, {
-              name: 'Argentina',
-              value: 199
-          },
-          {
-              name: 'Venezuela',
-              value: 195.2
           }]
       }],
-      series: competenceSeries
-    });*/
+      // series: competenceSeries
+    });
     $('.highcharts-credits').hide();
   }
 
