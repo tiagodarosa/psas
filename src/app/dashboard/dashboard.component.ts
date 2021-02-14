@@ -321,7 +321,7 @@ export class DashboardComponent implements OnInit {
 
 
 
-  updateHighlightsChart(project, team, competence) {
+  /*updateHighlightsChart(project, team, competence) {
     const temporary = [];
     const k = this.answers;
 
@@ -347,7 +347,7 @@ export class DashboardComponent implements OnInit {
       });
     });*/
 
-    let competenceSeries = [];
+    /*let competenceSeries = [];
     if (competence !== '') {
       temporary.forEach(t => {
         if (t.name === competence) {
@@ -431,7 +431,7 @@ export class DashboardComponent implements OnInit {
       // series: competenceSeries
     });
     $('.highcharts-credits').hide();
-  }
+  }*/
 
 
 
