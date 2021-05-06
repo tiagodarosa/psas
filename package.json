@@ -22,7 +22,7 @@
     "@auth0/angular-jwt": "^3.0.0",
     "angularx-social-login": "^1.2.7",
     "core-js": "^2.5.4",
-    "highcharts": "^7.2.2",
+    "highcharts": "^9.0.0",
     "jquery": "^3.5.0",
     "kind-of": "^6.0.3",
     "materialize-css": "^1.0.0-rc.2",
