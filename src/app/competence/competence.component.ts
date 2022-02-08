@@ -141,14 +141,14 @@ export class CompetenceComponent implements OnInit {
           name: competenceName,
           type: competenceType,
           description: competenceDescription
-        };
+        }
         this.organization.competences.push(competence);
         this.service.updateOrganization(this.organization).subscribe((data) => {
           this.competences = this.organization.competences;
           this.competences.sort(this.compare);
-          this.updateGraphs();
           this.spinner.hide();
           M.toast({html: 'Competência adicionada com sucesso!'});
+          this.updateGraphs();
         }, (error) => {
           this.router.navigate(['home']);
         });
@@ -174,9 +174,9 @@ export class CompetenceComponent implements OnInit {
           this.competences = this.organization.competences;
           this.competences.sort(this.compare);
           this.temporaryName = '';
-          this.updateGraphs();
           this.spinner.hide();
           M.toast({html: 'Competência atualizada com sucesso!'});
+          this.updateGraphs();
         }, (error) => {
           this.router.navigate(['home']);
         });
@@ -202,9 +202,9 @@ export class CompetenceComponent implements OnInit {
         this.competences = this.organization.competences;
         this.competences.sort(this.compare);
         this.temporaryName = '';
-        this.updateGraphs();
         this.spinner.hide();
         M.toast({html: 'Competência excluída com sucesso!'});
+        this.updateGraphs();
       }, (error) => {
         this.router.navigate(['home']);
       });

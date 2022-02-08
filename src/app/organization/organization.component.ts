@@ -117,5 +117,23 @@ export class OrganizationComponent implements OnInit {
     this.cookie.set('ORGANIZATIONMEMBERPROFILE', user.profile, 15);
     this.router.navigate(['profile']);
   }
+  
+  selectOrganizationPeople(organizationId: string) {
+    const organization = this.organizationsList.find(org => org._id === organizationId);
+    const user = Object(organization).users.find(u => u.email === this.email);
+    this.cookie.set('ORGANIZATIONID', organizationId, 15);
+    this.cookie.set('ORGANIZATIONNAME', organization.name, 15);
+    this.cookie.set('ORGANIZATIONMEMBERPROFILE', user.profile, 15);
+    this.router.navigate(['member']);
+  }
+
+  selectOrganizationCompetence(organizationId: string) {
+    const organization = this.organizationsList.find(org => org._id === organizationId);
+    const user = Object(organization).users.find(u => u.email === this.email);
+    this.cookie.set('ORGANIZATIONID', organizationId, 15);
+    this.cookie.set('ORGANIZATIONNAME', organization.name, 15);
+    this.cookie.set('ORGANIZATIONMEMBERPROFILE', user.profile, 15);
+    this.router.navigate(['competence']);
+  }
 
 }

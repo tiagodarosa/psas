@@ -130,12 +130,18 @@ export class TeamComponent implements OnInit {
   }
 
   addTeam(name: string, projectId: string) {
-    this.spinner.show();
-    this.service.addTeam(name, projectId).subscribe((data) => {
-      this.getTeams();
-    }, (error) => {
-      this.router.navigate(['home']);
-    });
+    if(name === ''){
+      M.toast({html:'Equipe inválida'});
+    } else {
+      this.spinner.show();
+      this.service.addTeam(name, projectId).subscribe((data) => {
+        this.spinner.hide();
+        this.getTeams();
+        M.toast({html: 'Equipe criada com sucesso'})
+      }, (error) => {
+        this.router.navigate(['home']);
+      });  
+    }
   }
 
   editTeamModal(teamId: string) {

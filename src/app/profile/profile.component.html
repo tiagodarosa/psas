@@ -17,22 +17,22 @@
         </div>
       </div>
       <div class="row">
-        <div class="col s12 m6" style="cursor: pointer;" routerLink="/application">
+        <div class="col s12 m6" style="cursor: default;" >
           <div class="card-panel white" style="height: 300px;">
-            <h6>Competências em destaque</h6>
-            <h5 *ngFor="let competence of topThreeCompetences">
+            <h5>Competências em destaque</h5>
+            <h6 *ngFor="let competence of topThreeCompetences">
               {{ competence.questionCompetence }}
-            </h5>
-            <h5 *ngIf="topThreeCompetences.length<=0">Sem avaliações para determinar competências em destaque</h5>
+            </h6>
+            <h6 *ngIf="topThreeCompetences.length<=0">Sem avaliações para determinar competências em destaque</h6>
           </div>
         </div>
-        <div class="col s12 m6" style="cursor: pointer;" routerLink="/application">
+        <div class="col s12 m6" style="cursor: default;">
           <div class="card-panel white" style="height: 300px;">
-            <h6>Competências que preciso aperfeiçoar</h6>
-            <h5 *ngFor="let competence of threeCompetencesToImprove">
+            <h5>Competências que preciso aperfeiçoar</h5>
+            <h6 *ngFor="let competence of threeCompetencesToImprove">
               {{ competence.questionCompetence }}
-            </h5>
-            <h5 *ngIf="threeCompetencesToImprove.length<=0">Sem avaliações para determinar as competências que você precisa aperfeiçoar</h5>
+            </h6>
+            <h6 *ngIf="threeCompetencesToImprove.length<=0">Sem avaliações para determinar as competências que você precisa aperfeiçoar</h6>
           </div>
         </div>
       </div>

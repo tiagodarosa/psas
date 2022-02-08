@@ -4,7 +4,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from 'angularx-social-login';
 import { Router } from '@angular/router';
-import { FormControl } from '@angular/forms';
+import Validator from 'validator';
+import { getMaxListeners } from 'process';
 declare var $: any;
 declare var M: any;
 
@@ -40,6 +41,7 @@ export class MemberComponent implements OnInit {
   ngOnInit() {
     this.spinner.show();
     this.organizationId = this.cookie.get('ORGANIZATIONID');
+    console.log(this.organizationId);
     this.authService.authState.subscribe((user) => {
       this.userEmail = user.email;
       this.getOrganization();
@@ -69,7 +71,7 @@ export class MemberComponent implements OnInit {
   }
 
   filterUserProfile(profile: string) {
-    try  {
+    try {
       return this.userProfiles.find(userProfile => userProfile.value === profile).description;
     } catch {
       return profile;
@@ -97,7 +99,7 @@ export class MemberComponent implements OnInit {
 
   deleteMemberModal(email: string) {
     if (email === this.userEmail) {
-      M.toast({html: 'Você não pode excluir você mesmo da organização!'});
+      M.toast({ html: 'Você não pode excluir você mesmo da organização!' });
     } else {
       this.userToDelete = email;
       $('select').formSelect();
@@ -109,22 +111,27 @@ export class MemberComponent implements OnInit {
   addMember(name: string, email: string, profile: string) {
     if (name !== '' && email !== '' && profile !== '') {
       const user = this.members.find(u => u.email === email);
+      const ifmailvalid = Validator.isEmail(email);
       if (user) {
-        M.toast({html: 'O e-mail informado já está cadastrado na organização!'});
-      } else {
+        M.toast({ html: 'O e-mail informado já está cadastrado na organização!' });
+
+      } else if (!ifmailvalid) { 
+        M.toast({html: 'Email inválido'});
+      }
+      else {
         this.spinner.show();
         const u = { name, email, profile, status: 'active' };
         this.members.push(u);
         Object(this.organization).users = this.members;
         this.service.updateOrganization(this.organization).subscribe((data) => {
           this.spinner.hide();
-          M.toast({html: 'Pessoa adicionada com sucesso!'});
+          M.toast({ html: 'Pessoa adicionada com sucesso!' });
         }, (error) => {
-          M.toast({html: 'Ocorreu algum erro ao adicionar a pessoa. Por favor, tente novamente!'});
+          M.toast({ html: 'Ocorreu algum erro ao adicionar a pessoa. Por favor, tente novamente!' });
         });
       }
-    } else {
-      M.toast({html: 'Favor preencher todos os campos!'});
+    } else if ((name === '' || email === '' || profile === '')) {
+      M.toast({ html: 'Favor preencher todos os campos!' });
     }
   }
 
@@ -141,15 +148,15 @@ export class MemberComponent implements OnInit {
           this.members = this.members.filter(member => member.email !== this.userToDelete);
           this.spinner.hide();
           this.userToDelete = '';
-          M.toast({html: 'Pessoa excluída com sucesso!'});
+          M.toast({ html: 'Pessoa excluída com sucesso!' });
         }, (error) => {
-          M.toast({html: 'Ocorreu algum erro ao excluir a pessoa da organização. Por favor, tente novamente!'});
+          M.toast({ html: 'Ocorreu algum erro ao excluir a pessoa da organização. Por favor, tente novamente!' });
         });
       } else {
-        M.toast({html: 'Estranho... E-mail não encontrado! Por favor, tente novamente!'});
+        M.toast({ html: 'Estranho... E-mail não encontrado! Por favor, tente novamente!' });
       }
     } else {
-      M.toast({html: 'Estranho... E-mail não encontrado! Por favor, tente novamente!'});
+      M.toast({ html: 'Estranho... E-mail não encontrado! Por favor, tente novamente!' });
     }
   }
 
@@ -166,16 +173,16 @@ export class MemberComponent implements OnInit {
         Object(this.organization).users = this.members;
         this.service.updateOrganization(this.organization).subscribe((data) => {
           this.spinner.hide();
-          M.toast({html: 'Informações da pessoa atualizadas com sucesso!'});
+          M.toast({ html: 'Informações da pessoa atualizadas com sucesso!' });
         }, (error) => {
           console.error(error);
-          M.toast({html: 'Ocorreu algum erro na edição dos dados da pessoa. Por favor, tente novamente!'});
+          M.toast({ html: 'Ocorreu algum erro na edição dos dados da pessoa. Por favor, tente novamente!' });
         });
       } else {
-        M.toast({html: 'Estranho... E-mail não encontrado! Por favor, tente novamente!'});
+        M.toast({ html: 'Estranho... E-mail não encontrado! Por favor, tente novamente!' });
       }
     } else {
-      M.toast({html: 'Favor preencher todos os campos!'});
+      M.toast({ html: 'Favor preencher todos os campos!' });
     }
   }
 

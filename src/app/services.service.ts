@@ -27,6 +27,7 @@ export class ServicesService {
   private getUserEmail() {
     this.authService.authState.subscribe((user) => {
       if (user != null) {
+        console.log(user);
         return user.email;
       }
     });

@@ -34,8 +34,14 @@
 
 <!-- Sidenav medium and upper -->
 <ul *ngIf="sidenav==true" class="sidenav sidenav-fixed sidenav-close" id="slide-out">
+<<<<<<< HEAD
+  <li class="logo center" style="margin-top: 30px; margin-bottom: 30px;"><a routerLink="/organization" class="organization" style="display:flex; align-items: center"><i class="material-icons" style="margin: 0px; margin-right: 5px; color: black;">keyboard_return</i>{{ organizationName }}</a>
+  </li>
+  <li><a class="waves-effect" style="font-size: 18px; cursor: default;"><b>DASHBOARD</b></a>
+=======
   <li class="logo center" style="margin-top: 30px; margin-bottom: 30px;"><a routerLink="/organization" class="organization">{{ organizationName }}</a></li>
   <li><a class="waves-effect" (click)="dropdown1()" style="font-size: 18px;"><b>DASHBOARD</b></a>
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
     <div id="dropdown1" class="collapsible-body" style="display: block;">
       <ul>
         <li routerLinkActive="active"><a style="padding-left: 50px;" routerLink="/profile"><i class="material-icons" style="margin-right: 10px;">person</i>Meu perfil</a></li>
@@ -43,7 +49,11 @@
       </ul>
     </div>
   </li>
+<<<<<<< HEAD
+  <li><a class="waves-effect" style="font-size: 18px; cursor: default;"><b>ORGANIZAÇÃO</b></a>
+=======
   <li><a class="waves-effect" (click)="dropdown2()" style="font-size: 18px;"><b>ORGANIZAÇÃO</b></a>
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
     <div id="dropdown2" class="collapsible-body" style="display: block;">
       <ul>
         <li routerLinkActive="active"><a style="padding-left: 50px;" routerLink="/competence"><i class="material-icons" style="margin-right: 10px;">grain</i>Competências</a></li>
@@ -53,7 +63,11 @@
       </ul>
     </div>
   </li>
+<<<<<<< HEAD
+  <li><a class="waves-effect" style="font-size: 18px; cursor: default;"><b>AVALIAÇÃO</b></a>
+=======
   <li><a class="waves-effect" (click)="dropdown3()" style="font-size: 18px;"><b>AVALIAÇÃO</b></a>
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
     <div id="dropdown3" class="collapsible-body" style="display: block;">
       <ul>
         <li routerLinkActive="active"><a style="padding-left: 50px;" routerLink="/assessment"><i class="material-icons" style="margin-right: 10px;">assessment</i>Avaliações</a></li>

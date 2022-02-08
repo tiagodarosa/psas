@@ -12,4 +12,6 @@ export class HelpComponent implements OnInit {
   ngOnInit() {
   }
 
+// markdown = `## Markdown __rulez!`
+
 }

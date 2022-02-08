@@ -79,17 +79,21 @@ export class ProjectComponent implements OnInit {
   }
 
   addProject(projectName: string) {
-    this.spinner.show();
-    const project = {
-      name: projectName,
-      organizationId: this.organizationId,
-      status: 'active'
-    };
-    this.service.addProject(project).subscribe((data) => {
-      this.getProjects();
-    }, (error) => {
-      this.router.navigate(['home']);
-    });
+    if(projectName === ''){
+      M.toast({html:'Projeto inválido'});
+    }else{
+      this.spinner.show();
+      const project = {
+        name: projectName,
+        organizationId: this.organizationId,
+        status: 'active'
+      };
+      this.service.addProject(project).subscribe((data) => {
+        this.getProjects();
+      }, (error) => {
+        this.router.navigate(['home']);
+      });
+    }
   }
 
   deleteProjectModal(projectId: string) {

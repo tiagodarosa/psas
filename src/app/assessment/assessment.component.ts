@@ -42,7 +42,7 @@ export class AssessmentComponent implements OnInit {
 
   tools = [
     {value: 'rubric', description: 'Rubrica'},
-    {value: 'questionnaire', description: 'Questionário'}
+    // {value: 'questionnaire', description: 'Questionário'}
   ];
 
   constructor(
@@ -111,22 +111,30 @@ export class AssessmentComponent implements OnInit {
   }
 
   addAssessment(name: string, tool: string) {
+    if(name === ''){
+      M.toast({html:'Avaliação inválida'});
+    } else {
     this.spinner.show();
     this.assessment.name = name;
     this.assessment.organizationId = this.organizationId;
     this.assessment.tool = tool;
     this.assessment.userCreator = this.userEmail;
     this.assessment.questions = [];
+    console.log(this.assessment);
     this.service.addAssessment(this.assessment).subscribe((data) => {
       this.assessment._id = Object(data).status.id;
       this.assessment._rev = Object(data).status.rev;
       this.assessments.push(this.assessment);
       this.assessments.sort(this.compare);
+      this.router.navigate([`assessment/${this.assessment._id}`]);
       this.spinner.hide();
+     
     }, (error) => {
       this.router.navigate(['home']);
     });
   }
+  }
+
 
   copyAssessmentById(assessmentId) {
     const copy = this.assessments.filter(a => a._id === assessmentId)[0];
@@ -137,6 +145,7 @@ export class AssessmentComponent implements OnInit {
     this.assessment.tool = Object(copy).tool;
     this.assessment.status = 'active';
     this.assessment.questions = Object(copy).questions;
+    console.log(this.assessment);
     if (this.assessment.organizationId !== '') {
       this.spinner.show();
       this.service.addAssessment(this.assessment).subscribe((data) => {

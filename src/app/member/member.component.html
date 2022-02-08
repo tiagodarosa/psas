@@ -44,9 +44,9 @@
               </thead>
               <tbody>
                 <tr *ngFor="let member of members">
-                  <td (click)="editMemberModal(member.email)">{{ member.name }}</td>
-                  <td (click)="editMemberModal(member.email)">{{ member.email }}</td>
-                  <td (click)="editMemberModal(member.email)">{{ filterUserProfile(member.profile) }}</td>
+                  <td>{{ member.name }}</td>
+                  <td>{{ member.email }}</td>
+                  <td>{{ filterUserProfile(member.profile) }}</td>
                   <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">
                     <a class="modal-trigger" href="#editMember" title="Editar informações de {{ member.name }}" (click)="editMemberModal(member.email)"><i class="material-icons left">edit</i></a>
                     <a style="cursor: pointer;" title="Excluir {{ member.name }}" (click)="deleteMemberModal(member.email)"><i class="material-icons left">delete</i></a>
@@ -60,7 +60,7 @@
         <!-- Buttons -->
         <div class="row" *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">
           <div class="col s12 center">
-            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newMember" (click)="addMemberModal()"><i class="material-icons left">add</i>Nova pessoa</a>
+            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newMember" (click)="addMemberModal()"><i class="material-icons left">add</i>Adicionar pessoa</a>
           </div>
         </div>
 
@@ -74,7 +74,7 @@
         <!-- Modal for new member -->
         <div id="newMember" class="modal modal-fixed-footer newMember">
           <div class="modal-content">
-            <h4>Nova pessoa</h4>
+            <h4>Adicionar pessoa</h4>
             <p>
               Informe os dados para adicionar uma nova pessoa na organização.
             </p>
@@ -84,7 +84,7 @@
                   <div class="input-field col s12 m6">
                     <i class="material-icons prefix">person</i>
                     <label for="name">Nome</label>
-                    <input #name id="name" type="text" class="validate">
+                    <input #name id="name"  type="text" class="validate">
                   </div>
                 </div>
                 <div class="row">
@@ -132,7 +132,7 @@
                 </div>
                 <div class="row">
                   <div class="input-field col s12 m6">
-                    <i class="material-icons prefix">email</i>
+                    <i class="material-icons prefix" >email</i>
                     <label for="editEmail" class="active">E-mail</label>
                     <input #editEmail id="editEmail" type="text" class="validate" value="{{ email }}">
                   </div>

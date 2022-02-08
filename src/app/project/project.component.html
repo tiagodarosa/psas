@@ -36,7 +36,7 @@
       <!-- Projects -->
       <div class="row">
         <div class="col s12">
-          <table class="highlight" *ngIf="projectsList.length>0">
+          <table *ngIf="projectsList.length>0">
             <thead>
               <tr>
                 <th style="width: 80%;">Nome</th>
@@ -45,7 +45,11 @@
             </thead>
             <tbody>
               <tr *ngFor="let project of projectsList">
+<<<<<<< HEAD
+                <td >{{ project.name }}</td>
+=======
                 <td (click)="editProjectModal(project._id)">{{ project.name }}</td>
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
                 <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">
                   <a class="modal-trigger" href="#editProject" title="Editar projeto {{ project.name }}" (click)="editProjectModal(project._id)"><i class="material-icons left">edit</i></a>
                   <a class="modal-trigger" href="#deleteProject" title="Excluir projeto {{ project.name }}" (click)="deleteProjectModal(project._id)"><i class="material-icons left">delete</i></a>

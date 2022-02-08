@@ -4,6 +4,8 @@ import { ServicesService } from 'src/app/services.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from 'angularx-social-login';
 import { CookieService } from 'ngx-cookie-service';
+
+
 declare var $: any;
 declare var M: any;
 
@@ -173,11 +175,15 @@ export class AssessmentDetailsComponent implements OnInit {
   }
 
   deleteAlternative(question: number, item: number) {
-    this.assessment.questions[question].items.splice(item, 1);
+    if(confirm(`Deseja realmente deletar a alternativa ${item+1}?`)){
+      this.assessment.questions[question].items.splice(item, 1);
+    }
   }
 
   deleteQuestion(question: number) {
-    this.assessment.questions.splice(question, 1);
+    if(confirm(`Deseja realmente deletar a questão ${question+1}?`)){
+      this.assessment.questions.splice(question, 1);
+    }
   }
 
   addAlternative(question: number) {
@@ -203,11 +209,28 @@ export class AssessmentDetailsComponent implements OnInit {
 
   save() {
     this.spinner.show();
+    console.log(this.assessment);
     this.service.updateAssessment(this.assessment).subscribe((data) => {
       this.getAssessment();
+      this.router.navigate(['assessment']);
+      M.toast({html: 'Questões da avaliação salvas com sucesso!'});
     }, (error) => {
       this.router.navigate(['home']);
     });
+  }
+
+
+  copy(){
+    this.spinner.show();
+    console.log(this.assessment);
+    this.service.addAssessment(this.assessment).subscribe((data) => {
+      this.getAssessment();
+      this.router.navigate(['assessment']);
+    }, (error) => {
+      this.router.navigate(['home']);
+    }); 
+
+  
   }
 
   changeQuestionName(question: number) {

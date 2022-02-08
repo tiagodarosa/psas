@@ -121,7 +121,7 @@ export class AnswerComponent implements OnInit {
   }
 
   filterType(type: string) {
-    try  {
+    try {
       return this.types.find(t => t.value === type).description;
     } catch {
       return type;
@@ -129,7 +129,7 @@ export class AnswerComponent implements OnInit {
   }
 
   filterMethod(method: string) {
-    try  {
+    try {
       return this.methods.find(m => m.value === method).description;
     } catch {
       return method;
@@ -137,7 +137,7 @@ export class AnswerComponent implements OnInit {
   }
 
   filterStrategy(strategy: string) {
-    try  {
+    try {
       return this.strategies.find(s => s.value === strategy).description;
     } catch {
       return strategy;
@@ -145,7 +145,7 @@ export class AnswerComponent implements OnInit {
   }
 
   filterName(user: string) {
-    try  {
+    try {
       const members = Object(this.organization).users;
       return members.find(m => m.email === user).name;
     } catch {
@@ -185,12 +185,13 @@ export class AnswerComponent implements OnInit {
   }
 
   saveAnswers() {
-    this.spinner.show();
-    this.service.saveAnswers(Object(this.currentApplication)._id, this.answers).subscribe((data) => {
-      this.getApplications();
-    }, (error) => {
-      this.router.navigate(['home']);
-    });
-  }
-
+    if (confirm('Após salva a resposta, não é possível sua edição. Você esta certo de sua resposta?')) {
+      this.spinner.show();
+      this.service.saveAnswers(Object(this.currentApplication)._id, this.answers).subscribe((data) => {
+        this.getApplications();
+      }, (error) => {
+        this.router.navigate(['home']);
+      });
+    }
+  } 
 }
