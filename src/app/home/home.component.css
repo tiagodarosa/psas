@@ -1,0 +1,34 @@
+.footer-copyright {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.a-footer-copyright {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.promo i {
+    color: rgb(3, 169, 244);
+    direction: ltr;
+    display: block;
+    font-family: "Material Icons";
+    font-size: 105px;
+    margin-top: 40px;
+}
+
+.promo-caption {
+    font-size: 25.5px;
+    font-weight: 500;
+    height: 41px;
+    line-height: 40px;
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+
+.promo-description {
+    font-size: 18px;
+    font-weight: 300;
+    /*height: 150px;*/
+    line-height: 25px;
+}

@@ -1,0 +1,25 @@
+<footer class="page-footer">
+  <p class="p-footer center">
+    <a class="a-footer" routerLink="/privacy">Política de privacidade</a>
+    <a class="a-footer modal-trigger" href="#apiDocumentation" onclick="M.Modal.init(document.querySelectorAll('.modal'));$('.apiDocumentation').modal('open');" (click)="getToken()">Documentação da API</a>
+  </p>
+  <!-- Modal to redirect to api documentation -->
+  <div id="apiDocumentation" class="modal modal-fixed-footer apiDocumentation">
+    <div class="modal-content">
+      <h4>Documentação da API</h4>
+      <p>
+        Para utilizar a API é necessário uma chave <i>bearer token</i>.
+        Você pode copiar e colar a sua chave abaixo. Na janela de documentação, clique sobre o botão <i>Authorize</i> e cole a chave copiada.
+      </p>
+      <br>
+      <div class="col s12">
+        <p class="grey-text text-darken-2" style="word-break: break-all; font-size: 12px;">{{ token }}</p>
+      </div>
+      <br>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+      <a class="modal-close waves-effect waves-light light-blue btn" target="_blank" href="./assets/api/index.html">Documentação</a>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,125 @@
+<div class="body">
+
+  <!--Header-->
+  <app-header></app-header>
+
+  <!-- Spinner -->
+  <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+
+  <!-- Main content -->
+  <main>
+    <div class="container">
+      
+      <!-- Title -->
+      <div class="row">
+        <div class="col s12">
+          <h3 class="header"><a [routerLink]="['/assessment']">Avaliações</a> > {{ assessment.name }}</h3>
+        </div>
+      </div>
+
+      <!-- Questions -->
+      <div class="row">
+        <div class="col s12">
+            <h5>Questões da avaliação</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <ul class="collapsible" *ngIf="assessment.questions.length>0">
+            <li *ngFor="let question of assessment.questions; let i = index" (click)="collapsible()">
+              <div class="collapsible-header">{{ i+1 }} - {{ question.name | slice:0:40 }}{{ question.name.length > 35 ? '...' : ''}} - {{ question.significance + '%' }}</div>
+              <div class="collapsible-body">
+                <span>
+                  <form class="col s12">
+                    <div class="row">
+                      <div class="input-field col s12 m12">
+                        <i class="material-icons prefix">edit</i>
+                        <label for="{{ 'questionName' + i }}" class="active">Questão</label>
+                        <input id="{{ 'questionName' + i }}" type="text" class="validate" value="{{ question.name }}" (input)="changeQuestionName(i)">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="input-field col s12 m6">
+                        <i class="material-icons prefix">grain</i>
+                        <label class="active" for="{{ 'competenceName' + i }}">Competência</label>
+                        <select name="{{ 'competenceName' + i }}" id="{{ 'competenceName' + i }}" class="validate" (change)="changeQuestionCompetence(i)">
+                          <option *ngFor="let competence of organization.competences" [value]="competence.name" [selected]="competence.name===question.competenceName">
+                            {{ competence.name }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="input-field col s12 m6">
+                        <i class="material-icons prefix">exposure</i>
+                        <label for="{{ 'significance' + i }}" class="active">Peso</label>
+                        <input id="{{ 'significance' + i }}" type="number" class="validate" value="{{ question.significance }}" (input)="changeQuestionSignificance(i)">
+                      </div>
+                    </div>
+                  </form>
+                  <!-- Alternatives -->
+                  <div class="row" *ngIf="question.items.length>0">
+                    <div class="col s12" *ngFor="let item of question.items; let j = index">
+                      <div class="card">
+                        <div class="card-content">
+                          <p><b>Alternativa {{ j+1 }}</b></p>
+                          <br>
+                          <div class="row">
+                            <div class="input-field col s12 m6">
+                              <i class="material-icons prefix">exposure</i>
+                              <label for="{{ 'itemPercentage' + i + j }}" class="active">Peso</label>
+                              <input id="{{ 'itemPercentage' + i + j }}" type="number" class="validate" value="{{ item.percentage }}" (input)="changeQuestionItemPercentage(i,j)">
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="input-field col s12 m12">
+                              <i class="material-icons prefix">edit</i>
+                              <label for="{{ 'itemDescription' + i + j }}" class="active">Descrição da alternativa</label>
+                              <input id="{{ 'itemDescription' + i + j }}" type="text" class="validate" value="{{ item.description }}" (input)="changeQuestionItemDescription(i,j)">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-action light-blue">
+                          <a style="cursor: pointer; color: white;" title="Excluir alternativa" (click)="deleteAlternative(i,j)"><i class="material-icons left">delete</i>Excluir alternativa</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Buttons to add alternative or edit question -->
+                  <div class="row">
+                    <div class="col s12">
+                      <a class="waves-effect waves-light light-blue btn-small" (click)="addAlternative(i)" style="margin-right: 8px;"><i class="material-icons left">add</i>Adicionar alternativa</a>
+                      <a class="waves-effect waves-light red btn-small" (click)="deleteQuestion(i)"><i class="material-icons left">delete</i>Excluir questão</a>
+                    </div>
+                  </div>
+                </span>
+              </div>
+            </li>
+          </ul>
+          <div class="row">
+            <div class="col s12">
+              <a class="waves-effect waves-light light-blue btn-small" (click)="addQuestion()"><i class="material-icons left">add</i>Adicionar questão</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="row">
+        <div class="col s12">
+          <a style="margin-top: 4px; margin-bottom: 4px; margin-right: 4px;" class="waves-effect waves-light light-blue btn-large" [routerLink]="['/assessment']"><i class="material-icons left">arrow_back</i>Voltar</a>
+          <!-- <a class="waves-effect waves-light light-blue btn-large right" (click)="copy()"><i class="material-icons left">save</i>Copiar</a> -->
+          <a class="waves-effect waves-light light-blue btn-large right" (click)="save()"><i class="material-icons left">save</i>Salvar</a>
+          <p class="alert alert-success">
+            <strong>Questões salvas com sucesso!</strong>
+        </div>
+      </div>
+
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+
+</div>

@@ -1,0 +1,181 @@
+<div class="body">
+
+    <!--Header-->
+    <app-header></app-header>
+
+    <!-- Spinner -->
+    <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+  
+    <!-- Main content -->
+    <main>
+      <div class="container">
+        
+        <!-- Title -->
+        <div class="row">
+          <div class="col s12">
+            <h3 class="header">Pessoas</h3>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="members.length<=0">
+          <div class="col s12 center">
+            <h5 class="header">Esta organização não possui pessoas cadastradas!</h5>
+            <p class="caption" *ngIf="userProfile!='organizationManager' && userProfile!='projectManager'">
+              Solicite para um gestor da organização ou gestor de projetos para adicionar, alterar ou excluir pessoas na organização.
+            </p>
+            <p class="caption" *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">
+              Adicione uma pessoa clicando no botão "Nova pessoa"!
+            </p>
+          </div>
+        </div>
+
+
+        <!-- Members -->
+        <div class="row">
+          <div class="col s12">
+            <table class="highlight" *ngIf="members.length>0">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                  <th>Perfil</th>
+                  <th *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">Opções</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let member of members">
+                  <td>{{ member.name }}</td>
+                  <td>{{ member.email }}</td>
+                  <td>{{ filterUserProfile(member.profile) }}</td>
+                  <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">
+                    <a class="modal-trigger" href="#editMember" title="Editar informações de {{ member.name }}" (click)="editMemberModal(member.email)"><i class="material-icons left">edit</i></a>
+                    <a style="cursor: pointer;" title="Excluir {{ member.name }}" (click)="deleteMemberModal(member.email)"><i class="material-icons left">delete</i></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="row" *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">
+          <div class="col s12 center">
+            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newMember" (click)="addMemberModal()"><i class="material-icons left">add</i>Adicionar pessoa</a>
+          </div>
+        </div>
+
+        <!-- User without access -->
+        <div class="row" *ngIf="userProfile!='organizationManager' && userProfile!='projectManager'">
+          <div class="col s12 center">
+            <p class="caption">Você não possui acesso para adicionar, alterar ou excluir pessoas na organização {{ organization.name }}.</p>
+          </div>
+        </div>
+
+        <!-- Modal for new member -->
+        <div id="newMember" class="modal modal-fixed-footer newMember">
+          <div class="modal-content">
+            <h4>Adicionar pessoa</h4>
+            <p>
+              Informe os dados para adicionar uma nova pessoa na organização.
+            </p>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">person</i>
+                    <label for="name">Nome</label>
+                    <input #name id="name"  type="text" class="validate">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">email</i>
+                    <label for="email">E-mail</label>
+                    <input #email id="email" type="text" class="validate">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">security</i>
+                    <label for="profile" class="active">Perfil</label>
+                    <select #profile id="profile" class="validate">
+                        <option *ngFor='let profile of userProfiles' [value]="profile.value">
+                          {{ profile.description }}
+                        </option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="addMember(name.value, email.value, profile.value)">Salvar</a>
+          </div>
+        </div>
+
+        <!-- Modal to edit member -->
+        <div id="editMember" class="modal modal-fixed-footer editMember">
+          <div class="modal-content">
+            <h4>Editar pessoa</h4>
+            <p>
+              Atualize os dados da pessoa.
+            </p>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">person</i>
+                    <label for="editName" class="active">Nome</label>
+                    <input #editName id="editName" type="text" class="validate">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix" >email</i>
+                    <label for="editEmail" class="active">E-mail</label>
+                    <input #editEmail id="editEmail" type="text" class="validate" value="{{ email }}">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">security</i>
+                    <label for="editProfile" class="active">Perfil</label>
+                    <select #editProfile id="editProfile" class="validate">
+                        <option *ngFor='let profile of userProfiles' [value]="profile.value">
+                          {{ profile.description }}
+                        </option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="editMember(editName.value, editEmail.value, editProfile.value)">Salvar</a>
+          </div>
+        </div>
+
+        <!-- Modal to delete member -->
+        <div id="deleteMember" class="modal modal-fixed-footer deleteMember">
+          <div class="modal-content">
+            <h4>Excluir pessoa</h4>
+            <p>
+              Você tem certeza que deseja excluir esta pessoa? Essa ação não poderá ser desfeita!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light red btn" (click)="deleteMember()">Excluir</a>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  
+    <!-- Footer -->
+    <app-footer></app-footer>
+  
+  </div>
+  

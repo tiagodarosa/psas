@@ -1,0 +1,31 @@
+.page-footer {
+    height: 46px;
+    padding-top: 0px;
+    background-color: white;
+    color: rgba(0,0,0,0.87);
+}
+
+.p-footer {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 10px;
+    border-top-color: rgb(224, 224, 224);
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+
+.a-footer {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.ul-footer {
+    display:flex;  
+    list-style:none;
+}
+
+@media only screen and (max-width : 992px) {
+    .ul-footer {
+        display: list-item;
+    }
+  }

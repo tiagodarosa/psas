@@ -1,0 +1,289 @@
+<div class="body">
+
+    <!--Header-->
+    <app-header></app-header>
+
+    <!-- Spinner -->
+    <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+  
+    <!-- Main content -->
+    <main>
+      <div class="container">
+
+        <!-- Title -->
+        <div class="row">
+          <div class="col s12">
+            <h3 class="header">Avaliações</h3>
+          </div>
+        </div>
+
+        <!-- Message when user doesnt have assessments -->
+        <div class="row" *ngIf="assessments.length<=0 && (userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager')">
+          <div class="col s12 center">
+            <h5 class="header">Você não criou nenhuma avaliação!</h5>
+            <p class="caption">
+              Crie uma avaliação clicando no botão "Nova avaliação" e utilize um modelo de avaliação já existente da organização que você é membro, copie de uma avaliação pública ou crie sua própria avaliação.
+            </p>
+          </div>
+        </div>
+
+        <!-- Assessments -->
+        <div class="row">
+          <div class="col s12">
+            <table class="highlight" *ngIf="assessments.length>0">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Ferramenta</th>
+                  <th>Autor</th>
+                  <th>Questões</th>
+                  <th *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">Opções</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let assessment of assessments">
+                  <td>{{ assessment.name }}</td>
+                  <td>{{ filterTool(assessment.tool) }}</td>
+                  <td>{{ assessment.userCreator }}</td>
+                  <td>{{ assessment.questions.length }}</td>
+                  <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
+                    <a style="cursor: pointer;" title="Editar informações da avaliação" (click)="editAssessmentModal(assessment._id)"><i class="material-icons left">edit</i></a>
+                    <!--<a style="cursor: pointer;" title="Editar questões da avaliação" (click)="editAssessmentQuestionsModal(assessment._id)"><i class="material-icons left">question_answer</i></a>-->
+                    <a style="cursor: pointer;" title="Editar questões da avaliação" [routerLink]="['/assessment', assessment._id]"><i class="material-icons left">question_answer</i></a>
+                    <a style="cursor: pointer;" title="{{ assessment.public ? 'Tornar privada a avaliação' : 'Tornar pública a avaliação'}}" (click)="assessmentVisibility(assessment._id)"><i class="material-icons left">{{ assessment.public ? 'visibility_off' : 'visibility'}}</i></a>
+                    <a style="cursor: pointer;" title="Copiar avaliação" (click)="copyAssessmentById(assessment._id)"><i class="material-icons left">content_copy</i></a>
+                    <a class="modal-trigger" href="#deleteAssessment" title="Excluir avaliação" (click)="deleteAssessmentModal(assessment.name, assessment._id)"><i class="material-icons left">delete</i></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Button to add assessment -->
+        <div class="row center" *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
+            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#addAssessment" (click)="addAssessmentModal()"><i class="material-icons left">add</i>Nova avaliação</a>
+            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#copyAssessment" (click)="copyAssessmentModal()"><i class="material-icons left">content_copy</i>Copiar avaliação</a>
+        </div>
+
+        <!-- User without access -->
+        <div class="row" *ngIf="userProfile!='organizationManager' && userProfile!='projectManager' && userProfile!='teamManager'">
+          <div class="col s12 center">
+            <p class="caption">Você não possui acesso para adicionar, alterar ou excluir avaliações na organização {{ organizationName }}.</p>
+          </div>
+        </div>
+
+        <!-- Modal for new assessment -->
+        <div id="addAssessment" class="modal modal-fixed-footer addAssessment">
+          <div class="modal-content">
+            <h4>Nova avaliação</h4>
+            <p>
+              Preencha as informações para criar uma nova avaliação.
+            </p>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s6">
+                    <i class="material-icons prefix">description</i>
+                    <input #name id="name" type="text" class="validate">
+                    <label for="name">Nome</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s6">
+                    <i class="material-icons prefix">build</i>
+                    <label for="tool" class="active">Ferramenta</label>
+                    <select #tool id="tool" class="validate">
+                        <option *ngFor='let tool of tools' [value]="tool.value">
+                          {{ tool.description }}
+                        </option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="addAssessment(name.value, tool.value)">Salvar</a>
+          </div>
+        </div>
+
+
+        <!-- Modal to edit assessment -->
+        <div id="editAssessment" class="modal modal-fixed-footer editAssessment">
+            <div class="modal-content">
+              <h4>Editar avaliação</h4>
+              <p>
+                Modifique as informações da avaliação.
+              </p>
+              <div class="row">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s6">
+                      <i class="material-icons prefix">description</i>
+                      <input #editName id="editName" type="text" class="validate">
+                      <label for="editName" class="active">Nome</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s6">
+                      <i class="material-icons prefix">build</i>
+                      <label for="editTool" class="active">Ferramenta</label>
+                      <select #editTool id="editTool" class="validate">
+                          <option *ngFor='let tool of tools' [value]="tool.value">
+                            {{ tool.description }}
+                          </option>
+                      </select>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+              <a class="modal-close waves-effect waves-light light-blue btn" (click)="editAssessment(editName.value, editTool.value)">Salvar</a>
+            </div>
+          </div>
+
+
+
+
+
+        <!-- Modal to delete assessment -->
+        <div id="deleteAssessment" class="modal modal-fixed-footer deleteAssessment">
+          <div class="modal-content">
+            <h4>Excluir avaliação</h4>
+            <p>
+              Você tem certeza que deseja excluir a avaliação?
+              Essa ação não poderá ser desfeita!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light red btn" (click)="deleteAssessment()">Excluir</a>
+          </div>
+        </div>
+
+        <!-- Modal to copy assessment -->
+        <div id="copyAssessment" class="modal modal-fixed-footer copyAssessment">
+          <div class="modal-content">
+            <h4>Copiar avaliação</h4>
+            <p>
+              Copie uma avaliação já existente de uma organização que você é membro ou de uma avaliação pública. Clique sobre a avaliação desejada para visualizar os detalhes completos e em seguida clique no botão "Copiar".
+            </p>
+            <div class="row">
+              <ul class="collapsible">
+                <!--<li class="active">
+                  <div class="collapsible-header waves-effect waves-light light-blue white-text">Avaliações da organização</div>
+                  <div class="collapsible-body">
+                    <span *ngIf="organizationAssessmentsCount<=0">Nenhuma avaliação disponível nas organizações que você é membro.</span>
+                  </div>
+                </li>-->
+                <li class="active">
+                  <div class="collapsible-header waves-effect waves-light light-blue white-text">Avaliações públicas</div>
+                  <div class="collapsible-body">
+                    <span *ngIf="publicAssessmentsCount<=0">Nenhuma avaliação pública disponível.</span>
+                    <table class="highlight responsive-table" *ngIf="publicAssessmentsCount>0">
+                        <thead>
+                          <tr>
+                            <th>Nome</th>
+                            <th>Ferramenta</th>
+                            <th>Questões</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="modal-close" style="cursor: pointer;" *ngFor="let assessment of publicAssessments" [routerLink]="['/assessment', assessment._id]">
+                            <td>{{ assessment.name }}</td>
+                            <td>{{ filterTool(assessment.tool) }}</td>
+                            <td>{{ assessment.questions.length }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <!--<a class="modal-close waves-effect waves-light light-blue btn" (click)="addAssessment(name.value, orgId.value, tool.value)">Salvar</a>-->
+          </div>
+        </div>
+
+
+
+
+        <!-- Modal to edit questions of assessment -->
+        <div id="editAssessmentQuestions" class="modal modal-fixed-footer editAssessmentQuestions">
+          <div class="modal-content">
+            <h4>Editar questões da avaliação</h4>
+            <!-- Application info -->
+            <div class="row">
+              <p>
+                Nome do avaliado: Tiago da Rosa Santos<br>
+                Aplicação: Avaliação de exemplo<br>
+                Tipo de aplicação: diagnóstica<br>
+                Método da aplicação: ranking<br>
+                Estratégia: Avaliação 360º<br>
+                Ferramenta: Rúbrica
+              </p>
+            </div>
+            <!-- Questions -->
+            <div class="row">
+              <ul class="collapsible expandable" *ngIf="currentApplicationValid">
+                <li *ngFor="let question of currentApplication.assessment.questions; let i = index" onclick="$('.collapsible').collapsible({ accordion: false });">
+                  <div class="collapsible-header">{{ i+1 }} - {{ question.name | slice:0:40 }}{{ question.name.length > 40 ? '...' : ''}}</div>
+                  <div class="collapsible-body">
+                    <p><b>Questão: </b>{{ question.name }}</p>
+                    <p><b>Competência: </b>{{ question.competenceName }}</p>
+                    <!-- Alternatives -->
+                    <div class="row" *ngIf="question.items.length>0">
+                      <div class="col s12 m6 l4 xl3" *ngFor="let item of question.items; let j = index" style="padding: 0;">
+                        <div class="card" style="cursor: pointer;" id="{{ i + '' + j}}" (click)="selectItem(i,j)">
+                          <div class="card-content">
+                            <p><b>Alternativa {{ j+1 }}</b></p>
+                            <p>{{ item.description }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <!-- Comments -->
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">comment</i>
+                    <label class="active" for="comments">Comentários</label>
+                    <input #comments id="comments" type="text" class="validate" value="">
+                  </div>
+                </div>
+              </form>
+            </div>
+
+          </div>
+
+          <!-- Buttons -->
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn">Salvar</a>
+          </div>
+        </div>
+
+
+
+
+
+
+      </div>
+    </main>
+  
+    <!-- Footer -->
+    <app-footer></app-footer>
+  
+  </div>
+  

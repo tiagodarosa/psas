@@ -1,0 +1,172 @@
+<div class="body">
+
+  <!--Header-->
+  <app-header></app-header>
+
+  <!-- Spinner -->
+  <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+
+  <!-- Main content -->
+  <div class="">
+    
+    <!-- Title -->
+    <div class="row center">
+      <div class="col s12 m12">
+        <h1 class="header">PSAS</h1>
+      </div>
+      <div class="col s12 m8 offset-m2">
+        <h4 class="light">Um framework para avaliação em pares das competências de equipes de projetos de software.</h4>
+      </div>
+    </div>
+    <div class="row center">
+        <a *ngIf="loggedIn" routerLink="/organization" class="btn-large waves-effect light-blue">Entrar</a>
+        <a *ngIf="loggedIn==false" routerLink="/user" class="btn-large waves-effect light-blue">Entrar</a>
+    </div>
+    <div class="divider"></div>
+
+    <!-- 3 steps -->
+    <div class="section">
+      <div class="row">
+        <div class="col s12 m10 offset-m1">
+          <div class="row">
+            <div class="col s12 m4">
+              <div class="center promo">
+                <i class="material-icons">add_box</i>
+                <!-- <i class="material-icons">note_add</i> -->
+                <p class="promo-caption">Crie</p>
+                <p class="light center promo-description">Crie avaliações de desempenho personalizadas, baseadas nas competências mais relevantes para a sua empresa e equipe, usando diferentes tipos, estratégias e métodos.</p>
+              </div>
+            </div>
+            <div class="col s12 m4">
+              <div class="center promo">
+                <i class="material-icons">star_half</i>
+                <!-- <i class="material-icons">star_border</i> -->
+                <p class="promo-caption">Avalie</p>
+                <p class="light center promo-description">Aplique avaliações de desempenho para mensurar atributos e competências da sua equipe. Descubra talentos e identifique pontos de melhora nos seus comapnheiros de equipe.</p>
+              </div>
+            </div>
+            <div class="col s12 m4">
+              <div class="center promo">
+                <i class="material-icons">insert_chart</i>
+                <p class="promo-caption">Veja</p>
+                <p class="light center promo-description">Analise os resultados das avaliações e acompanhe a evolução da sua equipe através de gráficos e elementos visuais que auxiliam na compreensão geral dos insumos da sua pesquisa.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- Porque avaliar competencias -->
+    <div class="section">
+      <div class="row center">
+        <h3 class="light header">Porquê avaliar competências?</h3>
+        <p class="col s12 m8 offset-m2 caption promo-description">
+          As competências de uma equipe são um fator significativo para o desempenho geral e
+          trabalhar em equipe também é uma parte essencial
+          do desenvolvimento de projetos [de
+          software]. A avaliação de competências, nesse contexto, tem o objetivo de permitir a
+          identificação das competências de cada pessoa e da equipe de projetos, facilitar a formação
+          de novas equipes com base nos resultados de
+          um projeto e ser utilizado para o
+          aperfeiçoamento das pessoas.</p>
+      </div>
+      <!--<div class="row center">
+          <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#pqAvaliarCompetencias" (click)="pqAvaliarCompetencias()">Mais informações</a>
+          <!- <a href="http://materializecss.com/showcase.html" class="btn-large waves-effect light-blue">Mais informações</a> ->
+      </div>-->
+    </div>
+    <div class="divider"></div>
+
+    <!-- Modal - Porque avaliar competencias? -->
+    <div id="pqAvaliarCompetencias" class="modal modal-fixed-footer pqAvaliarCompetencias">
+        <div class="modal-content">
+          <h4>Porquê avaliar competências?</h4>
+          <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#pqAvaliarCompetencias" class="modal-close waves-effect waves-light light-blue btn">Agree</a>        
+        </div>
+      </div>
+
+    <!-- Porque avaliar em pares -->
+    <div class="section">
+      <div class="row center">
+        <h3 class="light header">Porquê avaliar em pares?</h3>
+        <p class="col s12 m8 offset-m2 caption promo-description">
+          A avaliação em pares deve ser usada para melhorar as capacidades avaliativas,
+          motivando a reflexão sobre o próprio desempenho e aumentando a consciência de qualidade sobre o próprio trabalho.
+        </p>
+      </div>
+      <!--<div class="row center">
+          <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#pqAvaliarPares" (click)="pqAvaliarPares()">Mais informações</a>
+      </div>-->
+    </div>
+    <div class="divider"></div>
+
+      <!-- Modal - Porque avaliar em pares? -->
+      <!--<div id="pqAvaliarPares" class="modal modal-fixed-footer">
+          <div class="modal-content">
+            <h4>Porquê avaliar em pares?</h4>
+            <p>A bunch of text</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-light light-blue btn">Agree</a>        
+          </div>
+        </div>-->
+
+  </div>
+
+  <!-- Footer -->
+  <div class="row" style="margin-bottom: 0;">
+      <div class="col s12 m10 offset-m1">
+        <div class="row">
+          <div class="col l4 s12">
+            <h5>Contribuições científicas</h5>
+            <p class="grey-text text-darken-2">
+              Um mapeamento sistemático da literatura sobre a avaliação em pares das competências de um indivíduo em uma equipe de projetos de software.
+              <a href="http://www.seer.unirio.br/index.php/isys/article/view/7007/7974" target="_blank">Link externo</a>
+            </p>
+            <p class="grey-text text-darken-2">
+              PSAS: A Framework for Peer Assessment of an Individuals Skills in a Software Projects Team.
+              <a href="https://doi.org/10.1145/3422392.3422506" target="_blank">Link externo</a>
+            </p>
+            
+          </div>
+          <div class="col l4 s12">
+            <h5>Entre na discussão</h5>
+            <p class="grey-text text-darken-2">O PSAS é de código aberto, acesse o Github e contribua!</p>
+            <iframe src="https://ghbtns.com/github-btn.html?user=tiagodarosa&amp;repo=psas&amp;type=watch&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>
+          </div>
+          <div class="col l4 s12" style="overflow: hidden;">
+            <h5>Desenvolvido</h5>
+            <div class="patreon-footer-ad">
+                <a href="http://www2.joinville.udesc.br/%7Egpie/site/" alt="Compare Energy" target="_blank" rel="noopener">
+                  <img width="180px" height="84px" style="margin-top: 5px;" src="../../assets/gpie.png" alt="GPIE">
+                </a>
+              </div>
+              <div class="patreon-footer-ad">
+                  <a href="http://www.joinville.udesc.br/portal/departamentos/dcc/" target="_blank" rel="noopener">
+                  <img width="172px" height="63px" style="margin-top: 20px;" src="../../assets/dcc.png" alt="DCC">
+                  </a>
+                </div>
+                <div class="patreon-footer-ad">
+                    <a href="http://www.joinville.udesc.br/" target="_blank" rel="noopener">
+                    <img width="189px" height="65px" style="margin-top: 20px;" src="../../assets/marcaudesc.png" alt="UDESC">
+                    </a>
+                  </div>
+          </div>
+        </div>
+        
+
+        <div class="footer-copyright">
+          © 2021 PSAS.
+          <a class="a-footer-copyright" routerLink="/privacy">Política de privacidade</a>
+        </div>
+
+      </div>
+    </div>
+
+</div>
+

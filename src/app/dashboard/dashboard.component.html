@@ -1,0 +1,191 @@
+<div class="body">
+
+  <!--Header-->
+  <app-header></app-header>
+  
+  <!-- Spinner -->
+  <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+  
+  <!-- Main content -->
+  <main>
+
+    <div class="container">
+
+      <!-- Title -->
+      <div class="row">
+        <div class="col s12">
+          <h3 class="header">Perfil da organização</h3>
+          <p class="caption">Informações sobre a organização.</p>
+        </div>
+      </div>
+
+
+      <!-- Comparative -->
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col s12">
+          <h3 class="header">Comparação dos resultados de avaliação</h3>
+          <h5 *ngIf="answers.length<=0">Sem avaliações para calcular os resultados comparativos</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div class="row">
+            <div class="input-field col s12 m6">
+              <select>
+                <option value="" selected>Todos</option>
+                <option *ngFor="let project of projects" [value]="project._id">
+                  {{ project.name }}
+                </option>
+              </select>
+              <label>Projeto</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <select #team (change)="comparativeResultsByTeam(team.value)">
+                <option value="" selected>Todas</option>
+                <option *ngFor="let team of teams" [value]="team._id">
+                  {{ team.name }}
+                </option>
+              </select>
+              <label>Equipe</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12">
+              <div class="card-panel white" style="height: 500px;">
+                <div id="results"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    
+      <!-- History -->
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col s12">
+          <h3 class="header">Histórico</h3>
+          <h5 *ngIf="answers.length<=0">Sem avaliações para exibir no histórico</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div class="row">
+            <div class="input-field col s12 m6">
+              <select #HProject (change)="updateHistoryChart(HProject.value, HTeam.value, HPerson.value, HCompetence.value)">
+                <option value="" selected>Todos</option>
+                <option *ngFor="let project of projects" [value]="project._id">
+                  {{ project.name }}
+                </option>
+              </select >
+              <label>Projeto</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <select #HTeam (change)="filterHistoryTeam(HProject.value, HTeam.value, HPerson.value, HCompetence.value)">
+                <option value="" selected>Todas</option>
+                <option *ngFor="let team of teams" [value]="team._id">
+                  {{ team.name }}
+                </option>
+              </select>
+              <label>Equipe</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12 m6">
+              <select name="HPerson" id="HPerson" #HPerson (change)="updateHistoryChart(HProject.value, HTeam.value, HPerson.value, HCompetence.value)">
+                <option value="" selected>Todas</option>
+                <option *ngFor="let person of peopleList" [value]="person.email">
+                  {{ person.name }}
+                </option>
+              </select>
+              <label>Pessoas</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <select #HCompetence (change)="updateHistoryChart(HProject.value, HTeam.value, HPerson.value, HCompetence.value)">
+                <option value="" selected>Todas</option>
+                <option *ngFor="let competence of spotlightCompetences" [value]="competence">
+                  {{ competence }}
+                </option>
+              </select>
+              <label>Competências</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel white" style="height: 500px;">
+            <div id="history"></div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <!-- Highlights -->
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col s12">
+          <h3 class="header">Destaques</h3>
+          <h5 *ngIf="answers.length<=0">Sem avaliações para exibir os destaques</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div class="row">
+            <div class="input-field col s12 m6">
+              <select #DProject>
+                <option value="" selected>Todos</option>
+                <option *ngFor="let project of projects" [value]="project._id">
+                  {{ project.name }}
+                </option>
+              </select >
+              <label>Projeto</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <select #DTeam>
+                <option value="" selected>Todas</option>
+                <option *ngFor="let team of teams" [value]="team._id">
+                  {{ team.name }}
+                </option>
+              </select>
+              <label>Equipe</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12 m12">
+              <select #DCompetence>
+                <option value="" selected>Todas</option>
+                <option *ngFor="let competence of spotlightCompetences" [value]="competence">
+                  {{ competence }}
+                </option>
+              </select>
+              <label>Competências</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel white" style="height: 500px;">
+            <div id="highlights"></div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+    </div>
+
+  </main>
+  
+  <!-- Footer -->
+  <app-footer></app-footer>
+  
+</div>
+  
+  

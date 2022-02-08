@@ -1,0 +1,257 @@
+<div class="body">
+
+    <!--Header-->
+    <app-header></app-header>
+
+    <!-- Spinner -->
+    <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+  
+    <!-- Main content -->
+    <main onload="M.AutoInit();">
+      <div class="container">
+        
+        <!-- Title -->
+        <div class="row">
+          <div class="col s12">
+            <h3 class="header"><a [routerLink]="['/organization']">Organizações</a> > {{ organization.name }}</h3>
+          </div>
+        </div>
+
+        <!-- Organization info -->
+        <div class="row">
+          <div class="col s12">
+            <div class="card">
+              <div class="card-content light-blue white-text">
+                <span class="card-title">Informações</span>
+                  <!--<p></p>-->
+              </div>
+              <div class="divider"></div>
+              <div class="card-content">
+                <label class="active" for="name">Nome</label>
+                <input value="{{ organization.name }}" id="name" type="text" disabled>
+              </div>
+              <div class="card-action">
+                <a class="waves-effect waves-light light-blue btn-small modal-trigger" href="#editOrganization" (click)="editOrganizationModal()"><i class="material-icons left">edit</i>Editar</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Organization users -->
+        <div class="row">
+          <div class="col s12">
+            <div class="card">
+              <div class="card-content light-blue white-text">
+                <span class="card-title">Pessoas</span>
+                  <!--<p></p>-->
+              </div>
+              <div class="divider"></div>
+              <div class="card-content">
+                <table class="highlight responsive-table">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>E-mail</th>
+                      <th>Perfil</th>
+                      <th>Status</th>
+                      <th>Opções</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let user of organization.users">
+                      <td>{{ user.name }}</td>
+                      <td>{{ user.email }}</td>
+                      <td>{{ filterUserProfile(user.profile) }}</td>
+                      <td>{{ filterUserStatus(user.status) }}</td>
+                      <td>
+                        <a class="modal-trigger" href="#deleteUser" title="Excluir usuário {{ user.name }}" (click)="deleteUserModal(user.name, user.email)"><i class="material-icons left">delete</i></a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="card-action">
+                <a class="waves-effect waves-light light-blue btn-small modal-trigger" href="#addUser" (click)="addUserModal()"><i class="material-icons left">add</i>Adicionar pessoa</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Organization competences -->
+        <div class="row">
+          <div class="col s12">
+            <div class="card">
+              <div class="card-content light-blue white-text">
+                <span class="card-title">Competências avaliadas</span>
+                  <!--<p></p>-->
+              </div>
+              <div class="divider"></div>
+              <div class="card-content">
+                <table class="highlight" *ngIf="organization.competences.length>0">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Tipo</th>
+                      <th>Descrição</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let competence of organization.competences">
+                      <td>{{ competence.name }}</td>
+                      <td>{{ filterCompetenceType(competence.type) }}</td>
+                      <td>{{ competence.description }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p class="caption" *ngIf="organization.competences.length<=0">
+                  Esta organização não possui competências cadastradas.
+                </p>
+              </div>
+              <div class="card-action">
+                <a class="waves-effect waves-light light-blue btn-small modal-trigger" href="#addCompetence" (click)="addCompetenceModal()"><i class="material-icons left">add</i>Adicionar competência</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Buttons -->
+        <div class="row">
+          <div class="col s12">
+            <a class="waves-effect waves-light light-blue btn-large" [routerLink]="['/organization']"><i class="material-icons left">arrow_back</i>Voltar</a>
+          </div>
+        </div>
+
+        <!-- Modal to edit organization -->
+        <div id="editOrganization" class="modal modal-fixed-footer editOrganization">
+          <div class="modal-content">
+            <h4>Editar organização {{ organization.name }}</h4>
+            <p>
+              Informe o novo nome da organização e clique em Salvar.
+            </p>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">description</i>
+                    <label class="active" for="organizationName">Nome</label>
+                    <input #organizationName id="organizationName" type="text" class="validate" value="{{ organization.name }}">
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="updateOrganization(organizationName.value)">Salvar</a>
+          </div>
+        </div>
+
+        <!-- Modal to add user -->
+        <div id="addUser" class="modal modal-fixed-footer addUser">
+          <div class="modal-content">
+            <h4>Adicionar pessoa na organização {{ organization.name }}</h4>
+            <p>
+              Informe os dados da pessoa a ser cadastrada na organização.
+            </p>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">person_outline</i>
+                    <label class="active" for="organizationName">Nome</label>
+                    <input #userName id="userName" type="text" class="validate" value="">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">email</i>
+                    <label class="active" for="organizationName">E-mail</label>
+                    <input #userEmail id="userEmail" type="email" class="validate" value="">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">security</i>
+                    <label class="active" for="organizationName">Perfil</label>
+                    <select #userProfile id="userProfile" class="validate">
+                        <option *ngFor='let profile of userProfiles' [value]="profile.value">
+                          {{ profile.description }}
+                        </option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="addUser(userName.value, userEmail.value, userProfile.value)">Adicionar</a>
+          </div>
+        </div>
+
+        <!-- Modal to delete user -->
+        <div id="deleteUser" class="modal modal-fixed-footer deleteUser">
+          <div class="modal-content">
+            <h4>Excluir pessoa</h4>
+            <p>
+              Você realmente deseja excluir {{ email }} da organização {{ organization.name }}? Essa ação não poderá ser desfeita.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light red btn" (click)="deleteUser(email)">Excluir</a>
+          </div>
+        </div>
+
+        <!-- Modal to add competence -->
+        <div id="addCompetence" class="modal modal-fixed-footer addCompetence">
+          <div class="modal-content">
+            <h4>Adicionar competência na organização {{ organization.name }}</h4>
+            <p>
+              Informe os dados da competência a ser cadastrada na organização.
+            </p>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">blur_on</i>
+                    <label class="active" for="competenceName">Nome</label>
+                    <input #competenceName id="competenceName" type="text" class="validate" value="">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">Tipo</i>
+                    <label class="active" for="competenceType">Tipo</label>
+                    <select #competenceType id="competenceType" class="validate">
+                        <option *ngFor='let type of competenceTypes' [value]="type.value">
+                          {{ type.description }}
+                        </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">security</i>
+                    <label class="active" for="competenceDescription">Descrição</label>
+                    <input #competenceDescription id="competenceDescription" type="text" class="validate" value="">
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="addCompetence(competenceName.value, competenceType.value, competenceDescription.value)">Adicionar</a>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  
+    <!-- Footer -->
+    <app-footer></app-footer>
+  
+  </div>
+  

@@ -1,0 +1,35 @@
+<div class="wrapper" style="display: flex;position: absolute;top: 0;left: 0;height: 100%;width: 100%;">
+    <div class="row valign-wrapper" style="margin: 0 auto;">
+        <div class="col s12 m6 offset-m3">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title center"><h2>PSAS</h2></span>
+              <h5 class="center">Entre com sua conta de redes sociais</h5>
+              <p class="center" *ngIf="authorizationError" style="color: red">
+                Ocorreu algum erro :(
+                <br>
+                Por favor, tente novamente :)
+              </p>
+              <br>
+              <div class="row center">
+                  <a class="waves-effect waves-light btn-large red" (click)="signInWithGoogle()" style="width: 280px"><i class="fab fa-google left"></i>Google</a>
+              </div>
+              <!-- <div class="row center">
+                  <a class="waves-effect waves-light btn-large disabled" style="width: 280px"><i class="fab fa-apple left"></i>Apple</a>
+              </div> -->
+              <!-- <div class="row center">
+                  <a class="waves-effect waves-light btn-large disabled" style="width: 280px"><i class="fab fa-linkedin left"></i>LinkedIn</a>
+              </div> -->
+              <!-- <div class="row center">
+                  <a class="waves-effect waves-light btn-large blue" (click)="signInWithFB()" style="width: 280px"><i class="fab fa-facebook left"></i>Facebook</a>
+              </div> -->
+              <div class="row center">
+                  <a class="waves-effect waves-teal btn-flat" routerLink="/home">Cancelar</a>
+                </div>
+              <p>#NoPasswords. Não queremos que você fique criando novas contas em cada aplicativo que você acessa. Utiliza sua conta de redes sociais para se autenticar no PSAS.</p>
+            </div>
+          </div>
+        </div>
+  </div>
+</div>
+

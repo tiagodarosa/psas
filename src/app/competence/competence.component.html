@@ -1,0 +1,227 @@
+<div class="body">
+
+  <!--Header-->
+  <app-header></app-header>
+
+  <!-- Spinner -->
+  <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+
+  <!-- Main content -->
+  <main onload="M.AutoInit();">
+    <div class="container">
+      
+      <!-- Title -->
+      <div class="row">
+        <div class="col s12">
+          <h3 class="header">Competências</h3>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="competences.length<=0">
+        <div class="col s12 center">
+          <h5 class="header">Esta organização não possui competências cadastradas!</h5>
+          <p class="caption" *ngIf="userProfile!='organizationManager'">
+            Solicite para um gestor da organização para adicionar, alterar ou excluir competências da organização.
+          </p>
+          <p class="caption" *ngIf="userProfile==='organizationManager'">
+            Adicione uma competência clicando no botão "Nova Competência"!
+          </p>
+        </div>
+      </div>
+
+      <!-- Cards
+      <div class="row" *ngIf="cardsVisible">
+        <div class="col s12 m4">
+          <div class="card-panel white" style="height: 300px;">
+            <h6>Conhecimentos</h6>
+            <div id="knowledge" style="height: 90%;"></div>
+          </div>
+        </div>
+        <div class="col s12 m4">
+          <div class="card-panel white" style="height: 300px;">
+            <h6>Habilidades</h6>
+            <div id="ability" style="height: 90%;"></div>
+          </div>
+        </div>
+        <div class="col s12 m4">
+          <div class="card-panel white" style="height: 300px;">
+            <h6>Atitudes</h6>
+            <div id="attitude" style="height: 90%;"></div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- Cards -->
+      <div class="row" *ngIf="cardsVisible">
+        <div class="col s12 m4">
+          <div class="card-panel white" style="height: 300px;">
+            <h6>Distribuição</h6>
+            <div id="knowledge" style="height: 90%;"></div>
+          </div>
+        </div>
+        <div class="col s12 m8">
+          <div class="card-panel white" style="height: 300px;">
+            <h6>Visão geral</h6>
+            <h4>{{ knowledgeCount>0 ? (knowledgeCount>1 ? knowledgeCount + ' conhecimentos' : knowledgeCount + ' conhecimento') : 'Nenhum conhecimento'}}</h4>
+            <h4>{{ abilityCount>0 ? (abilityCount>1 ? abilityCount + ' habilidades' : abilityCount + ' habilidade') : 'Nenhuma habilidade'}}</h4>
+            <h4>{{ attitudeCount>0 ? (attitudeCount>1 ? attitudeCount + ' atitudes' : attitudeCount + ' atitude') : 'Nenhuma atitude'}}</h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- Competences -->
+      <div class="row">
+        <div class="col s12">
+          <table class="highlight" *ngIf="competences.length>0">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+                <th *ngIf="userProfile==='organizationManager'">Opções</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let competence of competences">
+                <td (click)="editCompetenceModal(competence.name)">{{ competence.name }}</td>
+                <td (click)="editCompetenceModal(competence.name)">{{ filterCompetenceType(competence.type) }}</td>
+                <td (click)="editCompetenceModal(competence.name)">{{ competence.description }}</td>
+                <td *ngIf="userProfile==='organizationManager'">
+                  <a style="cursor: pointer;" title="Editar competência {{ competence.name }}" (click)="editCompetenceModal(competence.name)"><i class="material-icons left">edit</i></a>
+                  <a class="modal-trigger" href="#deleteCompetence" title="Excluir competência {{ competence.name }}" (click)="deleteCompetenceModal(competence.name)"><i class="material-icons left">delete</i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Button -->
+      <div class="row" *ngIf="userProfile==='organizationManager'">
+        <div class="col s12 center">
+          <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#addCompetence" (click)="addCompetenceModal()"><i class="material-icons left">add</i>Nova competência</a>
+        </div>
+      </div>
+
+      <!-- User without access -->
+      <div class="row" *ngIf="userProfile!='organizationManager'">
+        <div class="col s12 center">
+          <p>Você não possui acesso para adicionar, alterar ou excluir competências na organização {{ organization.name }}.</p>
+        </div>
+      </div>
+
+      <!-- Modal to delete competence -->
+      <div id="deleteCompetence" class="modal modal-fixed-footer deleteCompetence">
+        <div class="modal-content">
+          <h4>Excluir competência</h4>
+          <p>
+            Você realmente deseja excluir a competência? Essa ação não poderá ser desfeita.
+            Todas as avaliações e histórico de avaliações que utilizaram essa competência não serão alterados.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+          <a class="modal-close waves-effect waves-light red btn" (click)="deleteCompetence()">Excluir</a>
+        </div>
+      </div>
+
+      <!-- Modal to add competence -->
+      <div id="addCompetence" class="modal modal-fixed-footer addCompetence">
+        <div class="modal-content">
+          <h4>Adicionar nova competência</h4>
+          <p>
+            Informe os dados da nova competência da organização {{ organization.name }}.
+          </p>
+          <div class="row">
+            <form class="col s12">
+              <div class="row">
+                <div class="input-field col s12 m6">
+                  <i class="material-icons prefix">grain</i>
+                  <label class="active" for="competenceName">Nome</label>
+                  <input #competenceName id="competenceName" type="text" class="validate" value="">
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12 m6">
+                  <i class="material-icons prefix">Tipo</i>
+                  <label class="active" for="competenceType">Tipo</label>
+                  <select #competenceType id="competenceType" class="validate">
+                      <option *ngFor='let type of competenceTypes' [value]="type.value">
+                        {{ type.description }}
+                      </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12 m6">
+                  <i class="material-icons prefix">description</i>
+                  <label class="active" for="competenceDescription">Descrição</label>
+                  <input #competenceDescription id="competenceDescription" type="text" class="validate" value="">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+          <a class="modal-close waves-effect waves-light light-blue btn" (click)="addCompetence(competenceName.value, competenceType.value, competenceDescription.value)">Adicionar</a>
+        </div>
+      </div>
+
+
+
+
+
+
+      <!-- Modal to edit competence -->
+      <div id="editCompetence" class="modal modal-fixed-footer editCompetence">
+          <div class="modal-content">
+            <h4>Editar competência</h4>
+            <p>
+              Atualize as informações da competência.
+            </p>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">grain</i>
+                    <label class="active" for="competenceNameEdit">Nome</label>
+                    <input #competenceNameEdit id="competenceNameEdit" type="text" class="validate" value="">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">Tipo</i>
+                    <label class="active" for="competenceTypeEdit">Tipo</label>
+                    <select #competenceTypeEdit id="competenceTypeEdit" class="validate">
+                        <option *ngFor='let type of competenceTypes' [value]="type.value">
+                          {{ type.description }}
+                        </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">description</i>
+                    <label class="active" for="competenceDescriptionEdit">Descrição</label>
+                    <input #competenceDescriptionEdit id="competenceDescriptionEdit" type="text" class="validate" value="">
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="editCompetence(competenceNameEdit.value, competenceTypeEdit.value, competenceDescriptionEdit.value)">Adicionar</a>
+          </div>
+        </div>
+
+
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+
+</div>

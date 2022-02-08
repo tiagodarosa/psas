@@ -1,0 +1,217 @@
+<div class="body">
+
+    <!--Header-->
+    <app-header></app-header>
+
+    <!-- Spinner -->
+    <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+  
+    <!-- Main content -->
+    <main>
+      <div class="container">
+
+        <!-- Title -->
+        <div class="row">
+          <div class="col s12">
+            <h3 class="header">Aplicar avaliação</h3>
+          </div>
+        </div>
+
+        <!-- No application-->
+        <div class="row" *ngIf="myApplications.length<=0">
+          <div class="col s12 center">
+            <h5 class="header">Nenhuma aplicação nesta organização!</h5>
+            <p class="caption" *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
+              Crie uma aplicação clicando no botão "Nova aplicação" ou solicite para o gestor da organização ou gestor de equipe para saber quando uma avaliação será aplicada.
+            </p>
+          </div>
+        </div>
+
+
+        <!-- Applications -->
+        <div class="row">
+          <div class="col s12">
+            <table class="highlight" *ngIf="myApplications.length>0">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Equipe</th>
+                  <th>Tipo</th>
+                  <th>Método</th>
+                  <th>Estratégia</th>
+                  <th>Status</th>
+                  <th *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">Opções</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let application of myApplications">
+                  <td>{{ application.name }}</td>
+                  <td>{{ application.team.name }}</td>
+                  <td>{{ filterType(application.type) }}</td>
+                  <td>{{ filterMethod(application.method) }}</td>
+                  <td>{{ filterStrategy(application.strategy) }}</td>
+                  <td>{{ filterStatus(application.status) }}{{ application.status === 'active' ? ' - ' + filterPercentage(application) + '%' : '' }}</td>
+                  <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
+                    <a *ngIf="application.status === 'active'" style="cursor: pointer;" title="Acompanhar aplicação" (click)="attendanceModal(application._id)"><i class="material-icons left">show_chart</i></a>
+                    <a style="cursor: pointer;" title="Excluir aplicação" (click)="deleteApplicationModal(application._id)"><i class="material-icons left">delete</i></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        
+        <!-- Modal for new application -->
+        <div id="addApplication" class="modal modal-fixed-footer addApplication">
+          <div class="modal-content">
+          <h4>Nova aplicação de avaliação</h4>
+          <p>
+            Informe os dados para criação da aplicação.
+          </p>
+          <div class="row">
+            <form class="col s12">
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">description</i>
+                  <input #name id="name" type="text" class="validate">
+                  <label for="name">Nome</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">group_work</i>
+                  <label for="team" class="active">Equipe</label>
+                  <select #team id="team" class="validate">
+                    <option *ngFor='let team of teamList' [value]="team._id">
+                      {{ team.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">assessment</i>
+                  <label for="assessment" class="active">Avaliação</label>
+                  <select #assessment id="assessment" class="validate">
+                    <option *ngFor='let assessment of assessmentList' [value]="assessment._id">
+                      {{ assessment.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">search</i>
+                  <label for="type" class="active">Tipo</label>
+                  <select #type id="type" class="validate">
+                    <option *ngFor='let type of types' [value]="type.value">
+                      {{ type.description }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">dashboard</i>
+                  <label for="method" class="active">Método</label>
+                  <select #method id="method" class="validate">
+                    <option *ngFor='let method of methods' [value]="method.value">
+                      {{ method.description }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">cached</i>
+                  <label for="strategy" class="active">Estratégia</label>
+                  <select #strategy id="strategy" class="validate">
+                    <option *ngFor='let strategy of strategies' [value]="strategy.value">
+                      {{ strategy.description }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+          <a class="modal-close waves-effect waves-light light-blue btn" (click)="addApplication(name.value, team.value, assessment.value, type.value, method.value, strategy.value)">Salvar</a>
+        </div>
+      </div>
+      
+      <!-- Buttons -->
+      <div class="row" *ngIf="userProfile==='organizationManager' || userProfile==='projectManager' || userProfile==='teamManager'">
+        <div class="col s12 center">
+          <a class="waves-effect waves-light light-blue btn-large" (click)="addApplicationModal()"><i class="material-icons left">add</i>Nova aplicação</a>
+        </div>
+      </div>
+
+      <!-- User without access -->
+      <div class="row" *ngIf="userProfile!=='organizationManager' && userProfile!=='projectManager' && userProfile!=='teamManager'">
+        <div class="col s12 center">
+          <p class="caption">Você não possui acesso para adicionar, alterar ou excluir aplicações.</p>
+        </div>
+      </div>
+      
+      <!-- Modal for attendance of application -->
+      <div id="attendance" class="modal modal-fixed-footer attendance">
+        <div class="modal-content">
+          <h4>Acompanhar aplicação</h4>
+          <p>
+              Status dos membros que responderam e que não responderam a avaliação.
+            </p>
+            <table class = "highlight">
+              <thead>
+                <tr>
+                  <th>Avaliador</th>
+                  <th>Avaliado</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let member of listOfAnswers">  
+                  <td>{{member.userEvaluator}}</td>
+                  <td>{{member.userRated}}</td>
+                  <td>
+                    <i *ngIf=" member.missing > 0" class = "material-icons left" style = "color:red;"> close</i>
+                    <i *ngIf=" member.missing === 0" class = "material-icons left" style = "color:green;"> check</i>
+                  </td>                    
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Fechar</a>
+          </div>
+        </div>
+
+        <!-- Modal to delete application -->
+        <div id="deleteApplication" class="modal modal-fixed-footer deleteApplication">
+          <div class="modal-content">
+            <h4>Excluir aplicação</h4>
+            <p>
+              Você tem certeza que deseja excluir a aplicação da avaliação?
+              Essa ação não poderá ser desfeita!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light red btn" (click)="deleteApplication()">Excluir</a>
+          </div>
+        </div>
+
+
+
+
+
+      </div>
+    </main>
+  
+    <!-- Footer -->
+    <app-footer></app-footer>
+  
+  </div>
+  

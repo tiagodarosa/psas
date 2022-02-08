@@ -1,0 +1,144 @@
+<div class="body">
+
+    <!--Header-->
+    <app-header></app-header>
+
+    <!-- Spinner -->
+    <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+  
+    <!-- Main content -->
+    <main>
+      <div class="container">
+        
+        <!-- Title -->
+        <div class="row">
+          <div class="col s12">
+            <h3 class="header">Projetos</h3>
+            <!--<p class="caption">
+                
+            </p>-->
+          </div>
+        </div>
+
+        <div class="row" *ngIf="projectsCount<=0">
+          <div class="col s12 center">
+            <h5 class="header">Esta organização não tem nenhum projeto!</h5>
+            <p class="caption" *ngIf="userProfile!='organizationManager' && userProfile!='projectManager'">
+              Solicite para um gestor da organização ou gestor de projetos que você deseja participar de um projeto!
+            </p>
+            <p class="caption" *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">
+                Crie um projeto clicando no botão "Novo projeto" ou solicite para um gestor da organização ou gestor de projetos que você deseja participar de um projeto!
+              </p>
+          </div>
+        </div>
+
+
+      <!-- Projects -->
+      <div class="row">
+        <div class="col s12">
+          <table *ngIf="projectsList.length>0">
+            <thead>
+              <tr>
+                <th style="width: 80%;">Nome</th>
+                <th *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">Opções</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let project of projectsList">
+                <td >{{ project.name }}</td>
+                <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">
+                  <a class="modal-trigger" href="#editProject" title="Editar projeto {{ project.name }}" (click)="editProjectModal(project._id)"><i class="material-icons left">edit</i></a>
+                  <a class="modal-trigger" href="#deleteProject" title="Excluir projeto {{ project.name }}" (click)="deleteProjectModal(project._id)"><i class="material-icons left">delete</i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+        <!-- Buttons -->
+        <div class="row" *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">
+          <div class="col s12 center">
+            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newProject" (click)="addProjectModal()"><i class="material-icons left">add</i>Novo projeto</a>
+          </div>
+        </div>
+
+        <!-- User without access -->
+        <div class="row" *ngIf="userProfile!='organizationManager' && userProfile!='projectManager'">
+          <div class="col s12 center">
+            <p class="caption">Você não possui acesso para adicionar, alterar ou excluir projetos na organização {{ organization.name }}.</p>
+          </div>
+        </div>
+
+        <!-- Modal for new project -->
+        <div id="newProject" class="modal modal-fixed-footer newProject">
+          <div class="modal-content">
+            <h4>Novo projeto</h4>
+            <p>
+              Informe os dados para criar um novo projeto.
+            </p>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">description</i>
+                    <input #projName id="projName" type="text" class="validate" value="{{ projectName }}">
+                    <label for="projName">Nome</label>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="addProject(projName.value)">Salvar</a>
+          </div>
+        </div>
+
+        <!-- Modal to edit project -->
+        <div id="editProject" class="modal modal-fixed-footer editProject">
+          <div class="modal-content">
+            <h4>Editar projeto {{ projectName }}</h4>
+            <p>
+              Atualize as informações do projeto.
+            </p>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">description</i>
+                    <label for="projNameEdit" class="active">Nome</label>
+                    <input #projNameEdit id="projNameEdit" type="text" class="validate" value="{{ projectName }}">
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light light-blue btn" (click)="updateProject(projectId, projNameEdit.value)">Salvar</a>
+          </div>
+        </div>
+
+        <!-- Modal to delete project -->
+        <div id="deleteProject" class="modal modal-fixed-footer">
+          <div class="modal-content">
+            <h4>Excluir projeto <b>{{ projectName }}</b></h4>
+            <p>
+              Você tem certeza que deseja excluir o projeto? Essa ação não poderá ser desfeita!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+            <a class="modal-close waves-effect waves-light red btn" (click)="deleteProject(projectId)">Excluir</a>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  
+    <!-- Footer -->
+    <app-footer></app-footer>
+  
+  </div>
+  

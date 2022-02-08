@@ -1,0 +1,68 @@
+<!-- Navbar -->
+<div class="navbar-fixed">
+  <nav>
+    <div class="nav-wrapper light-blue">
+      <a *ngIf="sidenav==true" href="#" data-target="slide-out" class="sidenav-trigger" onclick="M.Sidenav.init(document.querySelectorAll('.sidenav'));"><i class="material-icons">menu</i></a>
+      <a routerLink="/home" class="brand-logo" style="padding-left: 10px;">PSAS</a>
+      <!-- Navbar medium and upper -->
+      <!--<ul id="dropdown4" class="dropdown-content">
+        <li *ngFor="let org of organizations"><a href="#!">{{ org.name }}</a></li>
+      </ul>-->
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li *ngIf="loggedIn" style="pointer-events: none;"><a style="cursor: default;">Olá {{ user.firstName }}</a></li>
+        <li *ngIf="loggedIn==false"><a routerLink="/user" style="font-weight: bold;">Entrar</a></li>
+        <li><a routerLink="/help" style="font-weight: bold;">Ajuda</a></li>
+        <li *ngIf="loggedIn"><a (click)="signOut()" style="font-weight: bold;">Sair</a></li>
+      </ul>
+      <!-- Sidenav medium and down -->
+      <!--<ul class="sidenav" id="slide-out">
+        <li *ngIf="loggedIn"><a class="sidenav-close" routerLink="/home">Olá {{ user.firstName }}</a></li>
+        <li *ngIf="loggedIn==false"><a class="sidenav-close" routerLink="/user">Entrar</a></li>
+        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/dashboard">Dashboard</a></li>
+        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/organization">Organizações</a></li>
+        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/assessment">Avaliações</a></li>
+        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/project">Projetos</a></li>
+        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/team">Equipes</a></li>
+        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/application">Aplicações</a></li>
+        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/contact">Sobre</a></li>
+        <li routerLinkActive="active"><a class="sidenav-close" routerLink="/help">Ajuda</a></li>
+        <li *ngIf="loggedIn"><a class="sidenav-close" (click)="signOut()">Sair</a></li>
+      </ul>-->
+    </div>
+  </nav>
+</div>
+
+<!-- Sidenav medium and upper -->
+<ul *ngIf="sidenav==true" class="sidenav sidenav-fixed sidenav-close" id="slide-out">
+  <li class="logo center" style="margin-top: 30px; margin-bottom: 30px;"><a routerLink="/organization" class="organization" style="display:flex; align-items: center"><i class="material-icons" style="margin: 0px; margin-right: 5px; color: black;">keyboard_return</i>{{ organizationName }}</a>
+  </li>
+  <li><a class="waves-effect" style="font-size: 18px; cursor: default;"><b>DASHBOARD</b></a>
+    <div id="dropdown1" class="collapsible-body" style="display: block;">
+      <ul>
+        <li routerLinkActive="active"><a style="padding-left: 50px;" routerLink="/profile"><i class="material-icons" style="margin-right: 10px;">person</i>Meu perfil</a></li>
+        <li routerLinkActive="active"><a style="padding-left: 50px;" routerLink="/dashboard"><i class="material-icons" style="margin-right: 10px;">business</i>Perfil da organização</a></li>
+      </ul>
+    </div>
+  </li>
+  <li><a class="waves-effect" style="font-size: 18px; cursor: default;"><b>ORGANIZAÇÃO</b></a>
+    <div id="dropdown2" class="collapsible-body" style="display: block;">
+      <ul>
+        <li routerLinkActive="active"><a style="padding-left: 50px;" routerLink="/competence"><i class="material-icons" style="margin-right: 10px;">grain</i>Competências</a></li>
+        <li routerLinkActive="active"><a style="padding-left: 50px;" routerLink="/member"><i class="material-icons" style="margin-right: 10px;">people</i>Pessoas</a></li>
+        <li routerLinkActive="active"><a style="padding-left: 50px;" routerLink="/project"><i class="material-icons" style="margin-right: 10px;">folder</i>Projetos</a></li>
+        <li routerLinkActive="active"><a style="padding-left: 50px;" routerLink="/team"><i class="material-icons" style="margin-right: 10px;">group_work</i>Equipes</a></li>
+      </ul>
+    </div>
+  </li>
+  <li><a class="waves-effect" style="font-size: 18px; cursor: default;"><b>AVALIAÇÃO</b></a>
+    <div id="dropdown3" class="collapsible-body" style="display: block;">
+      <ul>
+        <li routerLinkActive="active"><a style="padding-left: 50px;" routerLink="/assessment"><i class="material-icons" style="margin-right: 10px;">assessment</i>Avaliações</a></li>
+        <li routerLinkActive="active"><a style="padding-left: 50px;" routerLink="/application"><i class="material-icons" style="margin-right: 10px;">assignment_turned_in</i>Aplicar avaliação</a></li>
+        <!--<li routerLinkActive="active"><a style="padding-left: 50px;" routerLink="/attendance"><i class="material-icons" style="margin-right: 10px;">question_answer</i>Acompanhar aplicação</a></li>-->
+        <li routerLinkActive="active"><a style="padding-left: 50px;" routerLink="/answer"><i class="material-icons" style="margin-right: 10px;">rate_review</i>Responder avaliação</a></li>
+      </ul>
+    </div>
+  </li>
+</ul>
+ 
