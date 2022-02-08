@@ -39,21 +39,12 @@
     <div class="row">
       <div class="col s12 m6 l6 xl4" *ngFor="let org of organizationsList">
         <div class="card small darken-1">
-<<<<<<< HEAD
           <div class="card-content" style="cursor: pointer;">
             <span class="card-title" (click)="selectOrganization(org._id)">{{ org.name }}</span>
             <p (click)="selectOrganizationPeople(org._id)">
               {{ org.users.length }} {{ org.users.length>1 ? 'pessoas' : 'pessoa' }}
             </p>
             <p (click)="selectOrganizationCompetence(org._id)">
-=======
-          <div class="card-content" (click)="selectOrganization(org._id)" style="cursor: pointer;">
-            <span class="card-title">{{ org.name }}</span>
-            <p>
-              {{ org.users.length }} {{ org.users.length>1 ? 'pessoas' : 'pessoa' }}
-            </p>
-            <p>
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
               {{ org.competences.length>0 ? (org.competences.length>1 ? org.competences.length + ' competências' : org.competences.length + ' competência') : ('Nenhuma competência cadastrada') }}
             </p>
           </div>

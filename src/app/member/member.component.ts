@@ -4,12 +4,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from 'angularx-social-login';
 import { Router } from '@angular/router';
-<<<<<<< HEAD
 import Validator from 'validator';
 import { getMaxListeners } from 'process';
-=======
-import { FormControl } from '@angular/forms';
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
 declare var $: any;
 declare var M: any;
 
@@ -45,10 +41,7 @@ export class MemberComponent implements OnInit {
   ngOnInit() {
     this.spinner.show();
     this.organizationId = this.cookie.get('ORGANIZATIONID');
-<<<<<<< HEAD
     console.log(this.organizationId);
-=======
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
     this.authService.authState.subscribe((user) => {
       this.userEmail = user.email;
       this.getOrganization();
@@ -78,11 +71,7 @@ export class MemberComponent implements OnInit {
   }
 
   filterUserProfile(profile: string) {
-<<<<<<< HEAD
     try {
-=======
-    try  {
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
       return this.userProfiles.find(userProfile => userProfile.value === profile).description;
     } catch {
       return profile;
@@ -110,11 +99,7 @@ export class MemberComponent implements OnInit {
 
   deleteMemberModal(email: string) {
     if (email === this.userEmail) {
-<<<<<<< HEAD
       M.toast({ html: 'Você não pode excluir você mesmo da organização!' });
-=======
-      M.toast({html: 'Você não pode excluir você mesmo da organização!'});
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
     } else {
       this.userToDelete = email;
       $('select').formSelect();
@@ -126,7 +111,6 @@ export class MemberComponent implements OnInit {
   addMember(name: string, email: string, profile: string) {
     if (name !== '' && email !== '' && profile !== '') {
       const user = this.members.find(u => u.email === email);
-<<<<<<< HEAD
       const ifmailvalid = Validator.isEmail(email);
       if (user) {
         M.toast({ html: 'O e-mail informado já está cadastrado na organização!' });
@@ -135,18 +119,12 @@ export class MemberComponent implements OnInit {
         M.toast({html: 'Email inválido'});
       }
       else {
-=======
-      if (user) {
-        M.toast({html: 'O e-mail informado já está cadastrado na organização!'});
-      } else {
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
         this.spinner.show();
         const u = { name, email, profile, status: 'active' };
         this.members.push(u);
         Object(this.organization).users = this.members;
         this.service.updateOrganization(this.organization).subscribe((data) => {
           this.spinner.hide();
-<<<<<<< HEAD
           M.toast({ html: 'Pessoa adicionada com sucesso!' });
         }, (error) => {
           M.toast({ html: 'Ocorreu algum erro ao adicionar a pessoa. Por favor, tente novamente!' });
@@ -154,15 +132,6 @@ export class MemberComponent implements OnInit {
       }
     } else if ((name === '' || email === '' || profile === '')) {
       M.toast({ html: 'Favor preencher todos os campos!' });
-=======
-          M.toast({html: 'Pessoa adicionada com sucesso!'});
-        }, (error) => {
-          M.toast({html: 'Ocorreu algum erro ao adicionar a pessoa. Por favor, tente novamente!'});
-        });
-      }
-    } else {
-      M.toast({html: 'Favor preencher todos os campos!'});
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
     }
   }
 
@@ -179,7 +148,6 @@ export class MemberComponent implements OnInit {
           this.members = this.members.filter(member => member.email !== this.userToDelete);
           this.spinner.hide();
           this.userToDelete = '';
-<<<<<<< HEAD
           M.toast({ html: 'Pessoa excluída com sucesso!' });
         }, (error) => {
           M.toast({ html: 'Ocorreu algum erro ao excluir a pessoa da organização. Por favor, tente novamente!' });
@@ -189,17 +157,6 @@ export class MemberComponent implements OnInit {
       }
     } else {
       M.toast({ html: 'Estranho... E-mail não encontrado! Por favor, tente novamente!' });
-=======
-          M.toast({html: 'Pessoa excluída com sucesso!'});
-        }, (error) => {
-          M.toast({html: 'Ocorreu algum erro ao excluir a pessoa da organização. Por favor, tente novamente!'});
-        });
-      } else {
-        M.toast({html: 'Estranho... E-mail não encontrado! Por favor, tente novamente!'});
-      }
-    } else {
-      M.toast({html: 'Estranho... E-mail não encontrado! Por favor, tente novamente!'});
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
     }
   }
 
@@ -216,7 +173,6 @@ export class MemberComponent implements OnInit {
         Object(this.organization).users = this.members;
         this.service.updateOrganization(this.organization).subscribe((data) => {
           this.spinner.hide();
-<<<<<<< HEAD
           M.toast({ html: 'Informações da pessoa atualizadas com sucesso!' });
         }, (error) => {
           console.error(error);
@@ -227,18 +183,6 @@ export class MemberComponent implements OnInit {
       }
     } else {
       M.toast({ html: 'Favor preencher todos os campos!' });
-=======
-          M.toast({html: 'Informações da pessoa atualizadas com sucesso!'});
-        }, (error) => {
-          console.error(error);
-          M.toast({html: 'Ocorreu algum erro na edição dos dados da pessoa. Por favor, tente novamente!'});
-        });
-      } else {
-        M.toast({html: 'Estranho... E-mail não encontrado! Por favor, tente novamente!'});
-      }
-    } else {
-      M.toast({html: 'Favor preencher todos os campos!'});
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
     }
   }
 

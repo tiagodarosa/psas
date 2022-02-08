@@ -141,24 +141,14 @@ export class CompetenceComponent implements OnInit {
           name: competenceName,
           type: competenceType,
           description: competenceDescription
-<<<<<<< HEAD
         }
-=======
-        };
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
         this.organization.competences.push(competence);
         this.service.updateOrganization(this.organization).subscribe((data) => {
           this.competences = this.organization.competences;
           this.competences.sort(this.compare);
-<<<<<<< HEAD
           this.spinner.hide();
           M.toast({html: 'Competência adicionada com sucesso!'});
           this.updateGraphs();
-=======
-          this.updateGraphs();
-          this.spinner.hide();
-          M.toast({html: 'Competência adicionada com sucesso!'});
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
         }, (error) => {
           this.router.navigate(['home']);
         });
@@ -184,15 +174,9 @@ export class CompetenceComponent implements OnInit {
           this.competences = this.organization.competences;
           this.competences.sort(this.compare);
           this.temporaryName = '';
-<<<<<<< HEAD
           this.spinner.hide();
           M.toast({html: 'Competência atualizada com sucesso!'});
           this.updateGraphs();
-=======
-          this.updateGraphs();
-          this.spinner.hide();
-          M.toast({html: 'Competência atualizada com sucesso!'});
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
         }, (error) => {
           this.router.navigate(['home']);
         });
@@ -218,15 +202,9 @@ export class CompetenceComponent implements OnInit {
         this.competences = this.organization.competences;
         this.competences.sort(this.compare);
         this.temporaryName = '';
-<<<<<<< HEAD
         this.spinner.hide();
         M.toast({html: 'Competência excluída com sucesso!'});
         this.updateGraphs();
-=======
-        this.updateGraphs();
-        this.spinner.hide();
-        M.toast({html: 'Competência excluída com sucesso!'});
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
       }, (error) => {
         this.router.navigate(['home']);
       });

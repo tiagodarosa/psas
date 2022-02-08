@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
-<<<<<<< HEAD
 import { AuthService, SocialUser,FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
-=======
-import { AuthService, SocialUser } from 'angularx-social-login';
-import { FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
 import { Router } from '@angular/router';
 
 
@@ -26,10 +21,7 @@ export class UserComponent implements OnInit {
 
   signInWithGoogle(): void {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((error) => {
-<<<<<<< HEAD
       // console.log(error);
-=======
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
       if (error) {
         this.router.navigate(['organization']);
       } else {
@@ -39,7 +31,6 @@ export class UserComponent implements OnInit {
     });
   }
 
-<<<<<<< HEAD
   // signInWithFB(): void {
   //   this.authService.signIn(FacebookLoginProvider.PROVIDER_ID).then((error) =>{
   //     if (error){
@@ -50,15 +41,6 @@ export class UserComponent implements OnInit {
   //     }
   //   });
   // }
-=======
-  signInWithFB(): void {
-    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
-  }
-
-  signOut(): void {
-    this.authService.signOut();
-  }
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
 
   ngOnInit() {
     this.authService.authState.subscribe((user) => {
@@ -67,13 +49,10 @@ export class UserComponent implements OnInit {
     });
   }
 
-<<<<<<< HEAD
   signOut(): void {
     this.authService.signOut();
   }
 
 
 
-=======
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
 }

@@ -117,7 +117,6 @@ export class OrganizationComponent implements OnInit {
     this.cookie.set('ORGANIZATIONMEMBERPROFILE', user.profile, 15);
     this.router.navigate(['profile']);
   }
-<<<<<<< HEAD
   
   selectOrganizationPeople(organizationId: string) {
     const organization = this.organizationsList.find(org => org._id === organizationId);
@@ -136,7 +135,5 @@ export class OrganizationComponent implements OnInit {
     this.cookie.set('ORGANIZATIONMEMBERPROFILE', user.profile, 15);
     this.router.navigate(['competence']);
   }
-=======
->>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
 
 }
