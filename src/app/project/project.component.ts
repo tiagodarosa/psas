@@ -79,6 +79,7 @@ export class ProjectComponent implements OnInit {
   }
 
   addProject(projectName: string) {
+<<<<<<< HEAD
     if(projectName === ''){
       M.toast({html:'Projeto inválido'});
     }else{
@@ -94,6 +95,19 @@ export class ProjectComponent implements OnInit {
         this.router.navigate(['home']);
       });
     }
+=======
+    this.spinner.show();
+    const project = {
+      name: projectName,
+      organizationId: this.organizationId,
+      status: 'active'
+    };
+    this.service.addProject(project).subscribe((data) => {
+      this.getProjects();
+    }, (error) => {
+      this.router.navigate(['home']);
+    });
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
   }
 
   deleteProjectModal(projectId: string) {

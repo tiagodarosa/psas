@@ -66,6 +66,7 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+<<<<<<< HEAD
 
 
 
@@ -92,5 +93,30 @@ export class HeaderComponent implements OnInit {
   //     $('#dropdown3').hide('fast');
   //   }
   // }
+=======
+  dropdown1() {
+    if ($('#dropdown1').css('display') === 'none') {
+      $('#dropdown1').show('fast');
+    } else {
+      $('#dropdown1').hide('fast');
+    }
+  }
+
+  dropdown2() {
+    if ($('#dropdown2').css('display') === 'none') {
+      $('#dropdown2').show('fast');
+    } else {
+      $('#dropdown2').hide('fast');
+    }
+  }
+
+  dropdown3() {
+    if ($('#dropdown3').css('display') === 'none') {
+      $('#dropdown3').show('fast');
+    } else {
+      $('#dropdown3').hide('fast');
+    }
+  }
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
 
 }

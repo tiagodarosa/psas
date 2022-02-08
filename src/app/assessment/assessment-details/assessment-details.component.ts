@@ -4,8 +4,11 @@ import { ServicesService } from 'src/app/services.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from 'angularx-social-login';
 import { CookieService } from 'ngx-cookie-service';
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
 declare var $: any;
 declare var M: any;
 
@@ -175,6 +178,7 @@ export class AssessmentDetailsComponent implements OnInit {
   }
 
   deleteAlternative(question: number, item: number) {
+<<<<<<< HEAD
     if(confirm(`Deseja realmente deletar a alternativa ${item+1}?`)){
       this.assessment.questions[question].items.splice(item, 1);
     }
@@ -184,6 +188,13 @@ export class AssessmentDetailsComponent implements OnInit {
     if(confirm(`Deseja realmente deletar a questão ${question+1}?`)){
       this.assessment.questions.splice(question, 1);
     }
+=======
+    this.assessment.questions[question].items.splice(item, 1);
+  }
+
+  deleteQuestion(question: number) {
+    this.assessment.questions.splice(question, 1);
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
   }
 
   addAlternative(question: number) {
@@ -209,16 +220,22 @@ export class AssessmentDetailsComponent implements OnInit {
 
   save() {
     this.spinner.show();
+<<<<<<< HEAD
     console.log(this.assessment);
     this.service.updateAssessment(this.assessment).subscribe((data) => {
       this.getAssessment();
       this.router.navigate(['assessment']);
       M.toast({html: 'Questões da avaliação salvas com sucesso!'});
+=======
+    this.service.updateAssessment(this.assessment).subscribe((data) => {
+      this.getAssessment();
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
     }, (error) => {
       this.router.navigate(['home']);
     });
   }
 
+<<<<<<< HEAD
 
   copy(){
     this.spinner.show();
@@ -233,6 +250,8 @@ export class AssessmentDetailsComponent implements OnInit {
   
   }
 
+=======
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
   changeQuestionName(question: number) {
     const field = '#questionName' + question;
     this.assessment.questions[question].name = $(field).val();

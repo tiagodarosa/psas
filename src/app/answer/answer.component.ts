@@ -121,7 +121,11 @@ export class AnswerComponent implements OnInit {
   }
 
   filterType(type: string) {
+<<<<<<< HEAD
     try {
+=======
+    try  {
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
       return this.types.find(t => t.value === type).description;
     } catch {
       return type;
@@ -129,7 +133,11 @@ export class AnswerComponent implements OnInit {
   }
 
   filterMethod(method: string) {
+<<<<<<< HEAD
     try {
+=======
+    try  {
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
       return this.methods.find(m => m.value === method).description;
     } catch {
       return method;
@@ -137,7 +145,11 @@ export class AnswerComponent implements OnInit {
   }
 
   filterStrategy(strategy: string) {
+<<<<<<< HEAD
     try {
+=======
+    try  {
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
       return this.strategies.find(s => s.value === strategy).description;
     } catch {
       return strategy;
@@ -145,7 +157,11 @@ export class AnswerComponent implements OnInit {
   }
 
   filterName(user: string) {
+<<<<<<< HEAD
     try {
+=======
+    try  {
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
       const members = Object(this.organization).users;
       return members.find(m => m.email === user).name;
     } catch {
@@ -185,6 +201,7 @@ export class AnswerComponent implements OnInit {
   }
 
   saveAnswers() {
+<<<<<<< HEAD
     if (confirm('Após salva a resposta, não é possível sua edição. Você esta certo de sua resposta?')) {
       this.spinner.show();
       this.service.saveAnswers(Object(this.currentApplication)._id, this.answers).subscribe((data) => {
@@ -194,4 +211,14 @@ export class AnswerComponent implements OnInit {
       });
     }
   } 
+=======
+    this.spinner.show();
+    this.service.saveAnswers(Object(this.currentApplication)._id, this.answers).subscribe((data) => {
+      this.getApplications();
+    }, (error) => {
+      this.router.navigate(['home']);
+    });
+  }
+
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
 }

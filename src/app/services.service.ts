@@ -27,7 +27,10 @@ export class ServicesService {
   private getUserEmail() {
     this.authService.authState.subscribe((user) => {
       if (user != null) {
+<<<<<<< HEAD
         console.log(user);
+=======
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
         return user.email;
       }
     });

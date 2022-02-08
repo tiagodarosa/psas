@@ -53,7 +53,11 @@
                       <div class="input-field col s12 m6">
                         <i class="material-icons prefix">exposure</i>
                         <label for="{{ 'significance' + i }}" class="active">Peso</label>
+<<<<<<< HEAD
                         <input id="{{ 'significance' + i }}" type="number" class="validate" value="{{ question.significance }}" (input)="changeQuestionSignificance(i)">
+=======
+                        <input id="{{ 'significance' + i }}" type="text" class="validate" value="{{ question.significance }}" (input)="changeQuestionSignificance(i)">
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
                       </div>
                     </div>
                   </form>
@@ -66,9 +70,15 @@
                           <br>
                           <div class="row">
                             <div class="input-field col s12 m6">
+<<<<<<< HEAD
                               <i class="material-icons prefix">exposure</i>
                               <label for="{{ 'itemPercentage' + i + j }}" class="active">Peso</label>
                               <input id="{{ 'itemPercentage' + i + j }}" type="number" class="validate" value="{{ item.percentage }}" (input)="changeQuestionItemPercentage(i,j)">
+=======
+                              <i class="material-icons prefix">edit</i>
+                              <label for="{{ 'itemPercentage' + i + j }}" class="active">Peso</label>
+                              <input id="{{ 'itemPercentage' + i + j }}" type="text" class="validate" value="{{ item.percentage }}" (input)="changeQuestionItemPercentage(i,j)">
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
                             </div>
                           </div>
                           <div class="row">
@@ -80,7 +90,11 @@
                           </div>
                         </div>
                         <div class="card-action light-blue">
+<<<<<<< HEAD
                           <a style="cursor: pointer; color: white;" title="Excluir alternativa" (click)="deleteAlternative(i,j)"><i class="material-icons left">delete</i>Excluir alternativa</a>
+=======
+                          <a style="cursor: pointer; color: white;" title="Excluir alternativa" (click)="deleteAlternative(i,j)"><i class="material-icons left">delete</i></a>
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
                         </div>
                       </div>
                     </div>
@@ -89,7 +103,11 @@
                   <div class="row">
                     <div class="col s12">
                       <a class="waves-effect waves-light light-blue btn-small" (click)="addAlternative(i)" style="margin-right: 8px;"><i class="material-icons left">add</i>Adicionar alternativa</a>
+<<<<<<< HEAD
                       <a class="waves-effect waves-light red btn-small" (click)="deleteQuestion(i)"><i class="material-icons left">delete</i>Excluir questão</a>
+=======
+                      <a class="waves-effect waves-light light-blue btn-small" (click)="deleteQuestion(i)"><i class="material-icons left">delete</i>Excluir questão</a>
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
                     </div>
                   </div>
                 </span>
@@ -108,10 +126,14 @@
       <div class="row">
         <div class="col s12">
           <a style="margin-top: 4px; margin-bottom: 4px; margin-right: 4px;" class="waves-effect waves-light light-blue btn-large" [routerLink]="['/assessment']"><i class="material-icons left">arrow_back</i>Voltar</a>
+<<<<<<< HEAD
           <!-- <a class="waves-effect waves-light light-blue btn-large right" (click)="copy()"><i class="material-icons left">save</i>Copiar</a> -->
           <a class="waves-effect waves-light light-blue btn-large right" (click)="save()"><i class="material-icons left">save</i>Salvar</a>
           <p class="alert alert-success">
             <strong>Questões salvas com sucesso!</strong>
+=======
+          <a class="waves-effect waves-light light-blue btn-large right" (click)="save()"><i class="material-icons left">save</i>Salvar</a>
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
         </div>
       </div>
 

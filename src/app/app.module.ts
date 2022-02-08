@@ -12,8 +12,13 @@ import { HomeComponent } from './home/home.component';
 import { HelpComponent } from './help/help.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { ContactComponent } from './contact/contact.component';
+<<<<<<< HEAD
 import { SocialLoginModule, AuthServiceConfig} from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
+=======
+import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
 import { FooterComponent } from './core/footer/footer.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { TeamComponent } from './team/team.component';
@@ -33,13 +38,17 @@ import { AnswerComponent } from './answer/answer.component';
 import { MemberComponent } from './member/member.component';
 import { FormsModule } from '@angular/forms';
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
 const config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
     provider: new GoogleLoginProvider('929484490456-cc41rqbu22rpl9td26v6i4k299mvje7p')
   }
+<<<<<<< HEAD
 //   ,{ 
 //     id: FacebookLoginProvider.PROVIDER_ID,
 //     provider: new FacebookLoginProvider('5001152149915134')
@@ -47,6 +56,10 @@ const config = new AuthServiceConfig([
 ]);
 
 
+=======
+]);
+
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
 export function provideConfig() {
   return config;
 }

@@ -130,6 +130,7 @@ export class TeamComponent implements OnInit {
   }
 
   addTeam(name: string, projectId: string) {
+<<<<<<< HEAD
     if(name === ''){
       M.toast({html:'Equipe inválida'});
     } else {
@@ -142,6 +143,14 @@ export class TeamComponent implements OnInit {
         this.router.navigate(['home']);
       });  
     }
+=======
+    this.spinner.show();
+    this.service.addTeam(name, projectId).subscribe((data) => {
+      this.getTeams();
+    }, (error) => {
+      this.router.navigate(['home']);
+    });
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
   }
 
   editTeamModal(teamId: string) {

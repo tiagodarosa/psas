@@ -44,9 +44,15 @@
               </thead>
               <tbody>
                 <tr *ngFor="let member of members">
+<<<<<<< HEAD
                   <td>{{ member.name }}</td>
                   <td>{{ member.email }}</td>
                   <td>{{ filterUserProfile(member.profile) }}</td>
+=======
+                  <td (click)="editMemberModal(member.email)">{{ member.name }}</td>
+                  <td (click)="editMemberModal(member.email)">{{ member.email }}</td>
+                  <td (click)="editMemberModal(member.email)">{{ filterUserProfile(member.profile) }}</td>
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
                   <td *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">
                     <a class="modal-trigger" href="#editMember" title="Editar informações de {{ member.name }}" (click)="editMemberModal(member.email)"><i class="material-icons left">edit</i></a>
                     <a style="cursor: pointer;" title="Excluir {{ member.name }}" (click)="deleteMemberModal(member.email)"><i class="material-icons left">delete</i></a>
@@ -60,7 +66,11 @@
         <!-- Buttons -->
         <div class="row" *ngIf="userProfile==='organizationManager' || userProfile==='projectManager'">
           <div class="col s12 center">
+<<<<<<< HEAD
             <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newMember" (click)="addMemberModal()"><i class="material-icons left">add</i>Adicionar pessoa</a>
+=======
+            <a class="waves-effect waves-light light-blue btn-large modal-trigger" href="#newMember" (click)="addMemberModal()"><i class="material-icons left">add</i>Nova pessoa</a>
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
           </div>
         </div>
 
@@ -74,7 +84,11 @@
         <!-- Modal for new member -->
         <div id="newMember" class="modal modal-fixed-footer newMember">
           <div class="modal-content">
+<<<<<<< HEAD
             <h4>Adicionar pessoa</h4>
+=======
+            <h4>Nova pessoa</h4>
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
             <p>
               Informe os dados para adicionar uma nova pessoa na organização.
             </p>
@@ -84,7 +98,11 @@
                   <div class="input-field col s12 m6">
                     <i class="material-icons prefix">person</i>
                     <label for="name">Nome</label>
+<<<<<<< HEAD
                     <input #name id="name"  type="text" class="validate">
+=======
+                    <input #name id="name" type="text" class="validate">
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
                   </div>
                 </div>
                 <div class="row">
@@ -132,7 +150,11 @@
                 </div>
                 <div class="row">
                   <div class="input-field col s12 m6">
+<<<<<<< HEAD
                     <i class="material-icons prefix" >email</i>
+=======
+                    <i class="material-icons prefix">email</i>
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
                     <label for="editEmail" class="active">E-mail</label>
                     <input #editEmail id="editEmail" type="text" class="validate" value="{{ email }}">
                   </div>

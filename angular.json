@@ -26,10 +26,14 @@
             "styles": [
               "src/styles.css"
             ],
+<<<<<<< HEAD
             "scripts": [    
               "node_modules/ngx-markdown-editor/assets/highlight.js/highlight.min.js",
               "node_modules/ngx-markdown-editor/assets/marked.min.js"],
               
+=======
+            "scripts": [],
+>>>>>>> 5caf4ad23b584424c65f3c809fd185d975ccb9e3
             "es5BrowserSupport": true
           },
           "configurations": {
