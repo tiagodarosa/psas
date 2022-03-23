@@ -30,7 +30,7 @@
     "jquery": "^3.5.0",
     "kind-of": "^6.0.3",
     "materialize-css": "^1.0.0-rc.2",
-    "minimist": "^1.2.3",
+    "minimist": "^1.2.6",
     "ngx-cookie-service": "^2.2.0",
     "ngx-markdown": "^13.0.0",
     "ngx-markdown-editor": "^4.0.0",
