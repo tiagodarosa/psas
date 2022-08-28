@@ -1,0 +1,139 @@
+<div class="body">
+
+  <!--Header-->
+  <app-header></app-header>
+  
+  <!-- Spinner -->
+  <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+  
+  <!-- Main content -->
+  <main>
+
+    <div class="container">
+
+      <!-- Title -->
+      <div class="row">
+        <div class="col s12">
+          <h3 class="header">Dashboard de competências</h3>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col s12">
+            <label>
+              <input name="group1" type="radio" checked />
+              <span>Meu perfil</span>
+            </label>
+          
+            <label style="margin-left: 20px;">
+              <input name="group1" type="radio"/>
+              <span>Minha equipe</span>
+            </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s6">
+          <i class="material-icons prefix">description</i>
+          <label for="tool" class="active">Selecione à avaliação</label>
+          <select #tool id="tool" class="validate">
+              <!-- <option *ngFor='let tool of tools' [value]="tool.value">
+                {{ tool.description }}
+              </option> -->
+              <option value="1">Avaliação 1</option>
+              <option value="2">Avaliação 2</option>
+              <option value="3">Avaliação 3</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s6">
+          <div class="widget-header">
+            <span style="font-size: 25pt; color: #fff;">Diário e Feedback</span>
+          </div>
+          <div class="card" style="margin-top: 0px !important; height: 405px !important">
+            <app-word-cloud></app-word-cloud>
+          </div>
+        </div>
+
+        <div class="col s6">
+          <div class="widget-header">
+            <span style="font-size: 25pt; color: #fff;">Destaque e a desenvolver</span>
+          </div>
+          <div class="card" style="margin-top: 0px !important; height: 405px !important;">
+            <div class="row">
+              <div class="col s3">
+                <span><i class="material-icons prefix" style="font-size: 100pt; text-align: center; color: green;">done</i></span>
+              </div>
+              <div class="col s9">
+                <h3>Destaque</h3>
+                <ul>
+                  <li>Comunicação</li>
+                  <li>Respeito</li>
+                  <li>Liderança</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col s3" style="vertical-align: text-top">
+                <span><i class="material-icons prefix" style="font-size: 100pt; text-align: center; color: darkgray;">book</i></span>
+              </div>
+              <div class="col s9">
+                <h3>À desenvolver</h3>
+                <ul>
+                  <li>Negociação</li>
+                  <li>Conhecimento</li>
+                  <li>Relacionamento interpessoal</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        
+        <div class="col s6">
+          <div class="widget-header">
+            <span style="font-size: 25pt; color: #fff;">9BOX</span>
+          </div>
+          <div class="card" style="margin-top: 0px !important; height: 405px !important;">
+            <app-nine-box-chart></app-nine-box-chart>
+          </div>
+        </div>
+
+        <div class="col s6">
+          <div class="widget-header">
+            <span style="font-size: 25pt; color: #fff;">Comparação dos resultados</span>
+          </div>
+          <div class="card" style="margin-top: 0px !important; height: 405px !important;">
+            <app-comparison-of-results></app-comparison-of-results>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        
+        <div class="col s12">
+          <div class="widget-header">
+            <span style="font-size: 25pt; color: #fff;">Histórico</span>
+          </div>
+          <div class="card" style="margin-top: 0px !important; height: 405px !important;">
+            <app-history-chart></app-history-chart>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+  
+  <!-- Footer -->
+  <app-footer></app-footer>
+  
+</div>
+  
+  

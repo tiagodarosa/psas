@@ -1,9 +1,10 @@
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { map, catchError, tap } from 'rxjs/operators';
-import { AuthService, SocialUser } from 'angularx-social-login';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { AuthService } from 'angularx-social-login';
+import { map } from 'rxjs/operators';
+import MyJourneyAndFeedbackData from './shared/data/my-journey-and-feedback-data';
+import MyJourneyAndFeedbackFilterData from './shared/data/my-journey-and-feedback-filter-data';
 
 const endpoint = 'https://61914044.us-south.apiconnect.appdomain.cloud/psas/v1';
 //const endpoint = 'https://438d472f.us-south.apigw.appdomain.cloud/v1';
@@ -289,5 +290,24 @@ export class ServicesService {
     return this.http.get(endpoint + '/dashboard/findOrganizationProfile/' + organizationId, this.httpOptions).pipe(
       map(this.extractData));
   }
+
+  addJourneyAndFeedback(params: MyJourneyAndFeedbackData) {
+    this.getHttpOptions();
+    return this.http.post('https://us-south.functions.appdomain.cloud/api/v1/web/7cce1250-d66c-4a8e-a0e4-a83a70a2d77b/Diary/myJourneyAndFeedback', params, this.httpOptions);
+  }
+
+  findJourneyAndFeedback(filter: MyJourneyAndFeedbackFilterData) {
+    this.getHttpOptions();
+    this.httpOptions['params'] = this.getParams(filter);
+    return this.http.get('https://us-south.functions.appdomain.cloud/api/v1/web/7cce1250-d66c-4a8e-a0e4-a83a70a2d77b/Diary/findJourneyAndFeedbacks', this.httpOptions);
+  }
+
+  private getParams(parameters: any): HttpParams {
+    let httpParams = new HttpParams();
+    for (let p in parameters) {
+      httpParams = httpParams.append(p, parameters[p]);
+    }
+    return httpParams;
+}
 
 }

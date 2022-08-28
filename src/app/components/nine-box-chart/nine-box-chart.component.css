@@ -1,0 +1,108 @@
+.nine-box .row {
+    margin-bottom: 1px;
+}
+
+.box-title {
+    font-size: 2.28rem;
+    line-height: 110%;
+}
+
+.box-tag-title {
+    font-size: 0.90rem;
+    font-weight: bold;
+    color: white;
+}
+
+.box-tag {
+    background-color: cornflowerblue;
+    border-radius: 10px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    width: 30%;
+}
+
+.box {
+    border: 1px solid black;
+    border-radius: 4px;
+    width: 32% !important;
+    text-align: center;
+}
+
+.user-line {
+    margin-top: 20px;
+}
+
+::ng-deep .popover {
+    max-width: 800px !important;
+    min-width: 600px !important;
+}
+
+.badge-yellow-custom {
+    color: #856404;
+    border: 2px solid #ffeeba;
+    background-color: #fff3cd;
+}
+
+.badge-green-custom {
+    color: #155724;
+    border: 2px solid #c3e6cb;
+    background-color: #d4edda;
+}
+
+.badge-custom {
+    display: inline-block;
+    padding: .25em .4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem;
+}
+
+.badge-custom-margin-left {
+    margin-left: 5px;
+}
+
+.nine-box-font-size {
+    font-size: 15pt;
+}
+
+.total-users-link {
+    margin-top: 2px;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    border: 1px solid black;
+    font-size: 17px;
+    padding: 1px;
+    cursor: pointer;
+}
+
+.total-users-link:hover {
+    color: blue;
+    border: 2px solid blue;
+    padding: 0px;
+}
+
+.user-mini-avatar {
+    width: 30px;
+    border-radius: 50%;
+    padding: 1px;
+}
+
+.user-avatar {
+    width: 60px;
+    border-radius: 50%;
+}
+
+@media (max-width: 2000px) {
+    .box-tag {
+        width: 100%;
+    }
+
+    .no-padding {
+        padding: 0px !important;
+    }
+}
