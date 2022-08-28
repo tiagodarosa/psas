@@ -1,0 +1,189 @@
+<div class="body">
+
+  <!--Header-->
+  <app-header></app-header>
+  
+  <!-- Spinner -->
+  <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+  
+  <!-- Main content -->
+  <main>
+
+    <div class="container">
+
+      <!-- Title -->
+      <div class="row">
+        <div class="col s8">
+          <h3>Adicionar Diário & Feedback</h3>
+        </div>
+      </div>
+
+      <div class="row">
+        <form class="col s12">
+
+          <div class="row" style="margin-bottom: 0px !important;">
+            <div class="col s9 wrap">
+              <span class="label-form">Data</span>
+              <span class="label-icon-help"><i class="material-icons prefix tooltipped" data-position="right" data-tooltip="Data">info</i></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s5 m4 l3">
+              <i class="material-icons prefix">date_range</i>
+              <input type="text" class="datepicker" name="utilizationDateField">
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom: 0px !important;">
+            <div class="col s9 wrap" style="margin-left: 1rem;">
+              <span class="label-form">Que tipo de informação voce deseja registrar ?</span>
+              <span class="label-icon-help"><i class="material-icons prefix tooltipped" data-position="right" data-tooltip="Que tipo de informação voce deseja registrar ?">info</i></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s9" style="margin-left: 1rem; margin-top: 15px;">
+              <label>
+                <input name="informationType" type="radio" value="1" [(ngModel)]="model.informationType"/>
+                <span>Todos</span>
+              </label>
+              <label style="margin-left: 20px;">
+                <input name="informationType" type="radio" value="2" [(ngModel)]="model.informationType"/>
+                <span>Diário particular</span>
+              </label>
+              <label style="margin-left: 20px;">
+                <input name="informationType" type="radio" value="3" [(ngModel)]="model.informationType"/>
+                <span>Diário para o time</span>
+              </label>
+              <label style="margin-left: 20px;">
+                <input name="informationType" type="radio" value="4" [(ngModel)]="model.informationType"/>
+                <span>Feedback enviados</span>
+              </label>
+              <label style="margin-left: 20px;">
+                <input name="informationType" type="radio" value="5" [(ngModel)]="model.informationType"/>
+                <span>Feedback recebidos</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom: 0px !important;">
+            <div class="col s6 wrap" style="margin-left: 1rem;">
+              <span class="label-form">Informe o destinatário</span>
+              <span class="label-icon-help"><i class="material-icons prefix tooltipped" data-position="right" data-tooltip="destinatário">info</i></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s5">
+              <div class="input-field col s12">
+                <i class="material-icons prefix">person</i>
+                <input type="text" id="autocomplete-input" class="autocomplete" [(ngModel)]="model.recipient" name="recipientField">
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom: 0px !important;">
+            <div class="col s6 wrap" style="margin-left: 1rem;">
+              <span class="label-form">Informe sua mensagem</span>
+              <span class="label-icon-help"><i class="material-icons prefix tooltipped" data-position="right" data-tooltip="informe a sua mensagem">info</i></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <textarea id="textarea1" class="materialize-textarea" [(ngModel)]="model.message" name="messageField"></textarea>
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom: 0px !important;">
+            <div class="col s6 wrap" style="margin-left: 1rem;">
+              <span class="label-form">Motivo da mensagem</span>
+              <span class="label-icon-help"><i class="material-icons prefix tooltipped" data-position="right" data-tooltip="motivo da mensagem">info</i></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s9" style="margin-left: 1rem; margin-top: 15px;">
+              <label>
+                <input name="messageTypeRadio" type="radio" value="1" [(ngModel)]="model.messageType"/>
+                <span>Reconhecimento</span>
+              </label>
+              <label style="margin-left: 20px;">
+                <input name="messageTypeRadio" type="radio" value="2" [(ngModel)]="model.messageType"/>
+                <span>Desenvolvimento</span>
+              </label>
+              <label style="margin-left: 20px;">
+                <input name="messageTypeRadio" type="radio" value="3" [(ngModel)]="model.messageType"/>
+                <span>Neutro</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom: 0px !important;">
+            <div class="col s6 wrap" style="margin-left: 1rem;">
+              <span class="label-form">Quais competências estão relacionadas ?</span>
+              <span class="label-icon-help"><i class="material-icons prefix tooltipped" data-position="right" data-tooltip="Quais competências estão relacionadas?">info</i></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s5" style="margin-left: 1rem;">
+              <select multiple [(ngModel)]="model.relatedSkills" name="relatedSkillsField">
+                <option *ngFor="let o of compentencesList" [value]="o.key">{{ o.label }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom: 0px !important;">
+            <div class="col s6 wrap" style="margin-left: 1rem;">
+              <span class="label-form">Manter o anonimato para esta mensagem ?</span>
+              <span class="label-icon-help"><i class="material-icons prefix tooltipped" data-position="right" data-tooltip="Manter o anonimato para esta mensagem ?">info</i></span>
+            </div>
+            <div class="col s6" style="margin-left: 1rem;">
+              <div class="switch">
+                <label>
+                  Não
+                  <input type="checkbox" [(ngModel)]="model.keepAnonymous" name="keepAnonymousField">
+                  <span class="lever"></span>
+                  Sim
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom: 0px !important;">
+            <div class="col s6 wrap" style="margin-left: 1rem;">
+              <span class="label-form">Compartilhar o diário dessa jornada com o meu líder ?</span>
+              <span class="label-icon-help"><i class="material-icons prefix tooltipped" data-position="right" data-tooltip="Compartilhar o diário dessa jornada com o meu líder ?">info</i></span>
+            </div>
+            <div class="col s6" style="margin-left: 1rem;">
+              <div class="switch">
+                <label>
+                  Não
+                  <input type="checkbox" [(ngModel)]="model.shareToTeamLeader" name="shareToTeamLeaderField">
+                  <span class="lever"></span>
+                  Sim
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row" style="margin-bottom: 0px !important;">
+            
+            <div class="col offset-m4 offset-l8 offset-x8 s6 m4 l2 x2">
+              <a class="waves-effect waves-light light-blue btn-large"
+                 (click)="back()">
+                <i class="material-icons left">cancel</i>Cancelar
+              </a>
+            </div>
+
+            <div class="col s6 m4 l2 x2">
+              <a class="waves-effect waves-light light-blue btn-large"
+                 (click)="onSave()">
+                <i class="material-icons left">save</i>Salvar
+              </a>
+            </div>
+
+          </div>
+
+        </form>
+      </div>  
+
+    </div>
+  </main>
+</div>

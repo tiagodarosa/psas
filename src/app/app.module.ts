@@ -1,39 +1,48 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Injectable } from '@angular/core';
-import { JwtModule } from '@auth0/angular-jwt';
-import { HttpClientModule, HTTP_INTERCEPTORS, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { NgxSpinnerModule } from 'ngx-spinner';
-
-import { AppComponent } from './app.component';
-import { HeaderComponent } from './core/header/header.component';
-import { AppRoutingModule } from './routing.module';
-import { UserComponent } from './user/user.component';
-import { HomeComponent } from './home/home.component';
-import { HelpComponent } from './help/help.component';
-import { PrivacyComponent } from './privacy/privacy.component';
-import { ContactComponent } from './contact/contact.component';
-import { SocialLoginModule, AuthServiceConfig} from 'angularx-social-login';
-import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
-import { FooterComponent } from './core/footer/footer.component';
-import { OrganizationComponent } from './organization/organization.component';
-import { TeamComponent } from './team/team.component';
-import { AssessmentComponent } from './assessment/assessment.component';
-import { NotfoundComponent } from './notfound/notfound.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { ProjectComponent } from './project/project.component';
-import { OrganizationDetailsComponent } from './organization/organization-details/organization-details.component';
-import { TeamDetailsComponent } from './team/team-details/team-details.component';
-import { AssessmentDetailsComponent } from './assessment/assessment-details/assessment-details.component';
-import { ApplicationComponent } from './application/application.component';
-import { CompetenceComponent } from './competence/competence.component';
-import { CookieService } from 'ngx-cookie-service';
-import { ProfileComponent } from './profile/profile.component';
-import { AttendanceComponent } from './attendance/attendance.component';
-import { AnswerComponent } from './answer/answer.component';
-import { MemberComponent } from './member/member.component';
+import { HttpClientModule, HttpHandler, HttpInterceptor, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Injectable, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { JwtModule } from '@auth0/angular-jwt';
+import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from 'angularx-social-login';
+import { CookieService } from 'ngx-cookie-service';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { AnswerComponent } from './answer/answer.component';
+import { AppComponent } from './app.component';
+import { ApplicationComponent } from './application/application.component';
+import { AssessmentDetailsComponent } from './assessment/assessment-details/assessment-details.component';
+import { AssessmentComponent } from './assessment/assessment.component';
+import { AttendanceComponent } from './attendance/attendance.component';
+import { CompetenceComponent } from './competence/competence.component';
+import { NineBoxChartComponent } from './components/nine-box-chart/nine-box-chart.component';
+import { ContactComponent } from './contact/contact.component';
+import { FooterComponent } from './core/footer/footer.component';
+import { HeaderComponent } from './core/header/header.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { HelpComponent } from './help/help.component';
+import { HomeComponent } from './home/home.component';
+import { MemberComponent } from './member/member.component';
+import { NotfoundComponent } from './notfound/notfound.component';
+import { OrganizationDetailsComponent } from './organization/organization-details/organization-details.component';
+import { OrganizationComponent } from './organization/organization.component';
+import { PrivacyComponent } from './privacy/privacy.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ProjectComponent } from './project/project.component';
+import { AppRoutingModule } from './routing.module';
+import { TeamDetailsComponent } from './team/team-details/team-details.component';
+import { TeamComponent } from './team/team.component';
+import { UserComponent } from './user/user.component';
+import { NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DashboardV2Component } from './dashboard-v2/dashboard-v2.component';
+import { WordCloudComponent } from './components/charts/word-cloud/word-cloud.component';
+import { ComparisonOfResultsComponent } from './components/charts/comparison-of-results/comparison-of-results.component';
+import { HistoryChartComponent } from './components/charts/history-chart/history-chart.component';
+import { MyJourneyAndFeedbackComponent } from './my-journey-and-feedback/my-journey-and-feedback.component';
+import { CustomDateParserFormatter } from './shared/formatter/custom-date-parser-formatter';
+import { AddJourneyAndFeedbackComponent } from './my-journey-and-feedback/add-journey-and-feedback/add-journey-and-feedback.component';
+import { DatePipe } from '@angular/common';
 
 const config = new AuthServiceConfig([
   {
@@ -83,6 +92,7 @@ export class NoCacheHeadersInterceptor implements HttpInterceptor {
     AssessmentComponent,
     NotfoundComponent,
     DashboardComponent,
+    DashboardV2Component,
     ProjectComponent,
     OrganizationDetailsComponent,
     TeamDetailsComponent,
@@ -92,10 +102,18 @@ export class NoCacheHeadersInterceptor implements HttpInterceptor {
     ProfileComponent,
     AttendanceComponent,
     AnswerComponent,
-    MemberComponent
+    MemberComponent,
+    NineBoxChartComponent,
+    WordCloudComponent,
+    ComparisonOfResultsComponent,
+    HistoryChartComponent,
+    MyJourneyAndFeedbackComponent,
+    AddJourneyAndFeedbackComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
     AppRoutingModule,
     SocialLoginModule,
     HttpClientModule,
@@ -109,18 +127,24 @@ export class NoCacheHeadersInterceptor implements HttpInterceptor {
           'https://us-south.functions.cloud.ibm.com/',
           'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/default/teste.json',
           'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/default/',
-          'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/default'
+          'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/default',
+          'https://us-south.functions.cloud.ibm.com/api/v1/namespaces/7cce1250-d66c-4a8e-a0e4-a83a70a2d77b/'
         ],
         blacklistedRoutes: []
       }
     }),
     NgxSpinnerModule,
-    FormsModule
+    NgbModule
   ],
   providers: [
+    DatePipe,
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig
+    },
+    {
+      provide: NgbDateParserFormatter,
+      useClass: CustomDateParserFormatter
     },
     {
       provide: HTTP_INTERCEPTORS,

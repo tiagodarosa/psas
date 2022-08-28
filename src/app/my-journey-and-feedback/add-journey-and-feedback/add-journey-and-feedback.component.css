@@ -1,0 +1,58 @@
+::ng-deep .datepicker-date-display {
+    background-color: #03a9f4 !important;
+}
+
+::ng-deep .datepicker-table td.is-today {
+    color: #03a9f4;
+}
+
+::ng-deep .datepicker-table td.is-selected {
+    background-color: #03a9f4 !important;
+    color: #fff;
+}
+
+::ng-deep .datepicker-cancel, .datepicker-clear, .datepicker-today, .datepicker-done {
+    color: #03a9f4 !important;
+}
+
+::ng-deep .datepicker-done {
+    color: #03a9f4 !important;
+}
+
+::ng-deep .input-field .prefix.active {
+    color: #03a9f4 !important;
+}
+
+::ng-deep input:not([type]):focus:not([readonly]), input[type=text]:not(.browser-default):focus:not([readonly]), input[type=password]:not(.browser-default):focus:not([readonly]), input[type=email]:not(.browser-default):focus:not([readonly]), input[type=url]:not(.browser-default):focus:not([readonly]), input[type=time]:not(.browser-default):focus:not([readonly]), input[type=date]:not(.browser-default):focus:not([readonly]), input[type=datetime]:not(.browser-default):focus:not([readonly]), input[type=datetime-local]:not(.browser-default):focus:not([readonly]), input[type=tel]:not(.browser-default):focus:not([readonly]), input[type=number]:not(.browser-default):focus:not([readonly]), input[type=search]:not(.browser-default):focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+    border-bottom: 1px solid #03a9f4;
+    box-shadow: 0 1px 0 0 #03a9f4;
+}
+
+::ng-deep [type="radio"]:checked+span:after {
+    background-color: #03a9f4 !important;
+    border: 2px solid #03a9f4;
+}
+
+::ng-deep .switch label input[type=checkbox]:checked+.lever:after {
+    background-color: #03a9f4 !important;
+}
+
+::ng-deep .switch label input[type=checkbox]:checked+.lever {
+    background-color: #03a9f4 !important;
+}
+
+.label-form {
+    font-size: 17pt;
+}
+
+.label-icon-help {
+    margin-left: 5px;
+}
+
+.wrap {
+    display: flex;
+}
+  
+.wrap span {
+    align-self: flex-end;
+}

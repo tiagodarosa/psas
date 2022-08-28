@@ -1,0 +1,209 @@
+<div class="body">
+
+  <!--Header-->
+  <app-header></app-header>
+  
+  <!-- Spinner -->
+  <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+  
+  <!-- Main content -->
+  <main>
+
+    <div class="container">
+
+      <!-- Title -->
+      <div class="row">
+        <div class="col s8">
+          <h3>Diário & Feedback</h3>
+        </div>
+      </div>
+
+      <div class="row">
+        <form class="col s12">
+          <!-- <div class="row" style="margin-bottom: 0px !important;">
+            <span class="col s9">
+              <h5>Período<i class="material-icons prefix tooltipped" data-position="right" data-tooltip="Ajuda para o campo periodo">info</i></h5>
+            </span>
+          </div> -->
+          <div class="row">
+            <!-- <div class="input-field col s5 m4 l3">
+              <i class="material-icons prefix">date_range</i>
+              <input type="text" class="datepicker" name="startPeriod">
+            </div>
+  
+            <div class="input-field col s5 m4 l3">
+              <i class="material-icons prefix">date_range</i>
+              <input type="text" class="datepicker" name="endPeriod">
+            </div> -->
+
+            <div class="col s2 m4 offset-l9 l3" style="text-align: right;">
+              <a class="waves-effect waves-light light-blue btn-large"
+                (click)="onAddData()">
+                <i class="material-icons left">add</i>Adicionar
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+  
+      <div class="row">
+        <div class="col s12">
+          <ul class="collapsible">
+            <li>
+              <div class="collapsible-header widget-header"><i class="material-icons">filter_list</i>Filtros</div>
+              <div class="collapsible-body">
+                
+                <div class="row" style="margin-bottom: 0px !important;">
+                  <span class="col s9">
+                    <h5>Período<i class="material-icons prefix tooltipped" data-position="right" data-tooltip="Ajuda para o campo periodo">info</i></h5>
+                  </span>
+                </div>
+                <div class="row">
+                  <div class="input-field col s5 m4 l3">
+                    <i class="material-icons prefix">date_range</i>
+                    <input type="text" class="datepicker" name="startPeriod">
+                  </div>
+        
+                  <div class="input-field col s5 m4 l3">
+                    <i class="material-icons prefix">date_range</i>
+                    <input type="text" class="datepicker" name="endPeriod">
+                  </div>
+                </div>
+
+                <div class="row" style="margin-bottom: 0px !important;">
+                  <div class="col s9" style="margin-left: 1rem;">
+                    <h5>Tipo informação <i class="material-icons prefix">info</i></h5>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col s9" style="margin-left: 1rem; margin-top: 15px;">
+                    <label>
+                      <input name="informationTypeField" type="radio" value="1" [(ngModel)]="filter.informationType"/>
+                      <span>Todos</span>
+                    </label>
+                    <label style="margin-left: 20px;">
+                      <input name="informationTypeField" type="radio" value="2" [(ngModel)]="filter.informationType"/>
+                      <span>Diário particular</span>
+                    </label>
+                    <label style="margin-left: 20px;">
+                      <input name="informationTypeField" type="radio" value="3" [(ngModel)]="filter.informationType"/>
+                      <span>Diário para o time</span>
+                    </label>
+                    <label style="margin-left: 20px;">
+                      <input name="informationTypeField" type="radio" value="4" [(ngModel)]="filter.informationType"/>
+                      <span>Feedback enviados</span>
+                    </label>
+                    <label style="margin-left: 20px;">
+                      <input name="informationTypeField" type="radio" value="5" [(ngModel)]="filter.informationType"/>
+                      <span>Feedback recebidos</span>
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="row" style="margin-bottom: 0px !important;">
+                  <div class="col s6" style="margin-left: 1rem;">
+                    <h5>Destinatário&nbsp;<i class="material-icons prefix">info</i></h5>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col s5">
+                    <div class="input-field col s12">
+                      <i class="material-icons prefix">person</i>
+                      <input type="text" id="autocomplete-input" class="autocomplete" [(ngModel)]="filter.recipient">
+                    </div>
+                  </div>
+                </div>
+      
+                <div class="row" style="margin-bottom: 0px !important;">
+                  <div class="col s6" style="margin-left: 1rem;">
+                    <h5>Motivo da mensagem <i class="material-icons prefix">info</i></h5>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col s9" style="margin-left: 1rem; margin-top: 15px;">
+                    <label>
+                      <input name="messageTypeName" type="radio" value="1" [(ngModel)]="filter.messageType" />
+                      <span>Reconhecimento</span>
+                    </label>
+                    <label style="margin-left: 20px;">
+                      <input name="messageTypeName" type="radio" value="2" [(ngModel)]="filter.messageType"/>
+                      <span>Desenvolvimento</span>
+                    </label>
+                    <label style="margin-left: 20px;">
+                      <input name="messageTypeName" type="radio" value="3" [(ngModel)]="filter.messageType"/>
+                      <span>Neutro</span>
+                    </label>
+                  </div>
+                </div>
+      
+                <div class="row" style="margin-bottom: 0px !important;">
+                  <div class="col s6" style="margin-left: 1rem;">
+                    <h5>Quais competências estão relacionadas? <i class="material-icons prefix">info</i></h5>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col s5" style="margin-left: 1rem;">
+                    <select multiple [(ngModel)]="filter.relatedSkills" name="relatedSkillsField">
+                      <option *ngFor="let o of compentencesList" [value]="o.key">{{ o.label }}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col s2 m4 offset-l9 l3" style="text-align: right;">
+                    <a class="waves-effect waves-light light-blue btn-large"
+                      (click)="onSearch()">
+                      <i class="material-icons left">search</i>Pesquisar
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+  
+        <div class="col s12">
+          
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Tipo</th>
+                <th>Destinatario</th>
+                <th>Autor</th>
+                <th>Motivo mensagem</th>
+                <th>Competências relacionadas</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let d of data">
+                <td> {{ d.utilizationDate }} </td>
+                <td> {{ d.type }} </td>
+                <td> {{ d.recipient }} </td>
+                <td> {{ d.author }} </td>
+                <td> {{ d.messageMotive }} </td>
+                <td> {{ d.competences }} </td>
+                <td>
+                  <span><i class="material-icons prefix">edit</i></span>
+                  <span><i class="material-icons prefix">delete</i></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+  
+        </div>
+    </div>
+
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+
+</div>
