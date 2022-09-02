@@ -11,8 +11,8 @@ export default class MyJourneyAndFeedbackFilterData {
         this.informationType = 0;
         this.recipient = '';
         this.messageType = 0;
-        this.startPeriod = new Date(2000, 1, 1).toISOString();
-        this.endPeriod = new Date(2100, 1, 1).toISOString();
+        this.startPeriod = '01/01/2000';
+        this.endPeriod = '01/01/2100';
         this.relatedSkills = new Array();
     }
 

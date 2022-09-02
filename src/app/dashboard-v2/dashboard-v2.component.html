@@ -51,9 +51,13 @@
         <div class="col s6">
           <div class="widget-header">
             <span style="font-size: 25pt; color: #fff;">Diário e Feedback</span>
+            <span class="detail-header"
+                  (click)="onDetailsJourneyAndFeedback()">
+              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;">more_vert</i>
+            </span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important">
-            <app-word-cloud></app-word-cloud>
+            <app-word-cloud [data]="wcData"></app-word-cloud>
           </div>
         </div>
 

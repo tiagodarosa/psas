@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 
 declare var require: any;
@@ -18,53 +18,34 @@ WordCloud(Highcharts);
   templateUrl: './word-cloud.component.html',
   styleUrls: ['./word-cloud.component.css']
 })
-export class WordCloudComponent implements OnInit {
+export class WordCloudComponent implements AfterViewInit {
   
+  @Input() data: Array<any>;
+
   options: any;
 
   constructor() {
-    this.buildChart();
+    this.loadComponent();
   }
 
-  ngOnInit(){
-    Highcharts.chart('container', this.options);
+  ngAfterViewInit() {
   }
 
-  private buildChart() {
-    this.options = {
+  private loadComponent() {
+    setTimeout(() => {
+      if (this.data === undefined || this.data.length === 0)
+        this.loadComponent();
+      else
+        Highcharts.chart('container', this.buildChart());
+    }, 1000);
+  }
+
+  private buildChart(): any {
+    return {
       series: [{
         type: 'wordcloud',
         name: 'Ocorrencias',
-        data: [
-          {
-            name: 'Comprometimento',
-            weight: 10
-          },
-          {
-            name: 'Empatia',
-            weight: 3
-          },
-          {
-            name: 'Resiliência',
-            weight: 19
-          },
-          {
-            name: 'Persistência',
-            weight: 30
-          },
-          {
-            name: 'Paciência',
-            weight: 18
-          },
-          {
-            name: 'Amor',
-            weight: 2
-          },
-          {
-            name: 'Respeito',
-            weight: 10
-          },
-        ]
+        data: this.data
       }],
       accessibility: {
         screenReaderSection: {

@@ -14,7 +14,7 @@ export default class MyJourneyAndFeedbackData {
         this.informationType = 1;
         this.recipient = '';
         this.message = '';
-        this.messageType = 1;
+        this.messageType = 0;
         this.relatedSkills = new Array();
         this.keepAnonymous = false;
         this.shareToTeamLeader = false;

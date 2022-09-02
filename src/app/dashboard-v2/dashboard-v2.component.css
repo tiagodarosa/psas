@@ -6,3 +6,10 @@
     padding: 10px 20px;
     font-weight: bold;
 }
+
+.detail-header {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    cursor: pointer;
+}

@@ -43,6 +43,8 @@ import { MyJourneyAndFeedbackComponent } from './my-journey-and-feedback/my-jour
 import { CustomDateParserFormatter } from './shared/formatter/custom-date-parser-formatter';
 import { AddJourneyAndFeedbackComponent } from './my-journey-and-feedback/add-journey-and-feedback/add-journey-and-feedback.component';
 import { DatePipe } from '@angular/common';
+import { DetailsJourneyAndFeedbackComponent } from './my-journey-and-feedback/details-journey-and-feedback/details-journey-and-feedback.component';
+import { UserOverviewComponent } from './components/nine-box-chart/user-overview/user-overview.component';
 
 const config = new AuthServiceConfig([
   {
@@ -108,7 +110,9 @@ export class NoCacheHeadersInterceptor implements HttpInterceptor {
     ComparisonOfResultsComponent,
     HistoryChartComponent,
     MyJourneyAndFeedbackComponent,
-    AddJourneyAndFeedbackComponent
+    AddJourneyAndFeedbackComponent,
+    DetailsJourneyAndFeedbackComponent,
+    UserOverviewComponent
   ],
   imports: [
     BrowserModule,
