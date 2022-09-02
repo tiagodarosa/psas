@@ -60,13 +60,13 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
   }
 
   onSearch() {
-    const [ startDay, startMonth, startYear] = this.getComponentInstance(this.dateFildsInstances, 'startPeriod').toString().split('/');
-    this.filter.startPeriod = new Date(+startYear, +startMonth - 1, +startDay).toISOString();
+    const startPeriodElem: any = this.getComponentInstance(this.dateFildsInstances, 'startPeriod');
+    this.filter.startPeriod = startPeriodElem.el.value;
 
-    const [ endDay, endMonth, endYear] = this.getComponentInstance(this.dateFildsInstances, 'endPeriod').toString().split('/');
-    this.filter.endPeriod = new Date(+endYear, +endMonth - 1, +endDay).toISOString();
+    const endPeriodElem: any = this.getComponentInstance(this.dateFildsInstances, 'endPeriod');
+    this.filter.endPeriod = endPeriodElem.el.value;
 
-    const relatedSkillsTempInstance =  this.filter.relatedSkills = this.getComponentInstance(this.relatedSkillsInstance, 'relatedSkillsField')
+    const relatedSkillsTempInstance = this.filter.relatedSkills = this.getComponentInstance(this.relatedSkillsInstance, 'relatedSkillsField');
     
     if (relatedSkillsTempInstance !== undefined)
       this.filter.relatedSkills = relatedSkillsTempInstance.getSelectedValues().map((el: string) => el.split(':')[1].replace('\'', '').replace('\'', '').trim());
@@ -76,7 +76,15 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
 
   private loadData() {
     this.spinner.show();
-    this.service.findJourneyAndFeedback(this.filter).subscribe(
+    const p = Object.assign({}, this.filter);
+    console.log(p);
+    const [ startDay, startMonth, startYear ] = p.startPeriod.toString().split('/');
+    p.startPeriod = this.datePipe.transform(new Date(+startYear, +startMonth - 1, +startDay), 'yyyy-MM-dd');
+
+    const [ endDay, endMonth, endYear ] = p.endPeriod.toString().split('/');
+    p.endPeriod = this.datePipe.transform(new Date(+endYear, +endMonth - 1, +endDay), 'yyyy-MM-dd');
+    
+    this.service.findJourneyAndFeedback(p).subscribe(
       {
         next: (response: any) => {
           this.data = response.docs.map((el: any) => {
@@ -99,7 +107,10 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
   }
 
   private getComponentInstance(instance: Array<any>, componentName: string) {
-    return instance.find((comp: any) => comp.el.name === componentName) || [];
+    return instance.find((comp: any) => {
+      console.log(comp.el.name, componentName);
+      return String(comp.el.name).indexOf(componentName) >= 0
+    });
   }
 
   private showErrors(error: any) {

@@ -13,24 +13,11 @@
 
       <!-- Title -->
       <div class="row">
-        <div class="col s8">
-          <h3>Diário & Feedback</h3>
+        <div class="col s12">
+          <h3>Detalhes Diário minha jornada & Feedback</h3>
         </div>
       </div>
 
-      <div class="row">
-        <form class="col s12">
-          <div class="row">
-            <div class="col s2 m4 offset-l9 l3" style="text-align: right;">
-              <a class="waves-effect waves-light light-blue btn-large"
-                (click)="onAddData()">
-                <i class="material-icons left">add</i>Adicionar
-              </a>
-            </div>
-          </div>
-        </form>
-      </div>
-  
       <div class="row">
         <div class="col s12">
           <ul class="collapsible">
@@ -149,46 +136,78 @@
       </div>
 
       <div class="row">
-  
-        <div class="col s12">
-          
-          <table>
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Tipo</th>
-                <th>Destinatario</th>
-                <th>Autor</th>
-                <th>Motivo mensagem</th>
-                <th>Competências relacionadas</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let d of data">
-                <td> {{ d.utilizationDate }} </td>
-                <td> {{ d.type }} </td>
-                <td> {{ d.recipient }} </td>
-                <td> {{ d.author }} </td>
-                <td> {{ d.messageMotive }} </td>
-                <td> {{ d.competences }} </td>
-                <td>
-                  <span><i class="material-icons prefix">edit</i></span>
-                  <span><i class="material-icons prefix">delete</i></span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-  
+
+        <div class="col s5">
+          <div class="widget-header">
+            <span style="font-size: 25pt; color: #fff;">Nuvem de competências</span>
+          </div>
+          <div class="card" style="margin-top: 0px !important; height: 405px !important">
+            <app-word-cloud [data]="wcData"></app-word-cloud>
+          </div>
         </div>
-    </div>
+
+        <div class="col s3">
+          <div class="widget-header">
+            <span style="font-size: 25pt; color: #fff;">Ranking</span>
+          </div>
+          <div class="card" style="margin-top: 0px !important; height: 405px !important">
+            <div *ngFor="let l of rankingData" style="padding: 10px;">
+              <div class="col s1" style="height: 20px; border-radius: 20%; margin-top: 5px; " style.background-color="{{ l.color }}"></div>
+              <div class="col s10"><span style="font-size: 15pt;">{{ l.name }}</span></div>
+              <div class="col s1"><span style="font-size: 15pt;">{{ l.weight }}</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col s4">
+          <div class="widget-header">
+            <span style="font-size: 25pt; color: #fff;">Ranking de mensagens</span>
+          </div>
+          <div class="card" style="margin-top: 0px !important; height: 405px !important">
+            Mensagens
+          </div>
+        </div>
+
+      </div>
+<!-- CARDS -->
+      <div class="row">
+
+        <div class="col s4" *ngFor="let card of cards">
+          <div class="widget-header-cards">
+            <img src="https://uploads.jovemnerd.com.br/wp-content/uploads/2021/08/confira-o-elenco-da-serie-live-action-de-avatar-a-lenda-de-aang.jpg" class="user-avatar"/>
+            <span class="widget-header-cards-title">{{ card.params.recipient }}</span>
+          </div>
+          <div class="card" style="margin-top: 0px !important; height: 396px !important">
+
+            <div class="col s12">
+              <span><b>Data:</b> {{ card.params.utilizationDate | date:'dd/MM/yyyy' }}</span>
+            </div>
+
+            <div class="col s12" style="height: 80px;">
+              <span><b>Mensagem:</b> {{ card.params.message }}</span>
+            </div>
+
+            <div class="col s12">
+              <a class="waves-effect waves-light btn" style="margin: 2px" *ngFor="let skill of card.params.relatedSkills">{{ skill }}</a>
+            </div>
+          
+            <div class="col s12" style="margin-top: 10px;">
+              <div class="card-panel grey lighten-5" style="padding: 15px !important">
+                <span style="font-size: 17pt; font-weight: bold;">{{ card.informationTypeValue }}</span><br>
+                <span><img src="https://uploads.jovemnerd.com.br/wp-content/uploads/2021/08/confira-o-elenco-da-serie-live-action-de-avatar-a-lenda-de-aang.jpg" class="user-big-avatar"/></span>
+                <span style="display: inline-block; vertical-align: top; margin-top: 8px; font-size: 15pt;">{{ card.name }}</span>
+              </div>
+            </div>
+
+            <div class="col s6">
+              <div class="card-panel teal lighten-2" style="padding: 15px !important">{{ card.messageTypeValue }}</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
 
 
     </div>
-
   </main>
-
-  <!-- Footer -->
-  <app-footer></app-footer>
-
 </div>

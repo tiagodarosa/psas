@@ -23,6 +23,7 @@ import { MemberComponent } from './member/member.component';
 import { DashboardV2Component } from './dashboard-v2/dashboard-v2.component';
 import { MyJourneyAndFeedbackComponent } from './my-journey-and-feedback/my-journey-and-feedback.component';
 import { AddJourneyAndFeedbackComponent } from './my-journey-and-feedback/add-journey-and-feedback/add-journey-and-feedback.component';
+import { DetailsJourneyAndFeedbackComponent } from './my-journey-and-feedback/details-journey-and-feedback/details-journey-and-feedback.component';
 
 
 const routes: Routes = [
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'dashboard-v2', component: DashboardV2Component },
   { path: 'my-journey-and-feedback', component: MyJourneyAndFeedbackComponent },
   { path: 'add-journey-and-feedback', component: AddJourneyAndFeedbackComponent },
+  { path: 'details-journey-and-feedback', component: DetailsJourneyAndFeedbackComponent },
   { path: 'help', component: HelpComponent },
   { path: 'privacy', component: PrivacyComponent },
   { path: 'contact', component: ContactComponent },

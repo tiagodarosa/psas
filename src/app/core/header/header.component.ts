@@ -66,31 +66,4 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-
-
-
-  // dropdown1() {
-  //   if ($('#dropdown1').css('display') === 'none') {
-  //     $('#dropdown1').show('fast');
-  //   } else {
-  //     $('#dropdown1').hide('fast');
-  //   }
-  // }
-
-  // dropdown2() {
-  //   if ($('#dropdown2').css('display') === 'none') {
-  //     $('#dropdown2').show('fast');
-  //   } else {
-  //     $('#dropdown2').hide('fast');
-  //   }
-  // }
-
-  // dropdown3() {
-  //   if ($('#dropdown3').css('display') === 'none') {
-  //     $('#dropdown3').show('fast');
-  //   } else {
-  //     $('#dropdown3').hide('fast');
-  //   }
-  // }
-
 }
