@@ -63,7 +63,6 @@ export class AddJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
     this.service.addJourneyAndFeedback(data)
       .subscribe({
         next: (response: any) => {
-          console.log(response);
           M.toast({ html: 'Registro inserido com sucesso!' });
           this.back();
         },

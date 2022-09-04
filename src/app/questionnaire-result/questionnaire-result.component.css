@@ -1,0 +1,25 @@
+.user-big-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid lightgray;
+    margin-left: 10px;
+}
+
+::ng-deep .tab a.active {
+    color: #039be5 !important;
+    background-color: rgb(3, 155, 229, 0.2) !important;
+}
+
+::ng-deep .tab a {
+    color: #039be5 !important;
+    background-color: transparent;
+}
+
+::ng-deep .tabs .tab a {
+    color: #039be5 !important;
+}
+
+::ng-deep .tabs .indicator {
+    background-color: #039be5;
+} 

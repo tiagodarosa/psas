@@ -77,7 +77,7 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
   private loadData() {
     this.spinner.show();
     const p = Object.assign({}, this.filter);
-    console.log(p);
+
     const [ startDay, startMonth, startYear ] = p.startPeriod.toString().split('/');
     p.startPeriod = this.datePipe.transform(new Date(+startYear, +startMonth - 1, +startDay), 'yyyy-MM-dd');
 
