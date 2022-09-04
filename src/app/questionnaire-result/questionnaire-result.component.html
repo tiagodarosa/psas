@@ -1,0 +1,166 @@
+<div class="body">
+
+  <!--Header-->
+  <app-header></app-header>
+  
+  <!-- Spinner -->
+  <ngx-spinner bdColor="rgba(0,0,0,0.8)" size="large" color="#00a7f8" type="ball-spin-clockwise"></ngx-spinner>
+  
+  <!-- Main content -->
+  <main>
+
+    <div class="container">
+
+      <!-- Title -->
+      <div class="row">
+        <div class="col s2" style="text-align: center; margin-top: 4%;">
+          <span>
+            <img *ngIf="userLogged.photoUrl !== undefined" [src]="userLogged.photoUrl" class="user-big-avatar"/>
+            <i *ngIf="userLogged.photoUrl === undefined" class="material-icons" style="width: 150px; height: 150px;">account_circle</i>
+          </span>
+        </div>
+        <div class="col s8">
+          <h3 class="header">Thiago Gonçalves dos Santos</h3>
+          <div>
+            <h5>Aplicação: XXXX</h5>
+            <h5>Tipo de aplicação: XXXX</h5>
+            <h5>Método de aplicação: XXXX</h5>
+          </div>
+        </div>
+        <div class="col s2" style="text-align: right; margin-top: 2%;">
+          <a class="waves-effect waves-light light-blue btn-large"
+             (click)="onBack()">
+            <i class="material-icons left">keyboard_return</i>Voltar
+          </a>
+        </div>
+      </div>
+
+      <div class="row">
+        
+        <div class="col s12">
+          
+          <table>
+            <thead>
+              <tr>
+                <th>Competência</th>
+                <th style="text-align: center;">Auto</th>
+                <th style="text-align: center;">Líder</th>
+                <th style="text-align: center;">Pares</th>
+                <th style="text-align: center;">Média</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let d of competenceData">
+                <td> {{ d.name }} </td>
+                <td style="text-align: center;"> {{ d.weight }} </td>
+                <td style="text-align: center;"> {{ d.weight }} </td>
+                <td style="text-align: center;"> {{ d.weight }} </td>
+                <td style="text-align: center;"> {{ d.weight }} </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr style="background-color: lightgrey;">
+                <td> <span><b>Resultado</b></span> </td>
+                <td style="text-align: center;"><span>0</span></td>
+                <td style="text-align: center;"><span>0</span></td>
+                <td style="text-align: center;"><span>0</span></td>
+                <td style="text-align: center;"><span>0</span></td>
+              </tr>
+            </tfoot>
+          </table>
+  
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col s12">
+          <ul class="tabs">
+            <li class="tab col s4"><a class="active" href="#auto">Autoavaliação</a></li>
+            <li class="tab col s4"><a href="#leader">Líder</a></li>
+            <li class="tab col s4"><a href="#pair">Pares</a></li>
+          </ul>
+        </div>
+        <div id="auto" class="col s12">
+
+          <ul class="collapsible">
+            <li>
+              <div class="collapsible-header"><i class="material-icons">chat</i>Comentário</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+            
+            <li>
+              <div class="collapsible-header"><i class="material-icons">chat</i>Pontos fortes</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+
+            <li>
+              <div class="collapsible-header"><i class="material-icons">chat</i>Pontos à desenvolver</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+          </ul>
+
+        </div>
+        <div id="leader" class="col s12">
+
+          <ul class="collapsible">
+            <li>
+              <div class="collapsible-header"><i class="material-icons">chat</i>Comentário</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+            
+            <li>
+              <div class="collapsible-header"><i class="material-icons">chat</i>Pontos fortes</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+
+            <li>
+              <div class="collapsible-header"><i class="material-icons">chat</i>Pontos à desenvolver</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+          </ul>
+
+        </div>
+        <div id="pair" class="col s12">
+
+          <ul class="collapsible">
+            <li>
+              <div class="collapsible-header"><i class="material-icons">chat</i>Comentário</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+            
+            <li>
+              <div class="collapsible-header"><i class="material-icons">chat</i>Pontos fortes</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+
+            <li>
+              <div class="collapsible-header"><i class="material-icons">chat</i>Pontos à desenvolver</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <h4 class="header">Resultado por competência</h4>
+        <div class="col s12">
+          <app-comparison-of-results></app-comparison-of-results>
+        </div>
+      </div>
+
+      <div class="row">
+        <h4 class="header">Histórico de competências: Comparação entre anos e curva de evolução</h4>
+        <div class="col s12">
+          <app-history-chart></app-history-chart>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+
+</div>

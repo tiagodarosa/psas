@@ -1,9 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { WordCloudComponent } from 'src/app/components/charts/word-cloud/word-cloud.component';
 import { ServicesService } from 'src/app/services.service';
 import CompetenceData from 'src/app/shared/data/compentende.data';
 import MyJourneyAndFeedbackConstantsData from 'src/app/shared/data/my-journey-and-feedback-constants.data';
@@ -28,14 +29,18 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   relatedSkillsInstance: any;
   dateFildsInstances: any;
   filter: MyJourneyAndFeedbackFilterData;
+  profile: string;
 
   @ViewChild('periodStart') periodStart: NgbInputDatepicker;
   @ViewChild('periodEnd') periodEnd: NgbInputDatepicker;
+  @ViewChild('appWordCloud') appWordCloud: WordCloudComponent;
 
   private _organizationId: string;
   private _docs: Array<any>;
+  private _isReloadComponents: boolean;
 
   constructor(private router: Router,
+              private route: ActivatedRoute,
               private datePipe: DatePipe,
               private cookie: CookieService,
               private spinner: NgxSpinnerService,
@@ -47,15 +52,49 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     this.rankingData = [];
     this.compentencesList = [];
     this._organizationId = this.cookie.get('ORGANIZATIONID');
+    this._isReloadComponents = false;
+    this.profile = this.route.snapshot.params.profile;
   }
 
   ngOnInit() {
+    this.wcData = [];
+    this.rankingData = [];
+    this.cards = [];
+    this.data = [];
+    this._docs = [];
+    this.loadData();
+  }
+
+  onSearch() {
+    this._isReloadComponents = true;
+    const startPeriodElem: any = this.getComponentInstance(this.dateFildsInstances, 'startPeriod');
+    this.filter.startPeriod = startPeriodElem.el.value;
+
+    const endPeriodElem: any = this.getComponentInstance(this.dateFildsInstances, 'endPeriod');
+    this.filter.endPeriod = endPeriodElem.el.value;
+
+    const relatedSkillsTempInstance = this.filter.relatedSkills = this.getComponentInstance(this.relatedSkillsInstance, 'relatedSkillsField');
+    
+    if (relatedSkillsTempInstance !== undefined)
+      this.filter.relatedSkills = relatedSkillsTempInstance.getSelectedValues().map((el: string) => el.split(':')[1].replace('\'', '').replace('\'', '').trim());
+
     this.loadData();
   }
 
   ngAfterViewInit(): void {
     this.loadComponents();
     this.getCompetences();
+  }
+
+  onBack() {
+    this.router.navigate(['dashboard-v2']);
+  }
+
+  private getComponentInstance(instance: Array<any>, componentName: string) {
+    return instance.find((comp: any) => {
+      console.log(comp.el.name, componentName);
+      return String(comp.el.name).indexOf(componentName) >= 0
+    });
   }
 
   private loadComponents() {
@@ -121,9 +160,11 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
           if (relSklTemp !== undefined) relSklTemp.weight++;
           else this.wcData.push({ name: el, weight: 1 });
         });
+        if (this._isReloadComponents) this.appWordCloud.reloadChart(this.wcData);
         this.buildRanking();
         this.buildMessageRanking();
         this.buildCardList();
+        this._isReloadComponents = false;
       }
     });
   }
@@ -148,7 +189,6 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   }
 
   private buildCardList() {
-    console.log(this._docs);
     this.cards = this._docs.map(
       (el: any) => {
         el.messageTypeValue = MyJourneyAndFeedbackConstantsData.MESSAGE_TYPE[`${el.params.messageType}`];

@@ -2,8 +2,7 @@ export default class MyJourneyAndFeedbackConstantsData {
 
     static MESSAGE_TYPE = {
         '1': 'Reconhecimento',
-        '2': 'Desenvolvimento',
-        '3': 'Neutro'
+        '2': 'Desenvolvimento'
     };
 
     static INFORMATION_TYPE = {

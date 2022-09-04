@@ -31,13 +31,18 @@ export class WordCloudComponent implements AfterViewInit {
   ngAfterViewInit() {
   }
 
+  reloadChart(data: Array<any>) {
+    this.data = data;
+    Highcharts.chart('container', this.buildChart());
+  }
+
   private loadComponent() {
     setTimeout(() => {
       if (this.data === undefined || this.data.length === 0)
         this.loadComponent();
       else
         Highcharts.chart('container', this.buildChart());
-    }, 1000);
+    }, 500);
   }
 
   private buildChart(): any {

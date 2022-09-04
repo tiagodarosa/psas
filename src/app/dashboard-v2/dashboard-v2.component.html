@@ -21,12 +21,12 @@
       <div class="row">
         <div class="col s12">
             <label>
-              <input name="group1" type="radio" checked />
+              <input name="perfilGroup" type="radio" value="1" [(ngModel)]="profileSelector" (click)="onChangeProfile()"/>
               <span>Meu perfil</span>
             </label>
           
             <label style="margin-left: 20px;">
-              <input name="group1" type="radio"/>
+              <input name="perfilGroup" type="radio" value="2" [(ngModel)]="profileSelector" (click)="onChangeProfile()"/>
               <span>Minha equipe</span>
             </label>
         </div>
@@ -37,12 +37,7 @@
           <i class="material-icons prefix">description</i>
           <label for="tool" class="active">Selecione à avaliação</label>
           <select #tool id="tool" class="validate">
-              <!-- <option *ngFor='let tool of tools' [value]="tool.value">
-                {{ tool.description }}
-              </option> -->
-              <option value="1">Avaliação 1</option>
-              <option value="2">Avaliação 2</option>
-              <option value="3">Avaliação 3</option>
+              <option *ngFor="let a of assessmentList" value="a.value">{{ a.label }}</option>
           </select>
         </div>
       </div>
@@ -57,13 +52,17 @@
             </span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important">
-            <app-word-cloud [data]="wcData"></app-word-cloud>
+            <app-word-cloud #appWordCloud [data]="wcData"></app-word-cloud>
           </div>
         </div>
 
         <div class="col s6">
           <div class="widget-header">
             <span style="font-size: 25pt; color: #fff;">Destaque e a desenvolver</span>
+            <span class="detail-header"
+                  (click)="onShowQuestionnaireResult()">
+              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;">more_vert</i>
+            </span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important;">
             <div class="row">
@@ -102,6 +101,10 @@
         <div class="col s6">
           <div class="widget-header">
             <span style="font-size: 25pt; color: #fff;">9BOX</span>
+            <span class="detail-header"
+                  (click)="onShowQuestionnaireResult()">
+              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;">more_vert</i>
+            </span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important;">
             <app-nine-box-chart></app-nine-box-chart>
@@ -111,6 +114,10 @@
         <div class="col s6">
           <div class="widget-header">
             <span style="font-size: 25pt; color: #fff;">Comparação dos resultados</span>
+            <span class="detail-header"
+                  (click)="onShowQuestionnaireResult()">
+              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;">more_vert</i>
+            </span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important;">
             <app-comparison-of-results></app-comparison-of-results>
@@ -124,6 +131,10 @@
         <div class="col s12">
           <div class="widget-header">
             <span style="font-size: 25pt; color: #fff;">Histórico</span>
+            <span class="detail-header"
+                  (click)="onShowQuestionnaireResult()">
+              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;">more_vert</i>
+            </span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important;">
             <app-history-chart></app-history-chart>

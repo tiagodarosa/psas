@@ -13,8 +13,17 @@
 
       <!-- Title -->
       <div class="row">
-        <div class="col s12">
+        <div class="col s11">
           <h3>Detalhes Diário minha jornada & Feedback</h3>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s2 m4 offset-l9 l3" style="text-align: right;">
+          <a class="waves-effect waves-light light-blue btn-large"
+             (click)="onBack()">
+            <i class="material-icons left">keyboard_return</i>Voltar
+          </a>
         </div>
       </div>
 
@@ -121,6 +130,19 @@
                   </div>
                 </div>
 
+                <div class="row" style="margin-bottom: 0px !important;">
+                  <div class="col s6" style="margin-left: 1rem;">
+                    <h5>Palavras <i class="material-icons prefix">info</i></h5>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col s5" style="margin-left: 1rem;">
+                    <select multiple name="wordsField">
+                      <option value="time">Time</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div class="row">
                   <div class="col s2 m4 offset-l9 l3" style="text-align: right;">
                     <a class="waves-effect waves-light light-blue btn-large"
@@ -142,7 +164,7 @@
             <span style="font-size: 25pt; color: #fff;">Nuvem de competências</span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important">
-            <app-word-cloud [data]="wcData"></app-word-cloud>
+            <app-word-cloud #appWordCloud [data]="wcData"></app-word-cloud>
           </div>
         </div>
 
@@ -159,12 +181,42 @@
           </div>
         </div>
 
-        <div class="col s4">
+        <div class="col s4" *ngIf="profile === 'team-profile'">
           <div class="widget-header">
             <span style="font-size: 25pt; color: #fff;">Ranking de mensagens</span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important">
             Mensagens
+          </div>
+        </div>
+
+        <div class="col s4" *ngIf="profile === 'user-profile'">
+          <div class="widget-header">
+            <span style="font-size: 25pt; color: #fff;">Diário e Feedbacks</span>
+          </div>
+          <div class="card" style="margin-top: 0px !important; height: 405px !important">
+
+            <div class="row" style="padding: 10px; padding-top: 65px;">
+              <div class="col s1 offset-s4" style="height: 40px; border-radius: 5px; padding: 5px; display: inline-table; background-color: lightgreen;">
+                <span style="font-size: 20pt;">15</span>
+              </div>
+              <div class="col s6"><span style="font-size: 20pt;">Recebidos</span></div>
+            </div>
+
+            <div class="row" style="padding: 10px;">
+              <div class="col s1 offset-s4" style="height: 40px; border-radius: 5px; padding: 5px; display: inline-table; background-color: lightgoldenrodyellow">
+                <span style="font-size: 20pt;">15</span>
+              </div>
+              <div class="col s6"><span style="font-size: 20pt;">Enviados</span></div>
+            </div>
+
+            <div class="row" style="padding: 10px;">
+              <div class="col s1 offset-s4" style="height: 40px; border-radius: 5px; padding: 5px; display: inline-table; background-color: lightskyblue">
+                <span style="font-size: 20pt;">15</span>
+              </div>
+              <div class="col s6"><span style="font-size: 20pt;">Diário</span></div>
+            </div>
+
           </div>
         </div>
 
@@ -200,7 +252,7 @@
             </div>
 
             <div class="col s6">
-              <div class="card-panel teal lighten-2" style="padding: 15px !important">{{ card.messageTypeValue }}</div>
+              <div class="chip teal">{{ card.messageTypeValue }}</div>
             </div>
 
           </div>

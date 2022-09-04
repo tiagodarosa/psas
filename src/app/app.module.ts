@@ -45,6 +45,7 @@ import { AddJourneyAndFeedbackComponent } from './my-journey-and-feedback/add-jo
 import { DatePipe } from '@angular/common';
 import { DetailsJourneyAndFeedbackComponent } from './my-journey-and-feedback/details-journey-and-feedback/details-journey-and-feedback.component';
 import { UserOverviewComponent } from './components/nine-box-chart/user-overview/user-overview.component';
+import { QuestionnaireResultComponent } from './questionnaire-result/questionnaire-result.component';
 
 const config = new AuthServiceConfig([
   {
@@ -112,7 +113,8 @@ export class NoCacheHeadersInterceptor implements HttpInterceptor {
     MyJourneyAndFeedbackComponent,
     AddJourneyAndFeedbackComponent,
     DetailsJourneyAndFeedbackComponent,
-    UserOverviewComponent
+    UserOverviewComponent,
+    QuestionnaireResultComponent
   ],
   imports: [
     BrowserModule,
