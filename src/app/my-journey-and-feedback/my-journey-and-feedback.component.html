@@ -106,6 +106,10 @@
                 </div>
                 <div class="row">
                   <div class="col s9" style="margin-left: 1rem; margin-top: 15px;">
+                    <label style="margin-left: 20px;">
+                      <input name="messageTypeName" type="radio" value="0" [(ngModel)]="filter.messageType"/>
+                      <span>Todos</span>
+                    </label>
                     <label>
                       <input name="messageTypeName" type="radio" value="1" [(ngModel)]="filter.messageType" />
                       <span>Reconhecimento</span>
@@ -113,10 +117,6 @@
                     <label style="margin-left: 20px;">
                       <input name="messageTypeName" type="radio" value="2" [(ngModel)]="filter.messageType"/>
                       <span>Desenvolvimento</span>
-                    </label>
-                    <label style="margin-left: 20px;">
-                      <input name="messageTypeName" type="radio" value="3" [(ngModel)]="filter.messageType"/>
-                      <span>Neutro</span>
                     </label>
                   </div>
                 </div>
