@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbDateStruct, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from 'angularx-social-login';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ServicesService } from '../services.service';
@@ -32,11 +33,13 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
   @ViewChild('periodEnd') periodEnd: NgbInputDatepicker;
 
   private _organizationId: string;
+  private _userLogged: any;
 
   constructor(private router: Router,
               private datePipe: DatePipe,
               private cookie: CookieService,
               private spinner: NgxSpinnerService,
+              private authService: AuthService,
               private service: ServicesService) {
     this.relatedSkillsInstance = [];
     this.filter = new MyJourneyAndFeedbackFilterData();
@@ -46,8 +49,18 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
   }
   
   ngOnInit() {
-    this.loadUsers();
-    this.loadData();
+    this.spinner.show();
+    this.authService.authState.subscribe(
+      {
+        next: (user) => {
+          this._userLogged = user;
+          this.loadUsers();
+          this.loadData();
+        },
+        error: () => this.spinner.hide(),
+        complete: () => this.spinner.hide()
+      }
+    );
   }
 
   ngAfterViewInit(): void {
@@ -84,6 +97,8 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
     const [ endDay, endMonth, endYear ] = p.endPeriod.toString().split('/');
     p.endPeriod = this.datePipe.transform(new Date(+endYear, +endMonth - 1, +endDay), 'yyyy-MM-dd');
     
+    p.userLogged = this._userLogged.email;
+
     this.service.findJourneyAndFeedback(p).subscribe(
       {
         next: (response: any) => {
@@ -91,7 +106,7 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
             const databaseObject = el.params;
             return {
               'utilizationDate': this.datePipe.transform(new Date(databaseObject.utilizationDate), 'dd/MM/yyyy'),
-              'type': databaseObject.informationType,
+              'type': MyJourneyAndFeedbackConstantsData.INFORMATION_TYPE[`${databaseObject.informationType}`],
               'recipient': databaseObject.recipient,
               'author': el.name,
               'messageMotive': MyJourneyAndFeedbackConstantsData.MESSAGE_TYPE[`${databaseObject.messageType}`],
@@ -147,6 +162,7 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
     this.service.findOrganizationById(this._organizationId).subscribe(
       {
         next: (response: any) => {
+          this.compentencesList.push({ key: 'todos', label: 'Todos' });
           response.competences.forEach((el: any) => {
             this.compentencesList.push({ key: el.name, label: el.name });
           });

@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService, SocialUser } from 'angularx-social-login';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ServicesService } from 'src/app/services.service';
@@ -17,26 +18,40 @@ export class AddJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
 
   model: any;
   compentencesList: Array<{label: string, key: string}>;
+  membersOfTeam: Array<{label: string, key: string}>;
+  membersOfOrganization: Array<{label: string, key: string}>;
+
   utilizationDateInstance: any;
-  relatedSkillsInstance: any;
+  selectsInstances: Array<any>;
 
   private _organizationId: string;
+  private _userLogged: SocialUser;
 
   constructor(private router: Router,
               private cookie: CookieService,
               private spinner: NgxSpinnerService,
+              private authService: AuthService,
               private service: ServicesService) {
     this.compentencesList = [];
-    this.model = {};
+    this.selectsInstances = [];
+    this.model = { 'informationType': '2', 'recipient': '' };
     this._organizationId = this.cookie.get('ORGANIZATIONID');
   }
 
   ngOnInit() {
+    
+    this.authService.authState.subscribe((response: SocialUser) => {
+      this._userLogged = response;
+      this.model.recipient = this._userLogged.email;
+    });
+
   }
 
   ngAfterViewInit(): void {
       this.loadComponents();
       this.getCompetences();
+      this.getMembersOfTeam();
+      this.getMembersOfOrganization();
   }
 
   back() {
@@ -49,16 +64,15 @@ export class AddJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
 
     this.spinner.show();
     const data = new MyJourneyAndFeedbackData();
-    data.informationType = this.model.informationType;
+    data.informationType = Number(this.model.informationType);
+    data.recipient = this.model.recipient;
     data.keepAnonymous = this.model.keepAnonymous || false;
     data.shareToTeamLeader = this.model.shareToTeamLeader || false;
     data.message = this.model.message;
     data.messageType = this.model.messageType;
-    data.recipient = this.model.recipient;
-    data.relatedSkills = this.getComponentInstance(this.relatedSkillsInstance, 'relatedSkillsField').getSelectedValues()
+    data.relatedSkills = this.getComponentInstance(this.selectsInstances, 'relatedSkillsField').getSelectedValues()
       .map((el: string) => el.split(':')[1].replace('\'', '').replace('\'', '').trim());
-    const [ day, month, year] = this.getComponentInstance(this.utilizationDateInstance, 'utilizationDateField').toString().split('/');
-    data.utilizationDate = new Date(+year, +month - 1, +day);
+    data.utilizationDate = new Date();
 
     this.service.addJourneyAndFeedback(data)
       .subscribe({
@@ -68,7 +82,18 @@ export class AddJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
         },
         error: this.showErrors.bind(this),
         complete: () => this.spinner.hide()
-      });
+      }
+    );
+    this.spinner.hide()
+  }
+ 
+  onChangeInformationType() {
+    setTimeout(() => {
+      this.model.recipient = '';
+      if (this.model.informationType === '2') {
+        this.model.recipient = this._userLogged.email;
+      }
+    }, 0);
   }
 
   private showErrors(error: any) {
@@ -95,13 +120,56 @@ export class AddJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
           response.competences.forEach((el: any) => {
             this.compentencesList.push({ key: el.name, label: el.name });
           });
-          setTimeout(() => {
-            const selectElems = document.querySelectorAll('select');
-            this.relatedSkillsInstance = M.FormSelect.init(selectElems, {});
-          }, 0);
+          this.initializeSelects('relatedSkillsField');
         }
       }
     );
+  }
+
+  private getMembersOfTeam() {
+
+    this.service.findProjectsFromUser().subscribe((response: any) => {
+      response.projects.forEach((el:any) => {
+        if (el.organizationId === this._organizationId) {
+          this.service.findTeamsFromUser().subscribe((r: any) => {
+            const team = r.teams.find((it: any) => it.projectId === el._id);
+            this.membersOfTeam = team.members.map((member: any) => {
+              const user = this.membersOfOrganization.find(it => it.key === member.email);
+              return {
+                'label': user.label, 'key': member.email
+              }
+            });
+            this.membersOfTeam.unshift({
+              'label': '', 'key': ''
+            });
+            this.initializeSelects('membersOfTeamName');
+          })
+        }
+      })
+    });
+
+  }
+
+  private initializeSelects(componentName: string) {
+    setTimeout(() => {
+      const selectElems = document.querySelector(`[name=${componentName}]`);
+      this.selectsInstances.push(M.FormSelect.init(selectElems, {}));
+    }, 0);
+  }
+
+  private getMembersOfOrganization() {
+    this.service.findOrganizationById(this._organizationId).subscribe((el: any) => {
+      this.membersOfOrganization = el.users.map(it => {
+        return {
+          'label': it.name,
+          'key': it.email
+        }
+      });
+      this.membersOfOrganization.unshift({
+        'label': '', 'key': ''
+      });
+      this.initializeSelects('membersOfOrganizationName');
+    });
   }
 
 }

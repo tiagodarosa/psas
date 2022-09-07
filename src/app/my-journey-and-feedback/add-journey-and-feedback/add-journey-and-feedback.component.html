@@ -22,19 +22,6 @@
         <form class="col s12">
 
           <div class="row" style="margin-bottom: 0px !important;">
-            <div class="col s9 wrap">
-              <span class="label-form">Data</span>
-              <span class="label-icon-help"><i class="material-icons prefix tooltipped" data-position="right" data-tooltip="Data">info</i></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="input-field col s5 m4 l3">
-              <i class="material-icons prefix">date_range</i>
-              <input type="text" class="datepicker" name="utilizationDateField">
-            </div>
-          </div>
-
-          <div class="row" style="margin-bottom: 0px !important;">
             <div class="col s9 wrap" style="margin-left: 1rem;">
               <span class="label-form">Que tipo de informação voce deseja registrar ?</span>
               <span class="label-icon-help"><i class="material-icons prefix tooltipped" data-position="right" data-tooltip="Que tipo de informação voce deseja registrar ?">info</i></span>
@@ -42,25 +29,17 @@
           </div>
           <div class="row">
             <div class="col s9" style="margin-left: 1rem; margin-top: 15px;">
-              <label>
-                <input name="informationType" type="radio" value="1" [(ngModel)]="model.informationType"/>
-                <span>Todos</span>
-              </label>
-              <label style="margin-left: 20px;">
+              <label style="margin-left: 20px;" (click)=onChangeInformationType()>
                 <input name="informationType" type="radio" value="2" [(ngModel)]="model.informationType"/>
                 <span>Diário particular</span>
               </label>
-              <label style="margin-left: 20px;">
+              <label style="margin-left: 20px;" (click)="onChangeInformationType()">
                 <input name="informationType" type="radio" value="3" [(ngModel)]="model.informationType"/>
                 <span>Diário para o time</span>
               </label>
               <label style="margin-left: 20px;">
                 <input name="informationType" type="radio" value="4" [(ngModel)]="model.informationType"/>
                 <span>Feedback enviados</span>
-              </label>
-              <label style="margin-left: 20px;">
-                <input name="informationType" type="radio" value="5" [(ngModel)]="model.informationType"/>
-                <span>Feedback recebidos</span>
               </label>
             </div>
           </div>
@@ -73,10 +52,26 @@
           </div>
           <div class="row">
             <div class="col s5">
-              <div class="input-field col s12">
+              <!-- Diario particular -->
+              <div class="input-field col s12" *ngIf="model.informationType === '2'">
                 <i class="material-icons prefix">person</i>
-                <input type="text" id="autocomplete-input" class="autocomplete" [(ngModel)]="model.recipient" name="recipientField">
+                <input type="text" id="autocomplete-input" class="autocomplete" [(ngModel)]="model.recipient" name="recipientField" disabled="true">
               </div>
+
+              <!-- Diario para o time-->
+              <div class="col s12" style="margin-left: 1rem;" [hidden]="model.informationType !== '3'">
+                <select name="membersOfTeamName" [(ngModel)]="model.recipient" >
+                  <option *ngFor="let o of membersOfTeam" [value]="o.key">{{ o.label }}</option>
+                </select>
+              </div>
+
+              <!-- Feedbacks enviados -->
+              <div class="col s12" style="margin-left: 1rem;" [hidden]="model.informationType !== '4'">
+                <select name="membersOfOrganizationName" [(ngModel)]="model.recipient" >
+                  <option *ngFor="let o of membersOfOrganization" [value]="o.key">{{ o.label }}</option>
+                </select>
+              </div>
+              
             </div>
           </div>
 
@@ -87,7 +82,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="input-field col s12">
+            <div class="input-field col s12" style="margin-left: 1rem;">
               <textarea id="textarea1" class="materialize-textarea" [(ngModel)]="model.message" name="messageField"></textarea>
             </div>
           </div>
