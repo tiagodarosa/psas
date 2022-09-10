@@ -28,12 +28,15 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
   dateFildsInstances: any;
   data: Array<CompetenceData>;
   filter: MyJourneyAndFeedbackFilterData;
+  modalInstance: any;
 
   @ViewChild('periodStart') periodStart: NgbInputDatepicker;
   @ViewChild('periodEnd') periodEnd: NgbInputDatepicker;
 
   private _organizationId: string;
   private _userLogged: any;
+  private _deleteIdCache: string;
+  private _deleteRevCache: string;
 
   constructor(private router: Router,
               private datePipe: DatePipe,
@@ -87,6 +90,35 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
     this.loadData();
   }
 
+  onConfirmDelete() {
+    this.service.deleteJourneyAndFeedback(this._deleteIdCache, this._deleteRevCache).subscribe(
+      {
+        next: () => {
+          this.data = []; 
+          this.onSearch();
+          this._deleteIdCache = '';
+          this._deleteRevCache = '';
+          M.toast({ html: 'Registro removido com sucesso!' });
+        }
+      }
+    )
+  }
+
+  onCancelDelete() {
+    this._deleteIdCache = '';
+    this._deleteRevCache = '';
+    const instance = M.Modal.getInstance(document.getElementById('exclusionMessageModal'))
+    instance.close();
+  }
+
+  onDelete(id: string, revision: string) {
+    this._deleteIdCache = id;
+    this._deleteRevCache = revision;
+    const instance = M.Modal.getInstance(document.getElementById('exclusionMessageModal'))
+    instance.open();
+
+  }
+
   private loadData() {
     this.spinner.show();
     const p = Object.assign({}, this.filter);
@@ -105,6 +137,8 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
           this.data = response.docs.map((el: any) => {
             const databaseObject = el.params;
             return {
+              'id': el._id,
+              'rev': el._rev,
               'utilizationDate': this.datePipe.transform(new Date(databaseObject.utilizationDate), 'dd/MM/yyyy'),
               'type': MyJourneyAndFeedbackConstantsData.INFORMATION_TYPE[`${databaseObject.informationType}`],
               'recipient': databaseObject.recipient,
@@ -123,7 +157,6 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
 
   private getComponentInstance(instance: Array<any>, componentName: string) {
     return instance.find((comp: any) => {
-      console.log(comp.el.name, componentName);
       return String(comp.el.name).indexOf(componentName) >= 0
     });
   }
@@ -143,6 +176,9 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
     });
 
     $('.collapsible').collapsible();
+
+    const elems = document.querySelectorAll('.modal');
+    this.modalInstance = M.Modal.init(elems, {});
   }
 
   private loadUsers() {
