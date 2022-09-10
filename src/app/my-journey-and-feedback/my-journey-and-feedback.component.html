@@ -173,8 +173,8 @@
                 <td> {{ d.messageMotive }} </td>
                 <td> {{ d.competences }} </td>
                 <td>
-                  <span><i class="material-icons prefix">edit</i></span>
-                  <span><i class="material-icons prefix">delete</i></span>
+                  <!-- <span><i class="material-icons prefix">edit</i></span> -->
+                  <span (click)="onDelete(d.id, d.rev)" style="cursor: pointer;"><i class="material-icons prefix" style="color: #03a9f4">delete</i></span>
                 </td>
               </tr>
             </tbody>
@@ -191,4 +191,15 @@
   <!-- Footer -->
   <app-footer></app-footer>
 
+</div>
+
+<div id="exclusionMessageModal" class="modal">
+  <div class="modal-content">
+    <h4>Confirmação de exclusão</h4>
+    <p>Voce confirma a exclusão do registro de feedback ?</p>
+  </div>
+  <div class="modal-footer">
+    <a (click)="onCancelDelete()" class="modal-close waves-effect waves-green btn-flat">Não</a>
+    <a (click)="onConfirmDelete()" class="modal-close waves-effect waves-green btn-flat">Sim</a>
+  </div>
 </div>

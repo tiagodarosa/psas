@@ -29,7 +29,6 @@ export class ServicesService {
   private getUserEmail() {
     this.authService.authState.subscribe((user) => {
       if (user != null) {
-        console.log(user);
         return user.email;
       }
     });
@@ -300,6 +299,11 @@ export class ServicesService {
     this.getHttpOptions();
     this.httpOptions['params'] = this.getParams(filter);
     return this.http.get('https://us-south.functions.appdomain.cloud/api/v1/web/7cce1250-d66c-4a8e-a0e4-a83a70a2d77b/Diary/findJourneyAndFeedbacks', this.httpOptions);
+  }
+
+  deleteJourneyAndFeedback(id: string, revision: string) {
+    this.getHttpOptions();
+    return this.http.delete(`https://us-south.functions.appdomain.cloud/api/v1/web/7cce1250-d66c-4a8e-a0e4-a83a70a2d77b/Diary/deleteJourneyAndFeedback/${id}/${revision}`, this.httpOptions);
   }
 
   private getParams(parameters: any): HttpParams {
