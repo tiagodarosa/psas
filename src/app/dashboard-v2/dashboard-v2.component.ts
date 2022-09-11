@@ -22,7 +22,9 @@ export class DashboardV2Component implements OnInit {
   teamsList: Array<any>;
   projectsList: Array<any>;
   assessmentList: Array<any>;
+  assessmentValue: string;
   profileSelector: string;
+  person: string;
 
   @ViewChild('appWordCloud') appWordCloud: WordCloudComponent;
 
@@ -66,10 +68,11 @@ export class DashboardV2Component implements OnInit {
 
   onShowQuestionnaireResult() {
     const paramUrl = this.profileSelector === '1' ? 'user-profile' : 'team-profile';
-    this.router.navigate(['questionnaire-result', paramUrl, 'thigo.san@gmail.com']);
+    this.router.navigate(['questionnaire-result', paramUrl, this.assessmentValue, 'thigo.san@gmail.com']);
   }
 
   onChangeProfile() {
+    this.person = this.profileSelector === '1' ? this._userLogged.email : '';
     this.loadWordCloudData();
   }
 

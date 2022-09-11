@@ -92,7 +92,6 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
 
   private getComponentInstance(instance: Array<any>, componentName: string) {
     return instance.find((comp: any) => {
-      console.log(comp.el.name, componentName);
       return String(comp.el.name).indexOf(componentName) >= 0
     });
   }

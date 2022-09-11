@@ -62,11 +62,13 @@ export class MemberComponent implements OnInit {
 
   getUserProfile(organization) {
     const users = organization.users;
-    const user = users.find(u => u.email === this.userEmail);
-    if (user) {
-      return user.profile;
-    } else {
-      return this.cookie.get('ORGANIZATIONMEMBERPROFILE');
+    if (users !== undefined && users !== null) {
+      const user = users.find(u => u.email === this.userEmail);
+      if (user) {
+        return user.profile;
+      } else {
+        return this.cookie.get('ORGANIZATIONMEMBERPROFILE');
+      }
     }
   }
 
