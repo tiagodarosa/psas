@@ -17,9 +17,11 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
 
   profile: string;
   code: string;
+  assessmentId: string;
   results: Array<any>;
   competenceData: Array<any>;
   userLogged: any;
+  assessment: string;
 
   private _docs: Array<any>;
 
@@ -32,11 +34,16 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
     this.results = [];
     this.competenceData = [];
     this.profile = this.route.snapshot.params.profile;
+    this.assessmentId = this.route.snapshot.params.assessment;
     this.code = this.route.snapshot.params.code;
   }
 
   ngOnInit() {
     this.loadData();
+    this.service.findAssessmentById(this.assessmentId).subscribe((response: any) => this.assessment = response.assessment);
+    this.service.findApplicationsFromUser().subscribe((response: any) => {
+      next: (response: any) => console.log(response);
+    })
     this.authService.authState.subscribe(
       {
         next: (user) => {

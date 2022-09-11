@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import * as Highcharts from 'highcharts';
 import { HttpClient } from '@angular/common/http';
-import { interval, Subscription } from 'rxjs';
-import { ServicesService } from '../services.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { AuthService } from 'angularx-social-login';
-import { CookieService } from 'ngx-cookie-service';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'angularx-social-login';
+import * as Highcharts from 'highcharts';
+import { CookieService } from 'ngx-cookie-service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ServicesService } from '../services.service';
 declare var $: any;
 declare var M: any;
 

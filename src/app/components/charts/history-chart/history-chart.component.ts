@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
+import { CookieService } from 'ngx-cookie-service';
+import { ServicesService } from 'src/app/services.service';
 
 declare var require: any;
+declare var $: any;
+
 let Boost = require('highcharts/modules/boost');
 let noData = require('highcharts/modules/no-data-to-display');
 let More = require('highcharts/highcharts-more');
@@ -18,66 +22,164 @@ noData(Highcharts);
 })
 export class HistoryChartComponent implements OnInit {
 
-  options: any;
+  @Input()
+  person: string;
 
-  constructor() {
-    this.buildChart();
+  @Input()
+  competence: string;
+
+  
+  options: any;
+  
+  private _organizationId: string;
+  private _answers: Array<any>
+  private _spotlightCompetences: Array<any>;
+  private _applications: Array<any>;
+
+  constructor(private service: ServicesService,
+              private cookie: CookieService) {
+    this._answers = [];
+    this._spotlightCompetences = [];
+    this._applications = [];
+    this._organizationId = this.cookie.get('ORGANIZATIONID');;
+    this.loadData();
   }
 
   ngOnInit(){
-    Highcharts.chart('history-chart-id', this.options);
   }
 
-  private buildChart() {
-    this.options = {
+  private loadData() {
+    this.service.findOrganizationProfile(this._organizationId).subscribe(
+      {
+        next: (data: any) => {
+          this._spotlightCompetences = [];
+          this._answers = data.answers;
+          this._applications = data.applications;
+          let compTempArray = [];
+          this._answers.forEach(answer => {
+            compTempArray.push(answer.questionCompetence);
+            if (!this._spotlightCompetences.includes(answer.questionCompetence)) {
+              this._spotlightCompetences.push(answer.questionCompetence);
+            }
+          });
+          this.updateHistoryChart(this.person, this.competence);
+        }
+      }
+    );
+  }
+
+  private updateHistoryChart(person: string, competence: string) {
+    let answ = [];
+    if (person !== '') {
+      this._answers.forEach(a => {
+        if (a.userRated === person) {
+          answ.push(a);
+        }
+      });
+    } else {
+      answ = this._answers;
+    }
+
+    const temporary = [];
+    const dates = [];
+    this._answers.forEach(a => {
+      if (!dates.includes(a.endDate)) {
+        dates.push(a.endDate);
+      }
+    });
+    this._spotlightCompetences.forEach(function(c, i) {
+      temporary[i] = { name: c, showInLegend: true, data: [] };
+      dates.forEach(d => {
+        let value = 0;
+        let count = 0;
+        let day = 0;
+        let month = 0;
+        let year = 0;
+        answ.forEach(a => {
+          if (a.questionCompetence === c && a.answer !== '' && a.endDate === d) {
+            day = new Date(a.endDate).getUTCDate();
+            month = new Date(a.endDate).getUTCMonth();
+            year = new Date(a.endDate).getUTCFullYear();
+            value = value + ((a.answer * 100) / 100);
+            count++;
+          }
+        });
+        temporary[i].data.push([Date.UTC(year, month, day), (value / count)]);
+      });
+    });
+
+    let competenceSeries = [];
+    if (competence !== '') {
+      temporary.forEach(t => {
+        if (t.name === competence) {
+          competenceSeries.push(t);
+        }
+      });
+    } else {
+      competenceSeries = temporary;
+    }
+    competenceSeries.forEach(c => {
+      let tempData2 = [];
+      let temp = [];
+      c.data.forEach(d => {
+        const index = temp.findIndex(t => t.date === d[0]);
+        if (index === -1) {
+          temp.push({date: d[0], values: [d[1]]});
+        } else {
+          temp[index].values.push(d[1]);
+        }
+      });
+      temp.forEach(t => {
+        tempData2.push([t.date, t.values.reduce((a, b) => a + b, 0) / t.values.length]);
+      });
+      c.data = tempData2;
+    });
+    Highcharts.chart('history-chart-id', {
       chart: {
-        type: 'area'
-      },
-      xAxis: {},
-      yAxis: {},
-      series: [
-        {
-          name: 'SUM Comunicação',
-          data: [4, 2, 3]
-        },
-        {
-          name: 'SUM de Qualidade',
-          data: [4, 4, 4]
-        },
-        {
-          name: 'SUM de Negociação',
-          data: [1, 5, 4]
-        },
-        {
-          name: 'SUM de Conhecimento',
-          data: [4, 5, 4]
-        },
-        {
-          name: 'SUM de Relac. interpessoal',
-          data: [3, 3, 4]
-        },
-        {
-          name: 'SUM de Responsabilidade',
-          data: [2, 5, 4]
-        },
-        {
-          name: 'SUM de Iniciativa',
-          data: [3, 2, 1]
-        },
-        {
-          name: 'SUM de Criatividade e inovação',
-          data: [1, 5, 4]
-        }
-      ],
-      accessibility: {
-        screenReaderSection: {
-            beforeChartFormat: ''
-        }
+        type: 'area',
+        height: '450px',
+        backgroundColor: 'transparent'
       },
       title: {
-        text: ''
-      }
-    }
+        text: null
+      },
+      xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: { // don't display the dummy year
+            minute: '%H:%M',
+            month: '%e/%m',
+            year: '%Y'
+        },
+        title: {
+            text: 'Data'
+        }
+      },
+      yAxis: {
+          title: {
+              text: 'Porcentagem'
+          }
+      },
+      tooltip: {
+        headerFormat: '<b>{series.name}</b><br>',
+        pointFormat: 'Atingiu {point.y:.0f}% em {point.x:%e/%m/%Y}'
+      },
+      plotOptions: {
+          area: {
+              marker: {
+                  enabled: false,
+                  symbol: 'circle',
+                  radius: 2,
+                  states: {
+                      hover: {
+                          enabled: true
+                      }
+                  }
+              }
+          }
+      },
+      series: competenceSeries
+    });
+    $('.highcharts-credits').hide();
   }
 
 }
