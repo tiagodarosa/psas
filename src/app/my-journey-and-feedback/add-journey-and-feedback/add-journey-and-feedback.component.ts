@@ -20,7 +20,7 @@ export class AddJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
   compentencesList: Array<{label: string, key: string}>;
   membersOfTeam: Array<{label: string, key: string}>;
   membersOfOrganization: Array<{label: string, key: string}>;
-
+  isTeamLeader: boolean;
   utilizationDateInstance: any;
   selectsInstances: Array<any>;
 
@@ -34,17 +34,17 @@ export class AddJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
               private service: ServicesService) {
     this.compentencesList = [];
     this.selectsInstances = [];
+    this.isTeamLeader = false;
     this.model = { 'informationType': '2', 'recipient': '' };
     this._organizationId = this.cookie.get('ORGANIZATIONID');
   }
 
   ngOnInit() {
-    
     this.authService.authState.subscribe((response: SocialUser) => {
       this._userLogged = response;
       this.model.recipient = this._userLogged.email;
+      this.verifyIfTeamLeader();
     });
-
   }
 
   ngAfterViewInit(): void {
@@ -70,6 +70,8 @@ export class AddJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
     data.shareToTeamLeader = this.model.shareToTeamLeader || false;
     data.message = this.model.message;
     data.messageType = this.model.messageType;
+    data.organizationId = this._organizationId;
+    data.issuer = this._userLogged.email;
     data.relatedSkills = this.getComponentInstance(this.selectsInstances, 'relatedSkillsField').getSelectedValues()
       .map((el: string) => el.split(':')[1].replace('\'', '').replace('\'', '').trim());
     data.utilizationDate = new Date();
@@ -94,6 +96,10 @@ export class AddJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
         this.model.recipient = this._userLogged.email;
       }
     }, 0);
+  }
+
+  getMessageHelp(): string {
+    return `Sugestões para estruturar a mensagem para a comunicação ser completa:<br/> Informe a data do incidente.<br/> Informe qual projeto ou contexto.<br/> Informe se houve indicadores impactados, quais e valores.<br/> Qual o comportamento percebido?<br/> Qual o impacto com o comportamento?<br/> Qual comportamento era esperado? <br/> Sugira melhorias na atitude.`;
   }
 
   private showErrors(error: any) {
@@ -170,6 +176,17 @@ export class AddJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
       });
       this.initializeSelects('membersOfOrganizationName');
     });
+  }
+
+  private verifyIfTeamLeader() {
+    this.service.findOrganizationById(this._organizationId).subscribe(
+      {
+        next: (response: any) => {
+          const userObject = response.users.find((u: any) => u.email === this._userLogged.email);
+          this.isTeamLeader = userObject.profile !== 'organizationMember';
+        }
+      }
+    )
   }
 
 }

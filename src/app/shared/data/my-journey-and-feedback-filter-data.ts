@@ -2,18 +2,22 @@ export default class MyJourneyAndFeedbackFilterData {
     
     startPeriod?: string;
     endPeriod?: string;
-    informationType?: number;
+    informationType?: string;
     recipient?: string;
-    messageType?: number;
+    issuer?: string;
+    messageType?: string;
     relatedSkills?: Array<string>;
     userLogged: string;
+    organizationId: string;
 
     constructor() {
-        this.informationType = 0;
+        this.informationType = '';
         this.recipient = '';
-        this.messageType = 0;
+        this.issuer = '';
+        this.messageType = '';
         this.startPeriod = `01/01/${new Date().getFullYear() - 1}`;
-        this.endPeriod = `31/12/${new Date().getFullYear() - 1}`;
+        const d = new Date();
+        this.endPeriod = `${d.getDate()}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
         this.relatedSkills = new Array();
     }
 

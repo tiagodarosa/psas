@@ -41,13 +41,14 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.loadData();
     this.service.findAssessmentById(this.assessmentId).subscribe((response: any) => this.assessment = response.assessment);
-    this.service.findApplicationsFromUser().subscribe((response: any) => {
-      next: (response: any) => console.log(response);
-    })
+    this.service.findApplicationsFromUser().subscribe({
+      next: (response: any) => console.log(response)
+    });
     this.authService.authState.subscribe(
       {
         next: (user) => {
           this.userLogged = user;
+          console.log(this.userLogged);
         },
         error: () => this.spinner.hide(),
         complete: () => this.spinner.hide()

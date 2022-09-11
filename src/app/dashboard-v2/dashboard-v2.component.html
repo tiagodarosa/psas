@@ -37,7 +37,7 @@
           <i class="material-icons prefix">description</i>
           <label for="assessmentField" class="active">Selecione à avaliação</label>
           <select #assessmentField id="assessmentField" class="validate" [(ngModel)]="assessmentValue">
-              <option *ngFor="let a of assessmentList" [value]="a.value">{{ a.label }}</option>
+              <option *ngFor="let a of applicationsList" [value]="a.value">{{ a.label }}</option>
           </select>
         </div>
       </div>

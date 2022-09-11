@@ -14,7 +14,7 @@
       <!-- Title -->
       <div class="row">
         <div class="col s8">
-          <h3>Diário & Feedback</h3>
+          <h3>Diário da minha jornada & Feedback</h3>
         </div>
       </div>
 
@@ -62,29 +62,39 @@
                 </div>
                 <div class="row">
                   <div class="col s9" style="margin-left: 1rem; margin-top: 15px;">
-                    <label>
-                      <input name="informationTypeField" type="radio" value="1" [(ngModel)]="filter.informationType"/>
-                      <span>Todos</span>
-                    </label>
                     <label style="margin-left: 20px;">
-                      <input name="informationTypeField" type="radio" value="2" [(ngModel)]="filter.informationType"/>
+                      <input name="informationTypeField" type="checkbox" value="2" [(ngModel)]="informationTypeFilter.particularDiary"/>
                       <span>Diário particular</span>
                     </label>
                     <label style="margin-left: 20px;">
-                      <input name="informationTypeField" type="radio" value="3" [(ngModel)]="filter.informationType"/>
+                      <input name="informationTypeField" type="checkbox" value="3" [(ngModel)]="informationTypeFilter.teamDiary"/>
                       <span>Diário para o time</span>
                     </label>
                     <label style="margin-left: 20px;">
-                      <input name="informationTypeField" type="radio" value="4" [(ngModel)]="filter.informationType"/>
+                      <input name="informationTypeField" type="checkbox" value="4" [(ngModel)]="informationTypeFilter.sendedFeedbacks"/>
                       <span>Feedback enviados</span>
                     </label>
                     <label style="margin-left: 20px;">
-                      <input name="informationTypeField" type="radio" value="5" [(ngModel)]="filter.informationType"/>
+                      <input name="informationTypeField" type="checkbox" value="5" [(ngModel)]="informationTypeFilter.receivedFeedbacks"/>
                       <span>Feedback recebidos</span>
                     </label>
                   </div>
                 </div>
                 
+                <div class="row" style="margin-bottom: 0px !important;">
+                  <div class="col s6" style="margin-left: 1rem;">
+                    <h5>Emitente&nbsp;<i class="material-icons prefix">info</i></h5>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col s5">
+                    <div class="input-field col s12">
+                      <i class="material-icons prefix">person</i>
+                      <input type="text" id="autocomplete-input" class="autocomplete" [(ngModel)]="filter.issuer">
+                    </div>
+                  </div>
+                </div>
+
                 <div class="row" style="margin-bottom: 0px !important;">
                   <div class="col s6" style="margin-left: 1rem;">
                     <h5>Destinatário&nbsp;<i class="material-icons prefix">info</i></h5>
@@ -106,16 +116,12 @@
                 </div>
                 <div class="row">
                   <div class="col s9" style="margin-left: 1rem; margin-top: 15px;">
-                    <label style="margin-left: 20px;">
-                      <input name="messageTypeName" type="radio" value="0" [(ngModel)]="filter.messageType"/>
-                      <span>Todos</span>
-                    </label>
                     <label>
-                      <input name="messageTypeName" type="radio" value="1" [(ngModel)]="filter.messageType" />
+                      <input name="messageTypeName" type="checkbox" value="1" [(ngModel)]="messageTypeFilter.acknowledgment" />
                       <span>Reconhecimento</span>
                     </label>
                     <label style="margin-left: 20px;">
-                      <input name="messageTypeName" type="radio" value="2" [(ngModel)]="filter.messageType"/>
+                      <input name="messageTypeName" type="checkbox" value="2" [(ngModel)]="messageTypeFilter.development"/>
                       <span>Desenvolvimento</span>
                     </label>
                   </div>

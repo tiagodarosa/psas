@@ -33,13 +33,13 @@
                 <input name="informationType" type="radio" value="2" [(ngModel)]="model.informationType"/>
                 <span>Diário particular</span>
               </label>
-              <label style="margin-left: 20px;" (click)="onChangeInformationType()">
+              <label style="margin-left: 20px;" (click)="onChangeInformationType()" *ngIf="isTeamLeader">
                 <input name="informationType" type="radio" value="3" [(ngModel)]="model.informationType"/>
                 <span>Diário para o time</span>
               </label>
               <label style="margin-left: 20px;">
                 <input name="informationType" type="radio" value="4" [(ngModel)]="model.informationType"/>
-                <span>Feedback enviados</span>
+                <span>Enviar feedback</span>
               </label>
             </div>
           </div>
@@ -78,7 +78,7 @@
           <div class="row" style="margin-bottom: 0px !important;">
             <div class="col s6 wrap" style="margin-left: 1rem;">
               <span class="label-form">Informe sua mensagem</span>
-              <span class="label-icon-help"><i class="material-icons prefix tooltipped" data-position="right" data-tooltip="informe a sua mensagem">info</i></span>
+              <span class="label-icon-help"><i class="material-icons prefix tooltipped" data-position="right" data-tooltip="Sugestões para estruturar a mensagem para a comunicação ser completa:<br/> Informe a data do incidente.<br/> Informe qual projeto ou contexto.<br/> Informe se houve indicadores impactados, quais e valores.<br/> Qual o comportamento percebido?<br/> Qual o impacto com o comportamento?<br/> Qual comportamento era esperado? <br/> Sugira melhorias na atitude.">info</i></span>
             </div>
           </div>
           <div class="row">
