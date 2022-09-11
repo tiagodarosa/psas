@@ -1,8 +1,10 @@
 export default class MyJourneyAndFeedbackData {
-    
+
+    organizationId?: string;
     utilizationDate?: Date;
     informationType?: number;
     recipient?: string;
+    issuer?: string;
     message?: string;
     messageType?: number;
     relatedSkills?: Array<string>;

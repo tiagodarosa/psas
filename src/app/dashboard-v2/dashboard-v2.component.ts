@@ -21,7 +21,7 @@ export class DashboardV2Component implements OnInit {
   wcData: Array<any>;
   teamsList: Array<any>;
   projectsList: Array<any>;
-  assessmentList: Array<any>;
+  applicationsList: Array<any>;
   assessmentValue: string;
   profileSelector: string;
   person: string;
@@ -40,7 +40,7 @@ export class DashboardV2Component implements OnInit {
               private service: ServicesService) {
     this._organizationId = this.cookie.get('ORGANIZATIONID');
     this.wcData = [];
-    this.assessmentList = [];
+    this.applicationsList = [];
     this._isReloadComponents = false;
     this.profileSelector = '1';
   }
@@ -51,7 +51,7 @@ export class DashboardV2Component implements OnInit {
       {
         next: (user) => {
           this._userLogged = user;
-          this.getAssessment();
+          this.getApplications();
           this.getTeams();
           this.loadWordCloudData();
         },
@@ -90,7 +90,7 @@ export class DashboardV2Component implements OnInit {
   private loadWordCloudData() {
     this.wcData = [];
     const param: MyJourneyAndFeedbackFilterData = new MyJourneyAndFeedbackFilterData();
-    param.informationType = 1;
+    param.informationType = '1';
     param.recipient = this.profileSelector === '1' ? this._userLogged.email : this.getMembers();
     const [ startDay, startMonth, startYear ] = param.startPeriod.toString().split('/');
     param.startPeriod = this.datePipe.transform(new Date(+startYear, +startMonth - 1, +startDay), 'yyyy-MM-dd');
@@ -149,21 +149,26 @@ export class DashboardV2Component implements OnInit {
     return comparison;
   }
 
-  private getAssessment() {
-    this.service.findAssessmentsFromUser().subscribe(
+  private getApplications() {
+    this.service.findApplicationsFromUser().subscribe(
       {
         next: (response: any) => {
-          this.assessmentList = [];
-          response.assessments.forEach(elem => {
-            this.assessmentList.push({ value: elem._id, label: elem.name });
-          });
+          response.applicationList.filter((el: any) => el.organizationId === this._organizationId)
+            .forEach((el: any) => {
+              this.applicationsList.push({
+                value: el._id,
+                label: el.name
+              });
+            }
+          );
           setTimeout(() => {
+            console.log(this.applicationsList);
             const selectElems = document.querySelectorAll('select');
             M.FormSelect.init(selectElems, {});
-          }, 0)
+          }, 100)
         }
       }
-    );
+    )
   }
 
 }

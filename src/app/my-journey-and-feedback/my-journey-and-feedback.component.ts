@@ -29,6 +29,8 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
   data: Array<CompetenceData>;
   filter: MyJourneyAndFeedbackFilterData;
   modalInstance: any;
+  informationTypeFilter: { particularDiary: boolean, teamDiary: boolean, sendedFeedbacks: boolean, receivedFeedbacks: boolean };
+  messageTypeFilter: { acknowledgment: boolean, development: boolean };
 
   @ViewChild('periodStart') periodStart: NgbInputDatepicker;
   @ViewChild('periodEnd') periodEnd: NgbInputDatepicker;
@@ -46,6 +48,8 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
               private service: ServicesService) {
     this.relatedSkillsInstance = [];
     this.filter = new MyJourneyAndFeedbackFilterData();
+    this.informationTypeFilter = { particularDiary: true, teamDiary: true, sendedFeedbacks: true, receivedFeedbacks: true };
+    this.messageTypeFilter = { acknowledgment: true, development: true };
     this.data = [];
     this.compentencesList = [];
     this._organizationId = this.cookie.get('ORGANIZATIONID');
@@ -57,7 +61,6 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
       {
         next: (user) => {
           this._userLogged = user;
-          this.loadUsers();
           this.loadData();
         },
         error: () => this.spinner.hide(),
@@ -124,12 +127,25 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
     const p = Object.assign({}, this.filter);
 
     const [ startDay, startMonth, startYear ] = p.startPeriod.toString().split('/');
-    p.startPeriod = this.datePipe.transform(new Date(+startYear, +startMonth - 1, +startDay), 'yyyy-MM-dd');
+    p.startPeriod = this.datePipe.transform(new Date(+startYear, +startMonth, +startDay), 'yyyy-MM-dd');
 
     const [ endDay, endMonth, endYear ] = p.endPeriod.toString().split('/');
-    p.endPeriod = this.datePipe.transform(new Date(+endYear, +endMonth - 1, +endDay), 'yyyy-MM-dd');
+    p.endPeriod = this.datePipe.transform(new Date(+endYear, +endMonth, Number(endDay) + 1), 'yyyy-MM-dd');
     
     p.userLogged = this._userLogged.email;
+    p.organizationId = this._organizationId;
+
+    const informationTypeArr = [];
+    if (this.informationTypeFilter.particularDiary) informationTypeArr.push(2);
+    if (this.informationTypeFilter.teamDiary) informationTypeArr.push(3);
+    if (this.informationTypeFilter.sendedFeedbacks) informationTypeArr.push(4);
+    if (this.informationTypeFilter.receivedFeedbacks) informationTypeArr.push(5);
+    p.informationType = informationTypeArr.join(',');
+    
+    const messageTypeArr = [];
+    if (this.messageTypeFilter.acknowledgment) messageTypeArr.push(1);
+    if (this.messageTypeFilter.development) messageTypeArr.push(2);
+    p.messageType = messageTypeArr.join(',');
 
     this.service.findJourneyAndFeedback(p).subscribe(
       {
@@ -179,19 +195,6 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
 
     const elems = document.querySelectorAll('.modal');
     this.modalInstance = M.Modal.init(elems, {});
-  }
-
-  private loadUsers() {
-    document.addEventListener('DOMContentLoaded', function() {
-      const elems = document.querySelectorAll('.autocomplete');
-      M.Autocomplete.init(elems, {
-        data: {
-          "Apple": null,
-          "Microsoft": null,
-          "Google": 'https://placehold.it/250x250'
-        }
-      });
-    });
   }
 
   private getCompetences() {
