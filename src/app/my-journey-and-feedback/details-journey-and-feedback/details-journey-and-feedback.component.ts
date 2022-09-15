@@ -205,8 +205,6 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   private buildRanking() {
     setTimeout(() => {
       const elArr = document.querySelectorAll('text.highcharts-point');
-      console.log('elArr', elArr);
-      console.log('wcData', this.wcData);
       this.rankingData = [];
       elArr.forEach((it: any) => {
         const object = this.wcData.find((wc: any) => wc.name === it.innerHTML);

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 
 declare var require: any;
@@ -18,47 +18,58 @@ noData(Highcharts);
 })
 export class ComparisonOfResultsComponent implements OnInit {
 
+  @Input() data: { competences: Array<string>, autoResults: Array<any>, leaderResults: Array<any>, pairResults: Array<any> };
+
   options: any;
 
   constructor() {
-    this.buildChart();
+    
   }
 
   ngOnInit(){
-    Highcharts.chart('comparisson-of-results', this.options);
+    if (this.data !== undefined)
+      Highcharts.chart('comparisson-of-results', this.buildChart());
   }
 
-  private buildChart() {
-    this.options = {
+  reloadChart(data: { competences: Array<string>, autoResults: Array<any>, leaderResults: Array<any>, pairResults: Array<any> }) {
+    this.data = data;
+    Highcharts.chart('comparisson-of-results', this.buildChart());
+  }
+
+  private buildChart(): any {
+    return {
       chart: {
-        polar: true,
-        type: 'line'
+        polar: true
       },
       xAxis: {
-        categories: ['Comunicação', 'Respeito', 'Liderança'],
+        categories: this.data.competences || [],
         tickmarkPlacement: 'on',
         lineWidth: 0
       },
       yAxis: {
         gridLineInterpolation: 'circle',
         lineWidth: 0,
-        min: 0
+        min: 0,
+        max: 4
       },
       series: [
         {
           pointPlacement: 'on',
           name: 'Auto',
-          data: [4,2,3]
+          type: 'area',
+          data: this.data.autoResults
         },
         {
           pointPlacement: 'on',
           name: 'Líder',
-          data: [4,4,4]
+          type: 'area',
+          data: this.data.leaderResults
         },
         {
           pointPlacement: 'on',
           name: 'Pares',
-          data: [5, 5, 4]
+          type: 'area',
+          data: this.data.pairResults
         }
       ],
       accessibility: {
