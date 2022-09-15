@@ -66,12 +66,15 @@ export class AddJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
     const data = new MyJourneyAndFeedbackData();
     data.informationType = Number(this.model.informationType);
     data.recipient = this.model.recipient;
+    data.recipientName = this.membersOfOrganization.find((mo: any) => mo.key === this.model.recipient).label || 'Não identificado';
     data.keepAnonymous = this.model.keepAnonymous || false;
     data.shareToTeamLeader = this.model.shareToTeamLeader || false;
     data.message = this.model.message;
     data.messageType = this.model.messageType;
     data.organizationId = this._organizationId;
     data.issuer = this._userLogged.email;
+    data.issuerPhotoUrl = this._userLogged.photoUrl;
+    data.issuerName = this._userLogged.name;
     data.relatedSkills = this.getComponentInstance(this.selectsInstances, 'relatedSkillsField').getSelectedValues()
       .map((el: string) => el.split(':')[1].replace('\'', '').replace('\'', '').trim());
     data.utilizationDate = new Date();

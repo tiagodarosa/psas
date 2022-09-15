@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from 'angularx-social-login';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { WordCloudComponent } from 'src/app/components/charts/word-cloud/word-cloud.component';
@@ -30,12 +31,16 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   dateFildsInstances: any;
   filter: MyJourneyAndFeedbackFilterData;
   profile: string;
+  totalReceived: number;
+  totalSent: number;
+  totalDiary: number;
 
   @ViewChild('periodStart') periodStart: NgbInputDatepicker;
   @ViewChild('periodEnd') periodEnd: NgbInputDatepicker;
   @ViewChild('appWordCloud') appWordCloud: WordCloudComponent;
 
   private _organizationId: string;
+  private _userLogged: any;
   private _docs: Array<any>;
   private _isReloadComponents: boolean;
 
@@ -43,6 +48,7 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
               private route: ActivatedRoute,
               private datePipe: DatePipe,
               private cookie: CookieService,
+              private authService: AuthService,
               private spinner: NgxSpinnerService,
               private service: ServicesService) {
     this.relatedSkillsInstance = [];
@@ -51,6 +57,9 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     this.wcData = [];
     this.rankingData = [];
     this.compentencesList = [];
+    this.totalReceived = 0;
+    this.totalSent = 0;
+    this.totalDiary = 0;
     this._organizationId = this.cookie.get('ORGANIZATIONID');
     this._isReloadComponents = false;
     this.profile = this.route.snapshot.params.profile;
@@ -62,7 +71,17 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     this.cards = [];
     this.data = [];
     this._docs = [];
-    this.loadData();
+    this.authService.authState.subscribe(
+      {
+        next: (user) => {
+          this._userLogged = user;
+          this.loadData();
+        },
+        error: () => this.spinner.hide(),
+        complete: () => this.spinner.hide()
+      }
+    );
+    
   }
 
   onSearch() {
@@ -126,19 +145,35 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
 
   private loadData() {
     this.spinner.show();
+    this.appWordCloud.reloadChart([]);
+    this.wcData = [];
+    this.rankingData = [];
+    this.totalReceived = 0;
+    this.totalSent = 0;
+    this.totalDiary = 0;
     const p = Object.assign({}, this.filter);
+    
     const [ startDay, startMonth, startYear ] = p.startPeriod.toString().split('/');
-    p.startPeriod = this.datePipe.transform(new Date(+startYear, +startMonth - 1, +startDay), 'yyyy-MM-dd');
+    p.startPeriod = this.datePipe.transform(new Date(+startYear, +startMonth, +startDay), 'yyyy-MM-dd');
 
     const [ endDay, endMonth, endYear ] = p.endPeriod.toString().split('/');
-    p.endPeriod = this.datePipe.transform(new Date(+endYear, +endMonth - 1, +endDay), 'yyyy-MM-dd');
+    p.endPeriod = this.datePipe.transform(new Date(+endYear, +endMonth - 1, Number(endDay) + 1), 'yyyy-MM-dd');
     
+    p.userLogged = this._userLogged.email;
+    p.organizationId = this._organizationId;
+
+    if (p.messageType !== undefined && p.messageType !== null && p.messageType === '')
+      delete p.messageType;
+
+    if (this.profile !== 'team-profile')
+      p.recipient = this._userLogged.email;
+
     this.service.findJourneyAndFeedback(p).subscribe(
       {
         next: (response: any) => {
-          this.wcData = [];
           this._docs = response.docs;
           this.buildWordCloudData();
+          this.buildTotals();
         },
         error: this.showErrors.bind(this),
         complete: () => this.spinner.hide()
@@ -154,47 +189,53 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   private buildWordCloudData() {
     this._docs.forEach((el: any) => {
       if (el.params.relatedSkills !== undefined) {
-        el.params.relatedSkills.forEach((el:string) => {
-          const relSklTemp = this.wcData.find(it => it.name === el);
+        el.params.relatedSkills.forEach((relSkills: string) => {
+          const relSklTemp = this.wcData.find(it => it.name === relSkills);
           if (relSklTemp !== undefined) relSklTemp.weight++;
-          else this.wcData.push({ name: el, weight: 1 });
+          else this.wcData.push({ name: relSkills, weight: 1 });
         });
-        if (this._isReloadComponents) this.appWordCloud.reloadChart(this.wcData);
-        this.buildRanking();
-        this.buildMessageRanking();
-        this.buildCardList();
-        this._isReloadComponents = false;
       }
     });
+    if (this._isReloadComponents) this.appWordCloud.reloadChart(this.wcData);
+    this.buildCardList();
+    this.buildRanking();
+    this._isReloadComponents = false;
   }
 
   private buildRanking() {
     setTimeout(() => {
       const elArr = document.querySelectorAll('text.highcharts-point');
-      this.rankingData = this.wcData.sort((a, b) => b - a).map(
-        (el: any) => {
-          elArr.forEach((it: any) => {
-            if (it.innerHTML === el.name)
-              el['color'] = it.attributes.fill.value;
-          })
-          return el;
-        }
-      );
-    }, 1000);
-  }
-
-  private buildMessageRanking() {
-
+      console.log('elArr', elArr);
+      console.log('wcData', this.wcData);
+      this.rankingData = [];
+      elArr.forEach((it: any) => {
+        const object = this.wcData.find((wc: any) => wc.name === it.innerHTML);
+        this.rankingData.push( {name: it.innerHTML, color: it.attributes.fill.value, weight: object.weight } );
+      } );
+    }, 500);
   }
 
   private buildCardList() {
     this.cards = this._docs.map(
       (el: any) => {
+        el.letter = el.params.recipientName || 'D';
         el.messageTypeValue = MyJourneyAndFeedbackConstantsData.MESSAGE_TYPE[`${el.params.messageType}`];
         el.informationTypeValue = MyJourneyAndFeedbackConstantsData.INFORMATION_TYPE[`${el.params.informationType}`];
         return el;
       }
     )
+  }
+
+  private buildTotals() {
+    this._docs.forEach((el: any) => {
+      if (el.params.informationType === 2) {
+        this.totalDiary++;
+      } else if (el.email === this._userLogged.email) {
+        this.totalSent++;
+      } else if (el.params.recipient === this._userLogged.email) {
+        this.totalReceived++;
+      }
+    });
   }
 
 }
