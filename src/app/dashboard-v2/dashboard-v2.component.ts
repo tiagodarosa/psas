@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'angularx-social-login';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ComparisonOfResultsComponent } from '../components/charts/comparison-of-results/comparison-of-results.component';
 import { WordCloudComponent } from '../components/charts/word-cloud/word-cloud.component';
 import { ServicesService } from '../services.service';
 import MyJourneyAndFeedbackFilterData from '../shared/data/my-journey-and-feedback-filter-data';
@@ -25,12 +26,15 @@ export class DashboardV2Component implements OnInit {
   assessmentValue: string;
   profileSelector: string;
   person: string;
+  comparissonResultsData: any;
 
   @ViewChild('appWordCloud') appWordCloud: WordCloudComponent;
+  @ViewChild('appComparisonOfResults') appComparisonOfResults: ComparisonOfResultsComponent;
 
   private _organizationId: string;
   private _userLogged: any;
   private _isReloadComponents: boolean;
+  private _applicationsListCache: Array<any>;
 
   constructor(private router: Router,
               private cookie: CookieService,
@@ -41,6 +45,8 @@ export class DashboardV2Component implements OnInit {
     this._organizationId = this.cookie.get('ORGANIZATIONID');
     this.wcData = [];
     this.applicationsList = [];
+    this._applicationsListCache = [];
+    this.comparissonResultsData = { competences: [] };
     this._isReloadComponents = false;
     this.profileSelector = '1';
   }
@@ -74,6 +80,40 @@ export class DashboardV2Component implements OnInit {
   onChangeProfile() {
     this.person = this.profileSelector === '1' ? this._userLogged.email : '';
     this.loadWordCloudData();
+  }
+
+  onSelectApplication() {
+    const object = this._applicationsListCache.find((al: any) => al._id === this.assessmentValue);
+    const teamLeader = object.team.members[0].email;
+    const competences = object.assessment.questions.map((q:any) => {
+      return {
+        order: q.order,
+        name: q.competenceName
+      };
+    }).sort((a: any, b: any) => a.order - b.order);
+    const autoResultsObj: Array<any> = object.answers.filter((a: any) => a.userEvaluator === this._userLogged.email && a.userRated === a.userEvaluator);
+    const leaderResultsObj: Array<any> = object.answers.filter((a: any) => a.userEvaluator === teamLeader && a.userRated === a.userEvaluator);
+    const pairResultsObj: Array<any> = object.answers.filter((a: any) => a.userEvaluator !== teamLeader && a.userEvaluator !== this._userLogged.email && a.userRated === a.userEvaluator);
+    const autoResults: Array<number> = [];
+    const leaderResults: Array<number> = [];
+    const pairResults: Array<number> = [];
+    competences.forEach((c: any) => {
+      const arObject = autoResultsObj.find((obj: any) => obj.questionOrder === c.order);
+      const lrObject = leaderResultsObj.find((obj: any) => obj.questionOrder === c.order);
+      const prObject = pairResultsObj.find((obj: any) => obj.questionOrder === c.order);
+      autoResults.push(Number(arObject.answer));
+      leaderResults.push(Number(lrObject.answer));
+      pairResults.push(Number(prObject.answer));
+    });
+
+    this.comparissonResultsData = {
+      competences: competences.map((c: any) => c.name),
+      autoResults,
+      leaderResults,
+      pairResults
+    };
+
+    this.appComparisonOfResults.reloadChart(this.comparissonResultsData);
   }
 
   private getMembers() {
@@ -113,10 +153,10 @@ export class DashboardV2Component implements OnInit {
               if (relSklTemp !== undefined) relSklTemp.weight++;
               else this.wcData.push({ name: el, weight: 1 });
             });
-            if (this._isReloadComponents) this.appWordCloud.reloadChart(this.wcData);
-            this._isReloadComponents = false;
           }
         });
+        if (this._isReloadComponents) this.appWordCloud.reloadChart(this.wcData);
+        this._isReloadComponents = false;
       }
     )
   }
@@ -159,6 +199,7 @@ export class DashboardV2Component implements OnInit {
     this.service.findApplicationsFromUser().subscribe(
       {
         next: (response: any) => {
+          this._applicationsListCache = response.applicationList;
           response.applicationList.filter((el: any) => el.organizationId === this._organizationId)
             .forEach((el: any) => {
               this.applicationsList.push({
@@ -168,9 +209,12 @@ export class DashboardV2Component implements OnInit {
             }
           );
           setTimeout(() => {
-            console.log(this.applicationsList);
             const selectElems = document.querySelectorAll('select');
             M.FormSelect.init(selectElems, {});
+            if (this.applicationsList.length === 1) {
+              this.assessmentValue = this.applicationsList[0].value;
+              this.onSelectApplication();
+            }
           }, 100)
         }
       }
