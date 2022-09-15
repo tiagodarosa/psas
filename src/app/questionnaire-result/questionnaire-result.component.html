@@ -22,9 +22,9 @@
         <div class="col s8">
           <h3 class="header">{{ userLogged.name }}</h3>
           <div>
-            <h5>Aplicação: {{ assessment.name }}</h5>
-            <h5>Tipo de aplicação: XXXX</h5>
-            <h5>Método de aplicação: {{ assessment.tool }}</h5>
+            <h5>Aplicação: {{ application.name }}</h5>
+            <h5>Tipo de aplicação: {{ types[application.type] }}</h5>
+            <h5>Método de aplicação: {{ methods[application.method] }}</h5>
           </div>
         </div>
         <div class="col s2" style="text-align: right; margin-top: 2%;">

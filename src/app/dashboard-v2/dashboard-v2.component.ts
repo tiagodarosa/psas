@@ -98,6 +98,12 @@ export class DashboardV2Component implements OnInit {
     const [ endDay, endMonth, endYear ] = param.endPeriod.toString().split('/');
     param.endPeriod = this.datePipe.transform(new Date(+endYear, +endMonth - 1, +endDay), 'yyyy-MM-dd');
 
+    param.informationType = '2,3,4,5';
+    param.messageType = '1,2';
+
+    param.userLogged = this._userLogged.email;
+    param.organizationId = this._organizationId;
+
     this.service.findJourneyAndFeedback(param).subscribe(
       (response: any) => {
         response.docs.forEach((el: any) => {

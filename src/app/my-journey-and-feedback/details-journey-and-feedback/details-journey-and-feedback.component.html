@@ -103,16 +103,16 @@
                 <div class="row">
                   <div class="col s9" style="margin-left: 1rem; margin-top: 15px;">
                     <label>
+                      <input name="messageTypeName" type="radio" value="0" [(ngModel)]="filter.messageType" />
+                      <span>Todos</span>
+                    </label>
+                    <label>
                       <input name="messageTypeName" type="radio" value="1" [(ngModel)]="filter.messageType" />
                       <span>Reconhecimento</span>
                     </label>
                     <label style="margin-left: 20px;">
                       <input name="messageTypeName" type="radio" value="2" [(ngModel)]="filter.messageType"/>
                       <span>Desenvolvimento</span>
-                    </label>
-                    <label style="margin-left: 20px;">
-                      <input name="messageTypeName" type="radio" value="3" [(ngModel)]="filter.messageType"/>
-                      <span>Neutro</span>
                     </label>
                   </div>
                 </div>
@@ -198,21 +198,21 @@
 
             <div class="row" style="padding: 10px; padding-top: 65px;">
               <div class="col s1 offset-s4" style="height: 40px; border-radius: 5px; padding: 5px; display: inline-table; background-color: lightgreen;">
-                <span style="font-size: 20pt;">15</span>
+                <span style="font-size: 20pt;">{{ totalReceived }}</span>
               </div>
               <div class="col s6"><span style="font-size: 20pt;">Recebidos</span></div>
             </div>
 
             <div class="row" style="padding: 10px;">
               <div class="col s1 offset-s4" style="height: 40px; border-radius: 5px; padding: 5px; display: inline-table; background-color: lightgoldenrodyellow">
-                <span style="font-size: 20pt;">15</span>
+                <span style="font-size: 20pt;">{{ totalSent }}</span>
               </div>
               <div class="col s6"><span style="font-size: 20pt;">Enviados</span></div>
             </div>
 
             <div class="row" style="padding: 10px;">
               <div class="col s1 offset-s4" style="height: 40px; border-radius: 5px; padding: 5px; display: inline-table; background-color: lightskyblue">
-                <span style="font-size: 20pt;">15</span>
+                <span style="font-size: 20pt;">{{ totalDiary }}</span>
               </div>
               <div class="col s6"><span style="font-size: 20pt;">Diário</span></div>
             </div>
@@ -226,8 +226,8 @@
 
         <div class="col s4" *ngFor="let card of cards">
           <div class="widget-header-cards">
-            <img src="https://uploads.jovemnerd.com.br/wp-content/uploads/2021/08/confira-o-elenco-da-serie-live-action-de-avatar-a-lenda-de-aang.jpg" class="user-avatar"/>
-            <span class="widget-header-cards-title">{{ card.params.recipient }}</span>
+            <img src="https://via.placeholder.com/40x40?text={{card.letter}}" class="user-avatar"/>
+            <span class="widget-header-cards-title">{{ card.params.recipientName || card.params.recipient}}</span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 396px !important">
 
@@ -239,15 +239,15 @@
               <span><b>Mensagem:</b> {{ card.params.message }}</span>
             </div>
 
-            <div class="col s12">
+            <div class="col s12" style="height: 80px;">
               <a class="waves-effect waves-light btn" style="margin: 2px" *ngFor="let skill of card.params.relatedSkills">{{ skill }}</a>
             </div>
           
             <div class="col s12" style="margin-top: 10px;">
               <div class="card-panel grey lighten-5" style="padding: 15px !important">
                 <span style="font-size: 17pt; font-weight: bold;">{{ card.informationTypeValue }}</span><br>
-                <span><img src="https://uploads.jovemnerd.com.br/wp-content/uploads/2021/08/confira-o-elenco-da-serie-live-action-de-avatar-a-lenda-de-aang.jpg" class="user-big-avatar"/></span>
-                <span style="display: inline-block; vertical-align: top; margin-top: 8px; font-size: 15pt;">{{ card.name }}</span>
+                <span><img [src]="card.params.issuerPhotoUrl" class="user-big-avatar"/></span>
+                <span style="display: inline-block; vertical-align: top; margin-top: 8px; font-size: 15pt;">{{ card.params.issuerName }}</span>
               </div>
             </div>
 

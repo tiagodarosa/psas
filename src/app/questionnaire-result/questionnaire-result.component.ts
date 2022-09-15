@@ -17,11 +17,13 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
 
   profile: string;
   code: string;
-  assessmentId: string;
+  applicationId: string;
   results: Array<any>;
   competenceData: Array<any>;
   userLogged: any;
-  assessment: string;
+  application: any;
+  types: any;
+  methods: any;
 
   private _docs: Array<any>;
 
@@ -31,25 +33,27 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
               private authService: AuthService,
               private service: ServicesService,
               private spinner: NgxSpinnerService) {
+    this.methods = this.buildMethodsObject();
+    this.types = this.buildTypesObject();
     this.results = [];
     this.competenceData = [];
+    this.application = { name: 'Carregando...' };
     this.profile = this.route.snapshot.params.profile;
-    this.assessmentId = this.route.snapshot.params.assessment;
+    this.applicationId = this.route.snapshot.params.assessment;
     this.code = this.route.snapshot.params.code;
   }
 
   ngOnInit() {
     this.loadData();
-    this.service.findAssessmentById(this.assessmentId).subscribe((response: any) => this.assessment = response.assessment);
     this.service.findApplicationsFromUser().subscribe({
-      next: (response: any) => console.log(response)
+      next: (response: any) => {
+        this.application = response.applicationList.find((el:any) => el._id === this.applicationId)
+        this.buildCompetences();
+      }
     });
     this.authService.authState.subscribe(
       {
-        next: (user) => {
-          this.userLogged = user;
-          console.log(this.userLogged);
-        },
+        next: (user) => this.userLogged = user,
         error: () => this.spinner.hide(),
         complete: () => this.spinner.hide()
       }
@@ -105,5 +109,28 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
     this.spinner.hide();
     M.toast({ html: `Erro: ${error.message}`});
   }
+
+  private buildTypesObject(): any {
+    return {
+      'initial': 'Diagnóstica',
+      'summative': 'Formativa',
+      'formative': 'Somativa'
+    }
+  }
+
+  private buildMethodsObject(): any {
+    return {
+      'ranking': 'Ranking',
+      'nomination': 'Nomeação',
+      'classification': 'Classificação'
+    }
+  }
+
+  private buildCompetences() {
+
+      const autoAssessment = this.application.answers.filter((el: any) => el.userEvaluator === this.userLogged.email && el.userRated === this.userLogged.email );
+      console.log('A', autoAssessment);
+
+  }  
 
 }

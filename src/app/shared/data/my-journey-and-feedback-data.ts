@@ -4,12 +4,15 @@ export default class MyJourneyAndFeedbackData {
     utilizationDate?: Date;
     informationType?: number;
     recipient?: string;
+    recipientName?: string;
     issuer?: string;
     message?: string;
     messageType?: number;
     relatedSkills?: Array<string>;
     keepAnonymous?: boolean;
     shareToTeamLeader?: boolean;
+    issuerPhotoUrl: string;
+    issuerName: string;
 
     constructor() {
         this.utilizationDate = new Date();
@@ -20,6 +23,7 @@ export default class MyJourneyAndFeedbackData {
         this.relatedSkills = new Array();
         this.keepAnonymous = false;
         this.shareToTeamLeader = false;
+        this.issuerPhotoUrl = '';
     }
 
 }
