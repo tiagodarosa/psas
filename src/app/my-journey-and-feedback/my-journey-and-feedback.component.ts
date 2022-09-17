@@ -79,17 +79,18 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
   }
 
   onSearch() {
+    console.log('onSearch, 1');
     const startPeriodElem: any = this.getComponentInstance(this.dateFildsInstances, 'startPeriod');
     this.filter.startPeriod = startPeriodElem.el.value;
-
+    console.log('onSearch, 2');
     const endPeriodElem: any = this.getComponentInstance(this.dateFildsInstances, 'endPeriod');
     this.filter.endPeriod = endPeriodElem.el.value;
-
+    console.log('onSearch, 3');
     const relatedSkillsTempInstance = this.filter.relatedSkills = this.getComponentInstance(this.relatedSkillsInstance, 'relatedSkillsField');
-    
+    console.log('onSearch, 4');
     if (relatedSkillsTempInstance !== undefined)
       this.filter.relatedSkills = relatedSkillsTempInstance.getSelectedValues().map((el: string) => el.split(':')[1].replace('\'', '').replace('\'', '').trim());
-
+    console.log('onSearch, 5');
     this.loadData();
   }
 
