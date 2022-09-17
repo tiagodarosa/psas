@@ -33,12 +33,15 @@
       </div>
 
       <div class="row">
-        <div class="input-field col s6">
+        <div class="input-field col s6" [hidden]="!isLoadingComplete">
           <i class="material-icons prefix">description</i>
           <label for="assessmentField" class="active">Selecione à avaliação</label>
           <select #assessmentField id="assessmentField" class="validate" [(ngModel)]="assessmentValue" (change)="onSelectApplication()">
               <option *ngFor="let a of applicationsList" [value]="a.value">{{ a.label }}</option>
           </select>
+        </div>
+        <div class="input-field col s6" [hidden]="isLoadingComplete">
+          <div>Carregando...</div>
         </div>
       </div>
 
@@ -48,7 +51,7 @@
             <span style="font-size: 25pt; color: #fff;">Diário e Feedback</span>
             <span class="detail-header"
                   (click)="onDetailsJourneyAndFeedback()">
-              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;">more_vert</i>
+              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;" *ngIf="isLoadingComplete">more_vert</i>
             </span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important">
@@ -61,7 +64,7 @@
             <span style="font-size: 25pt; color: #fff;">Destaque e a desenvolver</span>
             <span class="detail-header"
                   (click)="onShowQuestionnaireResult()">
-              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;">more_vert</i>
+              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;" *ngIf="isLoadingComplete">more_vert</i>
             </span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important;">
@@ -103,7 +106,7 @@
             <span style="font-size: 25pt; color: #fff;">9BOX</span>
             <span class="detail-header"
                   (click)="onShowQuestionnaireResult()">
-              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;">more_vert</i>
+              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;" *ngIf="isLoadingComplete">more_vert</i>
             </span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important;">
@@ -116,7 +119,7 @@
             <span style="font-size: 25pt; color: #fff;">Comparação dos resultados</span>
             <span class="detail-header"
                   (click)="onShowQuestionnaireResult()">
-              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;">more_vert</i>
+              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;" *ngIf="isLoadingComplete">more_vert</i>
             </span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important;">
@@ -133,7 +136,7 @@
             <span style="font-size: 25pt; color: #fff;">Histórico</span>
             <span class="detail-header"
                   (click)="onShowQuestionnaireResult()">
-              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;">more_vert</i>
+              <i class="material-icons prefix" style="font-size: 30pt; color: #fff;" *ngIf="isLoadingComplete">more_vert</i>
             </span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important;">

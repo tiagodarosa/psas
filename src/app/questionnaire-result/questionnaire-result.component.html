@@ -15,7 +15,7 @@
       <div class="row">
         <div class="col s2" style="text-align: center; margin-top: 4%;">
           <span>
-            <img *ngIf="userLogged.photoUrl !== undefined" [src]="userLogged.photoUrl" class="user-big-avatar"/>
+            <img *ngIf="userLogged.photoUrl !== undefined" [src]="userLogged.photoUrl" class="user-big-avatar" onError="this.onerror=null;this.src='/assets/user.png';"/>
             <i *ngIf="userLogged.photoUrl === undefined" class="material-icons" style="width: 150px; height: 150px;">account_circle</i>
           </span>
         </div>
@@ -52,19 +52,23 @@
             <tbody>
               <tr *ngFor="let d of competenceData">
                 <td> {{ d.name }} </td>
-                <td style="text-align: center;"> {{ d.weight }} </td>
-                <td style="text-align: center;"> {{ d.weight }} </td>
-                <td style="text-align: center;"> {{ d.weight }} </td>
-                <td style="text-align: center;"> {{ d.weight }} </td>
+                <td style="text-align: center;"> {{ d.auto }} </td>
+                <td style="text-align: center;"> {{ d.leader }} </td>
+                <td style="text-align: center;"> {{ d.pair }} </td>
+                <td style="text-align: center;"> {{ d.average }} </td>
               </tr>
             </tbody>
             <tfoot>
               <tr style="background-color: lightgrey;">
-                <td> <span><b>Resultado</b></span> </td>
-                <td style="text-align: center;"><span>0</span></td>
-                <td style="text-align: center;"><span>0</span></td>
-                <td style="text-align: center;"><span>0</span></td>
-                <td style="text-align: center;"><span>0</span></td>
+                <td> <span><b>{{ resultCompetenceData.name }}</b></span> </td>
+                <td style="text-align: center;"><span>{{ resultCompetenceData.auto }}</span></td>
+                <td style="text-align: center;"><span>{{ resultCompetenceData.leader }}</span></td>
+                <td style="text-align: center;"><span>{{ resultCompetenceData.pair }}</span></td>
+                <td style="text-align: center;"><span>{{ resultCompetenceData.average }}</span></td>
+              </tr>
+              <tr style="background-color: lightgrey;">
+                <td colspan="4"> <span><b>ENQUADRAMENTO 9BOX</b></span> </td>
+                <td style="text-align: center;"><span><b>2B</b></span></td>
               </tr>
             </tfoot>
           </table>
@@ -146,7 +150,7 @@
       <div class="row">
         <h4 class="header">Resultado por competência</h4>
         <div class="col s12">
-          <app-comparison-of-results></app-comparison-of-results>
+          <app-comparison-of-results #appComparisonOfResults [data]="competenceData"></app-comparison-of-results>
         </div>
       </div>
 

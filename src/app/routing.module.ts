@@ -34,7 +34,7 @@ const routes: Routes = [
   { path: 'dashboard-v2', component: DashboardV2Component },
   { path: 'my-journey-and-feedback', component: MyJourneyAndFeedbackComponent },
   { path: 'add-journey-and-feedback', component: AddJourneyAndFeedbackComponent },
-  { path: 'details-journey-and-feedback/:profile', component: DetailsJourneyAndFeedbackComponent },
+  { path: 'details-journey-and-feedback/:profile/:assessmentId', component: DetailsJourneyAndFeedbackComponent },
   { path: 'questionnaire-result/:profile/:assessment/:code', component: QuestionnaireResultComponent },
   { path: 'help', component: HelpComponent },
   { path: 'privacy', component: PrivacyComponent },
