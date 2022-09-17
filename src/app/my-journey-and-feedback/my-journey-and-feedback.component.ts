@@ -29,8 +29,12 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
   data: Array<CompetenceData>;
   filter: MyJourneyAndFeedbackFilterData;
   modalInstance: any;
-  informationTypeFilter: { particularDiary: boolean, teamDiary: boolean, sendedFeedbacks: boolean, receivedFeedbacks: boolean };
+  informationTypeFilter: string;
+  profile: string;
+  viewControl: { recipient: boolean, issuer: boolean };
   messageTypeFilter: { acknowledgment: boolean, development: boolean };
+  membersOfOrganization: Array<any>;
+  membersOfTeamCombo: Array<any>;
 
   @ViewChild('periodStart') periodStart: NgbInputDatepicker;
   @ViewChild('periodEnd') periodEnd: NgbInputDatepicker;
@@ -48,10 +52,14 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
               private service: ServicesService) {
     this.relatedSkillsInstance = [];
     this.filter = new MyJourneyAndFeedbackFilterData();
-    this.informationTypeFilter = { particularDiary: true, teamDiary: true, sendedFeedbacks: true, receivedFeedbacks: true };
+    this.informationTypeFilter = '2';
     this.messageTypeFilter = { acknowledgment: true, development: true };
+    this.viewControl = { recipient: false, issuer: false };
     this.data = [];
     this.compentencesList = [];
+    this.membersOfOrganization = [];
+    this.membersOfTeamCombo = [];
+    this.profile = this.cookie.get('ORGANIZATIONMEMBERPROFILE') === 'organizationMember' ? 'user-profile' : 'team-profile';
     this._organizationId = this.cookie.get('ORGANIZATIONID');
   }
   
@@ -61,6 +69,9 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
       {
         next: (user) => {
           this._userLogged = user;
+          this.onSelectInformationType(this.informationTypeFilter);
+          this.getMembersOfOrganization();
+          this.getMembersOfTeam();
           this.loadData();
         },
         error: () => this.spinner.hide(),
@@ -78,19 +89,55 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
     this.router.navigate(['add-journey-and-feedback']);
   }
 
+  onSelectInformationType(value: string) {
+    if (value === '2' || value === '5') {
+      if(this.profile === 'user-profile') {
+        this.viewControl.recipient = false;
+        this.filter.recipient = this._userLogged.email;
+        this.filter.issuer = '';
+      } else {
+        this.viewControl.issuer = true;
+        this.viewControl.recipient = true;
+        this.filter.recipient = '';
+        this.filter.issuer = '';
+        this.initializeSelects('membersOfOrganizationName');
+        this.initializeSelects('membersOfTeamName');
+      }
+    } else if (value === '3') {
+      this.viewControl.issuer = false;
+      this.viewControl.recipient = true;
+      this.filter.issuer = this._userLogged.email;
+      this.initializeSelects('membersOfOrganizationName');
+    } else if (value === '4') {
+      if(this.profile === 'user-profile') {
+        this.viewControl.recipient = true;
+        this.filter.recipient = '';
+        this.filter.issuer = this._userLogged.email;
+        this.initializeSelects('membersOfOrganizationName');
+      } else {
+        this.viewControl.issuer = true;
+        this.viewControl.recipient = true;
+        this.filter.recipient = '';
+        this.filter.issuer = '';
+        this.initializeSelects('membersOfOrganizationName');
+        this.initializeSelects('membersOfTeamName');
+      }
+    }
+  }
+
   onSearch() {
-    console.log('onSearch, 1');
+    
     const startPeriodElem: any = this.getComponentInstance(this.dateFildsInstances, 'startPeriod');
     this.filter.startPeriod = startPeriodElem.el.value;
-    console.log('onSearch, 2');
+    
     const endPeriodElem: any = this.getComponentInstance(this.dateFildsInstances, 'endPeriod');
     this.filter.endPeriod = endPeriodElem.el.value;
-    console.log('onSearch, 3');
+    
     const relatedSkillsTempInstance = this.filter.relatedSkills = this.getComponentInstance(this.relatedSkillsInstance, 'relatedSkillsField');
-    console.log('onSearch, 4');
+    
     if (relatedSkillsTempInstance !== undefined)
       this.filter.relatedSkills = relatedSkillsTempInstance.getSelectedValues().map((el: string) => el.split(':')[1].replace('\'', '').replace('\'', '').trim());
-    console.log('onSearch, 5');
+    
     this.loadData();
   }
 
@@ -136,20 +183,19 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
     const [ endDay, endMonth, endYear ] = p.endPeriod.toString().split('/');
     p.endPeriod = this.datePipe.transform(new Date(+endYear, +endMonth, Number(endDay) + 1), 'yyyy-MM-dd');
     
-    p.userLogged = this._userLogged.email;
     p.organizationId = this._organizationId;
-
-    const informationTypeArr = [];
-    if (this.informationTypeFilter.particularDiary) informationTypeArr.push(2);
-    if (this.informationTypeFilter.teamDiary) informationTypeArr.push(3);
-    if (this.informationTypeFilter.sendedFeedbacks) informationTypeArr.push(4);
-    if (this.informationTypeFilter.receivedFeedbacks) informationTypeArr.push(5);
-    p.informationType = informationTypeArr.join(',');
+    p.profile = this.profile;
+    p.userLogged = this._userLogged.email;
+    if (this.profile === 'team-profile') {
+      p.membersList = this.membersOfTeamCombo.map((mt: any) => mt.key).join(',');
+    }
     
     const messageTypeArr = [];
     if (this.messageTypeFilter.acknowledgment) messageTypeArr.push(1);
     if (this.messageTypeFilter.development) messageTypeArr.push(2);
     p.messageType = messageTypeArr.join(',');
+
+    p.informationType = this.informationTypeFilter;
 
     this.service.findJourneyAndFeedback(p).subscribe(
       {
@@ -160,8 +206,8 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
               'id': el._id,
               'rev': el._rev,
               'utilizationDate': this.datePipe.transform(new Date(databaseObject.utilizationDate), 'dd/MM/yyyy'),
-              'type': MyJourneyAndFeedbackConstantsData.INFORMATION_TYPE[`${databaseObject.informationType}`],
-              'recipient': databaseObject.recipient,
+              'type': databaseObject.recipient === this._userLogged.email ? 'Feedback recebido' : MyJourneyAndFeedbackConstantsData.INFORMATION_TYPE[`${databaseObject.informationType}`],
+              'recipient': databaseObject.recipientName || '-',
               'author': el.name,
               'messageMotive': MyJourneyAndFeedbackConstantsData.MESSAGE_TYPE[`${databaseObject.messageType}`],
               'competences': databaseObject.relatedSkills.join(',')
@@ -216,6 +262,41 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
         }
       }
     );
-    }
+  }
+
+  private getMembersOfOrganization() {
+    this.service.findOrganizationById(this._organizationId).subscribe((el: any) => {
+      this.membersOfOrganization = el.users.map((it: any) => {
+        return {
+          'label': it.name,
+          'key': it.email
+        }
+      });
+      this.membersOfOrganization.unshift({
+        'label': '', 'key': ''
+      });
+    });
+  }
+
+  private getMembersOfTeam() {
+    this.service.findApplicationsFromUser().subscribe((app: any) => {
+      app.applicationList.forEach((appList: any) => {
+          const isMember = appList.team.members.findIndex((ms: any) => ms.email === this._userLogged.email) >= 0;
+          if (isMember) {
+            appList.team.members.forEach((member: any) => {
+              if (this.membersOfTeamCombo.findIndex((mot: any) => mot.key === member.email) < 0)
+                this.membersOfTeamCombo.push({ key: member.email, label: member.name });
+            });
+          }
+      });
+    });
+  }
+
+  private initializeSelects(componentName: string) {
+    setTimeout(() => {
+      const selectElems = document.querySelector(`[name=${componentName}]`);
+      M.FormSelect.init(selectElems, {});
+    }, 0);
+  }
 
 }
