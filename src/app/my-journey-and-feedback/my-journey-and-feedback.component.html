@@ -164,7 +164,7 @@
                 <th>Data</th>
                 <th>Tipo</th>
                 <th>Destinatario</th>
-                <th>Autor</th>
+                <th>Emitente</th>
                 <th>Motivo mensagem</th>
                 <th>Competências relacionadas</th>
                 <th>Ações</th>
@@ -178,8 +178,8 @@
                 <td> {{ d.author }} </td>
                 <td> {{ d.messageMotive }} </td>
                 <td> {{ d.competences }} </td>
-                <td>
-                  <!-- <span><i class="material-icons prefix">edit</i></span> -->
+                <td style="display: flex;">
+                  <span (click)="onEdit(d.id, d.rev)" style="cursor: pointer;"><i class="material-icons prefix" style="color: #03a9f4">edit</i></span>
                   <span (click)="onDelete(d.id, d.rev)" style="cursor: pointer;"><i class="material-icons prefix" style="color: #03a9f4">delete</i></span>
                 </td>
               </tr>

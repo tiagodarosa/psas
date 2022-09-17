@@ -11,18 +11,20 @@ export default class MyJourneyAndFeedbackFilterData {
     organizationId: string;
     teamLeader?: string;
     profile: string;
+    membersList?: string;
+    words?: string;
 
     constructor() {
         this.informationType = '';
         this.recipient = '';
         this.issuer = '';
-        this.messageType = '';
         this.startPeriod = `01/01/${new Date().getFullYear() - 1}`;
         const d = new Date();
         this.endPeriod = `${d.getDate()}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
         this.relatedSkills = new Array();
         this.profile = '';
         this.teamLeader = '';
+        this.words = '';
     }
 
 }

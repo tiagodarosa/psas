@@ -114,12 +114,15 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
     instance.close();
   }
 
+  onEdit(id: string, revision: string) {
+    throw new Error('Implementar a funcionalidade!');
+  }
+
   onDelete(id: string, revision: string) {
     this._deleteIdCache = id;
     this._deleteRevCache = revision;
     const instance = M.Modal.getInstance(document.getElementById('exclusionMessageModal'))
     instance.open();
-
   }
 
   private loadData() {

@@ -56,3 +56,11 @@
 .wrap span {
     align-self: flex-end;
 }
+
+::ng-deep .tooltip-content {
+    text-align: left;
+}
+
+::ng-deep .material-tooltip {
+    text-align: left;
+}
