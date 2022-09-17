@@ -9,6 +9,8 @@ export default class MyJourneyAndFeedbackFilterData {
     relatedSkills?: Array<string>;
     userLogged: string;
     organizationId: string;
+    teamLeader?: string;
+    profile: string;
 
     constructor() {
         this.informationType = '';
@@ -19,6 +21,8 @@ export default class MyJourneyAndFeedbackFilterData {
         const d = new Date();
         this.endPeriod = `${d.getDate()}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
         this.relatedSkills = new Array();
+        this.profile = '';
+        this.teamLeader = '';
     }
 
 }

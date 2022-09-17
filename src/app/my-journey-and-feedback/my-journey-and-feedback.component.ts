@@ -212,6 +212,6 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
         }
       }
     );
-  }
+    }
 
 }

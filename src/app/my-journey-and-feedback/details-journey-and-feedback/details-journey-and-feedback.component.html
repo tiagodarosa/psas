@@ -58,39 +58,37 @@
                 </div>
                 <div class="row">
                   <div class="col s9" style="margin-left: 1rem; margin-top: 15px;">
-                    <label>
-                      <input name="informationTypeField" type="radio" value="1" [(ngModel)]="filter.informationType"/>
-                      <span>Todos</span>
-                    </label>
                     <label style="margin-left: 20px;">
-                      <input name="informationTypeField" type="radio" value="2" [(ngModel)]="filter.informationType"/>
+                      <input name="informationTypeField" type="radio" value="2" [(ngModel)]="filter.informationType" (click)="onSelectInformationType('2')" />
                       <span>Diário particular</span>
                     </label>
-                    <label style="margin-left: 20px;">
-                      <input name="informationTypeField" type="radio" value="3" [(ngModel)]="filter.informationType"/>
+                    <label style="margin-left: 20px;" *ngIf="profile === 'team-profile'">
+                      <input name="informationTypeField" type="radio" value="3" [(ngModel)]="filter.informationType" (click)="onSelectInformationType('3')"/>
                       <span>Diário para o time</span>
                     </label>
                     <label style="margin-left: 20px;">
-                      <input name="informationTypeField" type="radio" value="4" [(ngModel)]="filter.informationType"/>
+                      <input name="informationTypeField" type="radio" value="4" [(ngModel)]="filter.informationType" (click)="onSelectInformationType('4')"/>
                       <span>Feedback enviados</span>
                     </label>
                     <label style="margin-left: 20px;">
-                      <input name="informationTypeField" type="radio" value="5" [(ngModel)]="filter.informationType"/>
+                      <input name="informationTypeField" type="radio" value="5" [(ngModel)]="filter.informationType" (click)="onSelectInformationType('5')"/>
                       <span>Feedback recebidos</span>
                     </label>
                   </div>
                 </div>
                 
-                <div class="row" style="margin-bottom: 0px !important;">
+                <div class="row" style="margin-bottom: 0px !important;" *ngIf="viewControl.recipient">
                   <div class="col s6" style="margin-left: 1rem;">
                     <h5>Destinatário&nbsp;<i class="material-icons prefix">info</i></h5>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="viewControl.recipient">
                   <div class="col s5">
                     <div class="input-field col s12">
                       <i class="material-icons prefix">person</i>
-                      <input type="text" id="autocomplete-input" class="autocomplete" [(ngModel)]="filter.recipient">
+                      <select name="membersOfOrganizationName" [(ngModel)]="filter.recipient" >
+                        <option *ngFor="let o of membersOfOrganization" [value]="o.key">{{ o.label }}</option>
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -103,15 +101,11 @@
                 <div class="row">
                   <div class="col s9" style="margin-left: 1rem; margin-top: 15px;">
                     <label>
-                      <input name="messageTypeName" type="radio" value="0" [(ngModel)]="filter.messageType" />
-                      <span>Todos</span>
-                    </label>
-                    <label>
-                      <input name="messageTypeName" type="radio" value="1" [(ngModel)]="filter.messageType" />
+                      <input name="messageTypeName" type="checkbox" value="1" [(ngModel)]="messageTypeFilter.acknowledgment" />
                       <span>Reconhecimento</span>
                     </label>
                     <label style="margin-left: 20px;">
-                      <input name="messageTypeName" type="radio" value="2" [(ngModel)]="filter.messageType"/>
+                      <input name="messageTypeName" type="checkbox" value="2" [(ngModel)]="messageTypeFilter.development"/>
                       <span>Desenvolvimento</span>
                     </label>
                   </div>
@@ -183,10 +177,32 @@
 
         <div class="col s4" *ngIf="profile === 'team-profile'">
           <div class="widget-header">
-            <span style="font-size: 25pt; color: #fff;">Ranking de mensagens</span>
+            <span style="font-size: 25pt; color: #fff;">Indicadores</span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important">
-            Mensagens
+            <table>
+              <thead>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td colspan="2" style="text-align: center;"><b>FEEDBACKS</b></td>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>Diário do time</th>
+                  <th>Recebidos</th>
+                  <th>Enviados</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Nome Colaborador</td>
+                  <td style="text-align: center;">3</td>
+                  <td style="text-align: center;">7</td>
+                  <td style="text-align: center;">1</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -226,7 +242,7 @@
 
         <div class="col s4" *ngFor="let card of cards">
           <div class="widget-header-cards">
-            <img src="https://via.placeholder.com/40x40?text={{card.letter}}" class="user-avatar"/>
+            <img src="https://via.placeholder.com/40x40?text={{card.letter}}" onError="this.onerror=null;this.src='/assets/user.png';" class="user-avatar"/>
             <span class="widget-header-cards-title">{{ card.params.recipientName || card.params.recipient}}</span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 396px !important">
@@ -246,7 +262,7 @@
             <div class="col s12" style="margin-top: 10px;">
               <div class="card-panel grey lighten-5" style="padding: 15px !important">
                 <span style="font-size: 17pt; font-weight: bold;">{{ card.informationTypeValue }}</span><br>
-                <span><img [src]="card.params.issuerPhotoUrl" class="user-big-avatar"/></span>
+                <span><img [src]="card.params.issuerPhotoUrl" class="user-big-avatar" onError="this.onerror=null;this.src='/assets/user.png';"/></span>
                 <span style="display: inline-block; vertical-align: top; margin-top: 8px; font-size: 15pt;">{{ card.params.issuerName }}</span>
               </div>
             </div>

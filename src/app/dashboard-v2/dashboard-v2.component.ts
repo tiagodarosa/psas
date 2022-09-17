@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'angularx-social-login';
 import { CookieService } from 'ngx-cookie-service';
@@ -17,7 +17,7 @@ declare var M: any;
   templateUrl: './dashboard-v2.component.html',
   styleUrls: ['./dashboard-v2.component.css']
 })
-export class DashboardV2Component implements OnInit {
+export class DashboardV2Component implements OnInit, AfterViewInit {
 
   wcData: Array<any>;
   teamsList: Array<any>;
@@ -26,6 +26,7 @@ export class DashboardV2Component implements OnInit {
   assessmentValue: string;
   profileSelector: string;
   person: string;
+  isLoadingComplete: boolean;
   comparissonResultsData: any;
 
   @ViewChild('appWordCloud') appWordCloud: WordCloudComponent;
@@ -48,11 +49,11 @@ export class DashboardV2Component implements OnInit {
     this._applicationsListCache = [];
     this.comparissonResultsData = { competences: [] };
     this._isReloadComponents = false;
+    this.isLoadingComplete = false;
     this.profileSelector = '1';
   }
 
   ngOnInit() {
-    $('select').formSelect();
     this.authService.authState.subscribe(
       {
         next: (user) => {
@@ -67,9 +68,13 @@ export class DashboardV2Component implements OnInit {
     );
   }
 
+  ngAfterViewInit(): void {
+    setTimeout(() => $('select').formSelect(), 1000);
+  }
+
   onDetailsJourneyAndFeedback() {
     const paramUrl = this.profileSelector === '1' ? 'user-profile' : 'team-profile';
-    this.router.navigate(['details-journey-and-feedback', paramUrl]);
+    this.router.navigate(['details-journey-and-feedback', paramUrl, this.assessmentValue]);
   }
 
   onShowQuestionnaireResult() {
@@ -211,6 +216,7 @@ export class DashboardV2Component implements OnInit {
           setTimeout(() => {
             const selectElems = document.querySelectorAll('select');
             M.FormSelect.init(selectElems, {});
+            this.isLoadingComplete = true;
             if (this.applicationsList.length === 1) {
               this.assessmentValue = this.applicationsList[0].value;
               this.onSelectApplication();

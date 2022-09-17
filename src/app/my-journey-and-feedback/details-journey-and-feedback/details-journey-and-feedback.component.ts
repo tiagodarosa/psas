@@ -34,6 +34,9 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   totalReceived: number;
   totalSent: number;
   totalDiary: number;
+  messageTypeFilter: { acknowledgment: boolean, development: boolean };
+  viewControl: { recipient: boolean };
+  membersOfOrganization: Array<any>;
 
   @ViewChild('periodStart') periodStart: NgbInputDatepicker;
   @ViewChild('periodEnd') periodEnd: NgbInputDatepicker;
@@ -43,6 +46,7 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   private _userLogged: any;
   private _docs: Array<any>;
   private _isReloadComponents: boolean;
+  private _assessmentId: string;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -53,6 +57,7 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
               private service: ServicesService) {
     this.relatedSkillsInstance = [];
     this.filter = new MyJourneyAndFeedbackFilterData();
+    this.filter.informationType = '2';
     this.data = [];
     this.wcData = [];
     this.rankingData = [];
@@ -60,9 +65,12 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     this.totalReceived = 0;
     this.totalSent = 0;
     this.totalDiary = 0;
+    this.viewControl = { recipient: false };
+    this.messageTypeFilter = { acknowledgment: true, development: true };
     this._organizationId = this.cookie.get('ORGANIZATIONID');
     this._isReloadComponents = false;
     this.profile = this.route.snapshot.params.profile;
+    this._assessmentId = this.route.snapshot.params.assessmentValue;
   }
 
   ngOnInit() {
@@ -81,7 +89,22 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
         complete: () => this.spinner.hide()
       }
     );
-    
+    this.getMembersOfOrganization();
+    this.getMembersOfTeam();
+  }
+
+  onSelectInformationType(value: string) {
+    if (value === '2' || value === '5') {
+      this.viewControl.recipient = false;
+
+      this.filter.recipient = this._userLogged.email;
+    } else if (value === '4') {
+      this.viewControl.recipient = true;
+
+      this.filter.recipient = '';
+      this.filter.issuer = this._userLogged.email;
+      this.initializeSelects('membersOfOrganizationName');
+    }
   }
 
   onSearch() {
@@ -158,15 +181,21 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
 
     const [ endDay, endMonth, endYear ] = p.endPeriod.toString().split('/');
     p.endPeriod = this.datePipe.transform(new Date(+endYear, +endMonth - 1, Number(endDay) + 1), 'yyyy-MM-dd');
-    
-    p.userLogged = this._userLogged.email;
-    p.organizationId = this._organizationId;
 
+    const messageTypeArr = [];
+    if (this.messageTypeFilter.acknowledgment) messageTypeArr.push(1);
+    if (this.messageTypeFilter.development) messageTypeArr.push(2);
+    p.messageType = messageTypeArr.join(',');
     if (p.messageType !== undefined && p.messageType !== null && p.messageType === '')
       delete p.messageType;
 
-    if (this.profile !== 'team-profile')
-      p.recipient = this._userLogged.email;
+    p.organizationId = this._organizationId;
+    p.profile = this.profile;
+    if (this.profile === 'user-profile') {
+      p.userLogged = this._userLogged.email;
+    } else {
+
+    }
 
     this.service.findJourneyAndFeedback(p).subscribe(
       {
@@ -234,6 +263,35 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
         this.totalReceived++;
       }
     });
+  }
+
+  private getMembersOfOrganization() {
+    this.service.findOrganizationById(this._organizationId).subscribe((el: any) => {
+      this.membersOfOrganization = el.users.map((it: any) => {
+        return {
+          'label': it.name,
+          'key': it.email
+        }
+      });
+      this.membersOfOrganization.unshift({
+        'label': '', 'key': ''
+      });
+    });
+  }
+
+  private initializeSelects(componentName: string) {
+    setTimeout(() => {
+      const selectElems = document.querySelector(`[name=${componentName}]`);
+      M.FormSelect.init(selectElems, {});
+    }, 0);
+  }
+
+  private getMembersOfTeam() {
+    if (this.profile === 'team-profile') {
+      this.service.findApplicationsFromUser().subscribe((app: any) => {
+        console.log(app);
+      })
+    }
   }
 
 }
