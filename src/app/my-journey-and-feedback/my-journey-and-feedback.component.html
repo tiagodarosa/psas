@@ -63,48 +63,66 @@
                 <div class="row">
                   <div class="col s9" style="margin-left: 1rem; margin-top: 15px;">
                     <label style="margin-left: 20px;">
-                      <input name="informationTypeField" type="checkbox" value="2" [(ngModel)]="informationTypeFilter.particularDiary"/>
+                      <input name="informationTypeField" type="radio" value="2" [(ngModel)]="informationTypeFilter" (click)="onSelectInformationType('2')" />
                       <span>Diário particular</span>
                     </label>
-                    <label style="margin-left: 20px;">
-                      <input name="informationTypeField" type="checkbox" value="3" [(ngModel)]="informationTypeFilter.teamDiary"/>
+                    <label style="margin-left: 20px;" *ngIf="profile === 'team-profile'">
+                      <input name="informationTypeField" type="radio" value="3" [(ngModel)]="informationTypeFilter" (click)="onSelectInformationType('3')"/>
                       <span>Diário para o time</span>
                     </label>
                     <label style="margin-left: 20px;">
-                      <input name="informationTypeField" type="checkbox" value="4" [(ngModel)]="informationTypeFilter.sendedFeedbacks"/>
+                      <input name="informationTypeField" type="radio" value="4" [(ngModel)]="informationTypeFilter" (click)="onSelectInformationType('4')"/>
                       <span>Feedback enviados</span>
                     </label>
                     <label style="margin-left: 20px;">
-                      <input name="informationTypeField" type="checkbox" value="5" [(ngModel)]="informationTypeFilter.receivedFeedbacks"/>
+                      <input name="informationTypeField" type="radio" value="5" [(ngModel)]="informationTypeFilter" (click)="onSelectInformationType('5')"/>
                       <span>Feedback recebidos</span>
                     </label>
                   </div>
                 </div>
                 
-                <div class="row" style="margin-bottom: 0px !important;">
+                <div class="row" style="margin-bottom: 0px !important;" *ngIf="viewControl.issuer">
                   <div class="col s6" style="margin-left: 1rem;">
                     <h5>Emitente&nbsp;<i class="material-icons prefix">info</i></h5>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="viewControl.issuer">
                   <div class="col s5">
-                    <div class="input-field col s12">
+                    <div class="input-field col s12" *ngIf="profile === 'team-profile' && filter.informationType === '5'">
                       <i class="material-icons prefix">person</i>
-                      <input type="text" id="autocomplete-input" class="autocomplete" [(ngModel)]="filter.issuer">
+                      <select name="membersOfTeamName" [(ngModel)]="filter.issuer" >
+                        <option *ngFor="let o of membersOfOrganization" [value]="o.key">{{ o.label }}</option>
+                      </select>
+                    </div>
+
+                    <div class="input-field col s12" *ngIf="profile === 'user-profile' || profile === 'team-profile' && filter.informationType !== '5'">
+                      <i class="material-icons prefix">person</i>
+                      <select name="membersOfTeamName" [(ngModel)]="filter.issuer" >
+                        <option *ngFor="let o of membersOfTeamCombo" [value]="o.key">{{ o.label }}</option>
+                      </select>
                     </div>
                   </div>
                 </div>
 
-                <div class="row" style="margin-bottom: 0px !important;">
+                <div class="row" style="margin-bottom: 0px !important;" *ngIf="viewControl.recipient">
                   <div class="col s6" style="margin-left: 1rem;">
                     <h5>Destinatário&nbsp;<i class="material-icons prefix">info</i></h5>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="viewControl.recipient">
                   <div class="col s5">
-                    <div class="input-field col s12">
+                    <div class="input-field col s12" *ngIf="profile === 'user-profile' || profile === 'team-profile' && filter.informationType !== '3' && filter.informationType !== '5'">
                       <i class="material-icons prefix">person</i>
-                      <input type="text" id="autocomplete-input" class="autocomplete" [(ngModel)]="filter.recipient">
+                      <select name="membersOfOrganizationName" [(ngModel)]="filter.recipient" >
+                        <option *ngFor="let o of membersOfOrganization" [value]="o.key">{{ o.label }}</option>
+                      </select>
+                    </div>
+
+                    <div class="input-field col s12" *ngIf="profile === 'team-profile' && (filter.informationType === '3' || filter.informationType === '5')">
+                      <i class="material-icons prefix">person</i>
+                      <select name="membersOfOrganizationName" [(ngModel)]="filter.recipient">
+                        <option *ngFor="let o of membersOfTeamCombo" [value]="o.key">{{ o.label }}</option>
+                      </select>
                     </div>
                   </div>
                 </div>
