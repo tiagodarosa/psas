@@ -35,8 +35,10 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   totalSent: number;
   totalDiary: number;
   messageTypeFilter: { acknowledgment: boolean, development: boolean };
-  viewControl: { recipient: boolean };
+  viewControl: { recipient: boolean, issuer: boolean };
   membersOfOrganization: Array<any>;
+  membersOfTeam: Array<any>;
+  membersOfTeamCombo: Array<any>;
 
   @ViewChild('periodStart') periodStart: NgbInputDatepicker;
   @ViewChild('periodEnd') periodEnd: NgbInputDatepicker;
@@ -62,15 +64,16 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     this.wcData = [];
     this.rankingData = [];
     this.compentencesList = [];
+    this.membersOfTeamCombo = [];
     this.totalReceived = 0;
     this.totalSent = 0;
     this.totalDiary = 0;
-    this.viewControl = { recipient: false };
+    this.viewControl = { recipient: false, issuer: false };
     this.messageTypeFilter = { acknowledgment: true, development: true };
     this._organizationId = this.cookie.get('ORGANIZATIONID');
     this._isReloadComponents = false;
     this.profile = this.route.snapshot.params.profile;
-    this._assessmentId = this.route.snapshot.params.assessmentValue;
+    this._assessmentId = this.route.snapshot.params.assessmentId;
   }
 
   ngOnInit() {
@@ -83,27 +86,48 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
       {
         next: (user) => {
           this._userLogged = user;
-          this.loadData();
+          this.getMembersOfOrganization();
+          this.getMembersOfTeam();
+          this.onSelectInformationType(this.filter.informationType);
         },
         error: () => this.spinner.hide(),
         complete: () => this.spinner.hide()
       }
     );
-    this.getMembersOfOrganization();
-    this.getMembersOfTeam();
   }
 
   onSelectInformationType(value: string) {
     if (value === '2' || value === '5') {
-      this.viewControl.recipient = false;
-
-      this.filter.recipient = this._userLogged.email;
-    } else if (value === '4') {
+      if(this.profile === 'user-profile') {
+        this.viewControl.recipient = false;
+        this.filter.recipient = this._userLogged.email;
+      } else {
+        this.viewControl.issuer = true;
+        this.viewControl.recipient = true;
+        this.filter.recipient = '';
+        this.filter.issuer = '';
+        this.initializeSelects('membersOfOrganizationName');
+        this.initializeSelects('membersOfTeamName');
+      }
+    } else if (value === '3') {
+      this.viewControl.issuer = false;
       this.viewControl.recipient = true;
-
-      this.filter.recipient = '';
       this.filter.issuer = this._userLogged.email;
       this.initializeSelects('membersOfOrganizationName');
+    } else if (value === '4') {
+      if(this.profile === 'user-profile') {
+        this.viewControl.recipient = true;
+        this.filter.recipient = '';
+        this.filter.issuer = this._userLogged.email;
+        this.initializeSelects('membersOfOrganizationName');
+      } else {
+        this.viewControl.issuer = true;
+        this.viewControl.recipient = true;
+        this.filter.recipient = '';
+        this.filter.issuer = '';
+        this.initializeSelects('membersOfOrganizationName');
+        this.initializeSelects('membersOfTeamName');
+      }
     }
   }
 
@@ -191,10 +215,10 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
 
     p.organizationId = this._organizationId;
     p.profile = this.profile;
-    if (this.profile === 'user-profile') {
-      p.userLogged = this._userLogged.email;
-    } else {
-
+    p.userLogged = this._userLogged.email;
+    if (this.profile === 'team-profile') {
+      p.teamLeader = this.membersOfTeam[0].email;
+      p.membersList = this.membersOfTeam.map((mt: any) => mt.email).join(',');
     }
 
     this.service.findJourneyAndFeedback(p).subscribe(
@@ -289,8 +313,15 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   private getMembersOfTeam() {
     if (this.profile === 'team-profile') {
       this.service.findApplicationsFromUser().subscribe((app: any) => {
-        console.log(app);
+        const applicationObject = app.applicationList.find((appList: any) => appList._id === this._assessmentId);
+        this.membersOfTeam = applicationObject.team.members;
+        this.membersOfTeamCombo = applicationObject.team.members
+          .filter((mm: any) => mm.name !== undefined)
+          .map((object: any) => { return { key: object.email, label: object.name }});
+        this.loadData();
       })
+    } else {
+      this.loadData();
     }
   }
 
