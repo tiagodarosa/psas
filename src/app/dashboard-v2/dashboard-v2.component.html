@@ -14,7 +14,7 @@
       <!-- Title -->
       <div class="row">
         <div class="col s12">
-          <h3 class="header">Dashboard de competências</h3>
+          <h3 style="font-size: 2.92rem !important;">Dashboard de competências</h3>
         </div>
       </div>
       
@@ -35,11 +35,20 @@
       <div class="row">
         <div class="input-field col s6" [hidden]="!isLoadingComplete">
           <i class="material-icons prefix">description</i>
-          <label for="assessmentField" class="active">Selecione à avaliação</label>
+          <label for="assessmentField" class="active">Selecione a avaliação</label>
           <select #assessmentField id="assessmentField" class="validate" [(ngModel)]="assessmentValue" (change)="onSelectApplication()">
               <option *ngFor="let a of applicationsList" [value]="a.value">{{ a.label }}</option>
           </select>
         </div>
+
+        <div class="input-field col s6" [hidden]="!isLoadingComplete">
+          <i class="material-icons prefix">description</i>
+          <label for="teamField" class="active">Selecione a equipe</label>
+          <select #teamField id="teamField" class="validate" [(ngModel)]="teamValue">
+              <option *ngFor="let a of teamsList" [value]="a._id">{{ a.name }}</option>
+          </select>
+        </div>
+
         <div class="input-field col s6" [hidden]="isLoadingComplete">
           <div>Carregando...</div>
         </div>
@@ -48,7 +57,7 @@
       <div class="row">
         <div class="col s6">
           <div class="widget-header">
-            <span style="font-size: 25pt; color: #fff;">Diário e Feedback</span>
+            <span style="font-size: 25pt; color: #fff;">Diário & Feedback</span>
             <span class="detail-header"
                   (click)="onDetailsJourneyAndFeedback()">
               <i class="material-icons prefix" style="font-size: 30pt; color: #fff;" *ngIf="isLoadingComplete">more_vert</i>
@@ -61,7 +70,7 @@
 
         <div class="col s6">
           <div class="widget-header">
-            <span style="font-size: 25pt; color: #fff;">Destaque e a desenvolver</span>
+            <span style="font-size: 25pt; color: #fff;">Competências em destaque</span>
             <span class="detail-header"
                   (click)="onShowQuestionnaireResult()">
               <i class="material-icons prefix" style="font-size: 30pt; color: #fff;" *ngIf="isLoadingComplete">more_vert</i>
@@ -116,7 +125,7 @@
 
         <div class="col s6">
           <div class="widget-header">
-            <span style="font-size: 25pt; color: #fff;">Comparação dos resultados</span>
+            <span style="font-size: 25pt; color: #fff;">Radar de competências</span>
             <span class="detail-header"
                   (click)="onShowQuestionnaireResult()">
               <i class="material-icons prefix" style="font-size: 30pt; color: #fff;" *ngIf="isLoadingComplete">more_vert</i>
@@ -133,7 +142,7 @@
         
         <div class="col s12">
           <div class="widget-header">
-            <span style="font-size: 25pt; color: #fff;">Histórico</span>
+            <span style="font-size: 25pt; color: #fff;">Histórico de competências</span>
             <span class="detail-header"
                   (click)="onShowQuestionnaireResult()">
               <i class="material-icons prefix" style="font-size: 30pt; color: #fff;" *ngIf="isLoadingComplete">more_vert</i>

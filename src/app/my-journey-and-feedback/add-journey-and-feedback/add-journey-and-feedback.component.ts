@@ -34,6 +34,7 @@ export class AddJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
               private service: ServicesService) {
     this.compentencesList = [];
     this.selectsInstances = [];
+    this.membersOfTeam = [];
     this.isTeamLeader = false;
     this.model = { 'informationType': '2', 'recipient': '' };
     this._organizationId = this.cookie.get('ORGANIZATIONID');
@@ -136,6 +137,21 @@ export class AddJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
   }
 
   private getMembersOfTeam() {
+    this.service.findTeamsFromUser().subscribe((r: any) => {
+      r.teams.forEach((team: any) => {
+        team.members.forEach((member: any) => {
+          if (member.name)
+            this.membersOfTeam.push({ 'label': member.name, 'key': member.email });
+        })
+      });
+      this.membersOfTeam.unshift({
+        'label': '', 'key': ''
+      });
+      setTimeout(() => this.initializeSelects('membersOfTeamName'), 500);
+    });
+  }
+
+  private getMembersOfTeam_() {
 
     this.service.findProjectsFromUser().subscribe((response: any) => {
       response.projects.forEach((el:any) => {
