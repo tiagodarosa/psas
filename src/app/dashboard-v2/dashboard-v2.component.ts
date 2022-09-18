@@ -28,6 +28,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   person: string;
   isLoadingComplete: boolean;
   comparissonResultsData: any;
+  teamValue: any;
 
   @ViewChild('appWordCloud') appWordCloud: WordCloudComponent;
   @ViewChild('appComparisonOfResults') appComparisonOfResults: ComparisonOfResultsComponent;
@@ -48,6 +49,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
     this.applicationsList = [];
     this._applicationsListCache = [];
     this.comparissonResultsData = { competences: [] };
+    this.teamValue = {};
     this._isReloadComponents = false;
     this.isLoadingComplete = false;
     this.profileSelector = '1';
@@ -183,6 +185,10 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
         }
       });
       this.teamsList.sort(this.compare);
+      setTimeout(() => {
+        const selectElems = document.querySelectorAll('#teamField');
+        M.FormSelect.init(selectElems, {});
+      }, 100);
     }, (error) => {
       console.log(error);
     });
