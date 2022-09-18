@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService } from 'angularx-social-login';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import MyJourneyAndFeedbackData from './shared/data/my-journey-and-feedback-data';
 import MyJourneyAndFeedbackFilterData from './shared/data/my-journey-and-feedback-filter-data';
@@ -17,8 +18,10 @@ export class ServicesService {
 
   private token = '';
   private httpOptions = {};
+  private _userInfo: Array<any>;
 
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService, private authService: AuthService) {
+    this._userInfo = [];
   }
 
   private extractData(res: Response) {
@@ -304,6 +307,17 @@ export class ServicesService {
   deleteJourneyAndFeedback(id: string, revision: string) {
     this.getHttpOptions();
     return this.http.delete(`https://us-south.functions.appdomain.cloud/api/v1/web/7cce1250-d66c-4a8e-a0e4-a83a70a2d77b/Diary/deleteJourneyAndFeedback/${id}/${revision}`, this.httpOptions);
+  }
+
+  saveUserInfo(payload: { photoUrl: string, email: string } ) {
+    this.getHttpOptions();
+    return this.http.post('https://us-south.functions.appdomain.cloud/api/v1/web/7cce1250-d66c-4a8e-a0e4-a83a70a2d77b/UserInfo/postUserInfo', payload, this.httpOptions);
+  }
+
+  getUserInfoByEmail(params: { email: string }) {
+    this.getHttpOptions();
+    this.httpOptions['params'] = this.getParams(params);
+    return this.http.get('https://us-south.functions.appdomain.cloud/api/v1/web/7cce1250-d66c-4a8e-a0e4-a83a70a2d77b/UserInfo/getUserInforByEmail', this.httpOptions);
   }
 
   private getParams(parameters: any): HttpParams {

@@ -35,6 +35,7 @@ export class OrganizationComponent implements OnInit {
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.email = user.email;
+      this.service.saveUserInfo({email: user.email, photoUrl: user.photoUrl}).subscribe(() => {});
       this.getOrganizations();
     });
     $('select').formSelect();

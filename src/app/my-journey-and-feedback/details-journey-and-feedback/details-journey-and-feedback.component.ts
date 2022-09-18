@@ -39,6 +39,7 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   membersOfOrganization: Array<any>;
   membersOfTeam: Array<any>;
   membersOfTeamCombo: Array<any>;
+  userInfoList: Array<any>
 
   @ViewChild('periodStart') periodStart: NgbInputDatepicker;
   @ViewChild('periodEnd') periodEnd: NgbInputDatepicker;
@@ -82,6 +83,10 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     this.cards = [];
     this.data = [];
     this._docs = [];
+    this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => {
+      this.userInfoList = response.docs;
+      console.log(this.userInfoList);
+    });
     this.authService.authState.subscribe(
       {
         next: (user) => {
@@ -94,6 +99,11 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
         complete: () => this.spinner.hide()
       }
     );
+  }
+
+  ngAfterViewInit(): void {
+    this.loadComponents();
+    this.getCompetences();
   }
 
   onSelectInformationType(value: string) {
@@ -147,13 +157,20 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     this.loadData();
   }
 
-  ngAfterViewInit(): void {
-    this.loadComponents();
-    this.getCompetences();
-  }
-
   onBack() {
     this.router.navigate(['dashboard-v2']);
+  }
+
+  getPhotoUrl(email: string) {
+    try {
+      const userInfo = this.userInfoList.find((uil: any) => uil.params.email === email);
+      if (userInfo !== undefined && userInfo !== null)
+        return userInfo.params.photoUrl;
+      else
+        return '/assets/user.png';
+    } catch(error) {
+      return '/assets/user.png';
+    }
   }
 
   private getComponentInstance(instance: Array<any>, componentName: string) {
