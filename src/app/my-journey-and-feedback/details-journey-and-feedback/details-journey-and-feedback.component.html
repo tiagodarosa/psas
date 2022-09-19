@@ -201,7 +201,7 @@
           </div>
         </div>
 
-        <div class="col s3">
+        <!-- <div class="col s3">
           <div class="widget-header">
             <span style="font-size: 25pt; color: #fff;">Ranking</span>
           </div>
@@ -210,6 +210,18 @@
               <div class="col s1" style="height: 20px; border-radius: 20%; margin-top: 5px; " style.background-color="{{ l.color }}"></div>
               <div class="col s10"><span style="font-size: 15pt;">{{ l.name }}</span></div>
               <div class="col s1"><span style="font-size: 15pt;">{{ l.weight }}</span></div>
+            </div>
+          </div>
+        </div> -->
+
+        <div class="col s3">
+          <div class="widget-header">
+            <span style="font-size: 25pt; color: #fff;">Ranking</span>
+          </div>
+          <div class="card" style="margin-top: 0px !important; height: 405px !important">
+            <div *ngFor="let l of rankingData" style="padding: 10px;">
+              <div class="col s10"><span style="font-size: 15pt;" style.color="{{ l.color }}">{{ l.name }}</span></div>
+              <div class="col s1"><span style="font-size: 15pt;" style.color="{{ l.color }}">{{ l.weight }}</span></div>
             </div>
           </div>
         </div>
@@ -228,17 +240,17 @@
                 </tr>
                 <tr>
                   <th></th>
-                  <th>Diário do time</th>
-                  <th>Recebidos</th>
-                  <th>Enviados</th>
+                  <th style="text-align: center;">Diário do time</th>
+                  <th style="text-align: center;">Recebidos</th>
+                  <th style="text-align: center;">Enviados</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Nome Colaborador</td>
-                  <td style="text-align: center;">3</td>
-                  <td style="text-align: center;">7</td>
-                  <td style="text-align: center;">1</td>
+                <tr *ngFor="let i of indicators">
+                  <td style="font-size: 10pt;">{{ i.name }}</td>
+                  <td style="text-align: center; font-size: 12pt; font-weight: bold;">{{ i.partDiary }}</td>
+                  <td style="text-align: center; font-size: 12pt; font-weight: bold;">{{ i.sent }}</td>
+                  <td style="text-align: center; font-size: 12pt; font-weight: bold;">{{ i.received }}</td>
                 </tr>
               </tbody>
             </table>
@@ -307,7 +319,8 @@
             </div>
 
             <div class="col s6">
-              <div class="chip teal">{{ card.messageTypeValue }}</div>
+              <div class="chip teal" *ngIf="card.messageTypeValue === 'Reconhecimento'">{{ card.messageTypeValue }}</div>
+              <div class="chip yellow" *ngIf="card.messageTypeValue === 'Desenvolvimento'">{{ card.messageTypeValue }}</div>
             </div>
 
           </div>
