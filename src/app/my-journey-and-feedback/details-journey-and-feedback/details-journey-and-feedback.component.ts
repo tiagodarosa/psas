@@ -35,11 +35,13 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   totalSent: number;
   totalDiary: number;
   messageTypeFilter: { acknowledgment: boolean, development: boolean };
+  indicators: Array<{ name: string, partDiary: number, sent: number, received: number }>;
   viewControl: { recipient: boolean, issuer: boolean };
   membersOfOrganization: Array<any>;
   membersOfTeam: Array<any>;
   membersOfTeamCombo: Array<any>;
-  userInfoList: Array<any>
+  userInfoList: Array<any>;
+  isLoadingIndicators: boolean;
 
   @ViewChild('periodStart') periodStart: NgbInputDatepicker;
   @ViewChild('periodEnd') periodEnd: NgbInputDatepicker;
@@ -61,11 +63,13 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     this.relatedSkillsInstance = [];
     this.filter = new MyJourneyAndFeedbackFilterData();
     this.filter.informationType = '2';
+    this.isLoadingIndicators = false;
     this.data = [];
     this.wcData = [];
     this.rankingData = [];
     this.compentencesList = [];
     this.membersOfTeamCombo = [];
+    this.indicators = [];
     this.totalReceived = 0;
     this.totalSent = 0;
     this.totalDiary = 0;
@@ -251,6 +255,42 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     );
   }
 
+  private buildIndicators() {
+    const indicatorFilterData = new MyJourneyAndFeedbackFilterData();
+    const d = new Date();
+    this.isLoadingIndicators = true;
+    indicatorFilterData.startPeriod = `01/01/${d.getFullYear()}`;
+    indicatorFilterData.endPeriod = `${d.getDate()}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+    indicatorFilterData.organizationId = this._organizationId;
+    indicatorFilterData.profile = 'team-leader';
+
+    const p = Object.assign({}, indicatorFilterData);
+    
+    const [ startDay, startMonth, startYear ] = p.startPeriod.toString().split('/');
+    p.startPeriod = this.datePipe.transform(new Date(+startYear, +startMonth, +startDay), 'yyyy-MM-dd');
+
+    const [ endDay, endMonth, endYear ] = p.endPeriod.toString().split('/');
+    p.endPeriod = this.datePipe.transform(new Date(+endYear, +endMonth - 1, Number(endDay) + 1), 'yyyy-MM-dd');
+
+    this.service.findJourneyAndFeedback(p).subscribe(
+      {
+        next: (response: any) => {
+          const indicatorsDocs = response.docs;
+          this.membersOfTeam.forEach((member: any) => {
+            if (member.name) {
+              const particularDiary = indicatorsDocs.filter((id: any) => id.params.issuer === member.email && id.params.recipient === member.email) || [];
+              const sentFeedbacks = indicatorsDocs.filter((id: any) => id.params.issuer === member.email && id.params.recipient !== member.email) || [];
+              const receivedFeedbacks = indicatorsDocs.filter((id: any) => id.params.issuer !== member.email && id.params.recipient === member.email) || [];
+              this.indicators.push({ name: member.name, partDiary: particularDiary.length, sent: sentFeedbacks.length, received: receivedFeedbacks.length });
+            }
+          });
+        },
+        error: this.showErrors.bind(this),
+        complete: () => this.isLoadingIndicators = false
+      }
+    );
+  }
+
   private showErrors(error: any) {
     this.spinner.hide();
     M.toast({ html: `Erro: ${error.message}`});
@@ -335,6 +375,7 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
         this.membersOfTeamCombo = applicationObject.team.members
           .filter((mm: any) => mm.name !== undefined)
           .map((object: any) => { return { key: object.email, label: object.name }});
+        this.buildIndicators();
         this.loadData();
       })
     } else {
