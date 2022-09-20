@@ -46,6 +46,7 @@ import { DatePipe } from '@angular/common';
 import { DetailsJourneyAndFeedbackComponent } from './my-journey-and-feedback/details-journey-and-feedback/details-journey-and-feedback.component';
 import { UserOverviewComponent } from './components/nine-box-chart/user-overview/user-overview.component';
 import { QuestionnaireResultComponent } from './questionnaire-result/questionnaire-result.component';
+import { BarsChartComponent } from './components/charts/bars-chart/bars-chart.component';
 
 const config = new AuthServiceConfig([
   {
@@ -108,6 +109,7 @@ export class NoCacheHeadersInterceptor implements HttpInterceptor {
     MemberComponent,
     NineBoxChartComponent,
     WordCloudComponent,
+    BarsChartComponent,
     ComparisonOfResultsComponent,
     HistoryChartComponent,
     MyJourneyAndFeedbackComponent,
