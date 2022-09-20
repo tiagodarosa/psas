@@ -5,6 +5,7 @@ import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'angularx-social-login';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { BarsChartComponent } from 'src/app/components/charts/bars-chart/bars-chart.component';
 import { WordCloudComponent } from 'src/app/components/charts/word-cloud/word-cloud.component';
 import { ServicesService } from 'src/app/services.service';
 import CompetenceData from 'src/app/shared/data/compentende.data';
@@ -31,9 +32,6 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   dateFildsInstances: any;
   filter: MyJourneyAndFeedbackFilterData;
   profile: string;
-  totalReceived: number;
-  totalSent: number;
-  totalDiary: number;
   messageTypeFilter: { acknowledgment: boolean, development: boolean };
   indicators: Array<{ name: string, partDiary: number, sent: number, received: number }>;
   viewControl: { recipient: boolean, issuer: boolean };
@@ -42,10 +40,12 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   membersOfTeamCombo: Array<any>;
   userInfoList: Array<any>;
   isLoadingIndicators: boolean;
+  barsTotalData: { totalDiary: number, totalSent: number, totalReceived: number };
 
   @ViewChild('periodStart') periodStart: NgbInputDatepicker;
   @ViewChild('periodEnd') periodEnd: NgbInputDatepicker;
   @ViewChild('appWordCloud') appWordCloud: WordCloudComponent;
+  @ViewChild('appBarsChart') appBarsChart: BarsChartComponent;
 
   private _organizationId: string;
   private _userLogged: any;
@@ -70,15 +70,13 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     this.compentencesList = [];
     this.membersOfTeamCombo = [];
     this.indicators = [];
-    this.totalReceived = 0;
-    this.totalSent = 0;
-    this.totalDiary = 0;
     this.viewControl = { recipient: false, issuer: false };
     this.messageTypeFilter = { acknowledgment: true, development: true };
     this._organizationId = this.cookie.get('ORGANIZATIONID');
     this._isReloadComponents = false;
     this.profile = this.route.snapshot.params.profile;
     this._assessmentId = this.route.snapshot.params.assessmentId;
+    this.barsTotalData = { totalDiary: 0, totalSent: 0, totalReceived: 0 };
   }
 
   ngOnInit() {
@@ -216,9 +214,6 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     this.appWordCloud.reloadChart([]);
     this.wcData = [];
     this.rankingData = [];
-    this.totalReceived = 0;
-    this.totalSent = 0;
-    this.totalDiary = 0;
     const p = Object.assign({}, this.filter);
     
     const [ startDay, startMonth, startYear ] = p.startPeriod.toString().split('/');
@@ -247,7 +242,8 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
         next: (response: any) => {
           this._docs = response.docs;
           this.buildWordCloudData();
-          this.buildTotals();
+          if (this.profile === 'user-profile')
+            this.buildTotals();
         },
         error: this.showErrors.bind(this),
         complete: () => this.spinner.hide()
@@ -255,7 +251,7 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     );
   }
 
-  private buildIndicators() {
+  private buildTeamIndicators() {
     const indicatorFilterData = new MyJourneyAndFeedbackFilterData();
     const d = new Date();
     this.isLoadingIndicators = true;
@@ -335,15 +331,37 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   }
 
   private buildTotals() {
-    this._docs.forEach((el: any) => {
-      if (el.params.informationType === 2) {
-        this.totalDiary++;
-      } else if (el.email === this._userLogged.email) {
-        this.totalSent++;
-      } else if (el.params.recipient === this._userLogged.email) {
-        this.totalReceived++;
+    const indicatorFilterData = new MyJourneyAndFeedbackFilterData();
+    const d = new Date();
+    this.isLoadingIndicators = true;
+    indicatorFilterData.startPeriod = `01/01/${d.getFullYear()}`;
+    indicatorFilterData.endPeriod = `${d.getDate()}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+    indicatorFilterData.organizationId = this._organizationId;
+    indicatorFilterData.userLogged = this._userLogged.email;
+    indicatorFilterData.profile = 'my-profile';
+
+    const p = Object.assign({}, indicatorFilterData);
+    
+    const [ startDay, startMonth, startYear ] = p.startPeriod.toString().split('/');
+    p.startPeriod = this.datePipe.transform(new Date(+startYear, +startMonth - 1, +startDay), 'yyyy-MM-dd');
+
+    const [ endDay, endMonth, endYear ] = p.endPeriod.toString().split('/');
+    p.endPeriod = this.datePipe.transform(new Date(+endYear, +endMonth - 1, Number(endDay) + 1), 'yyyy-MM-dd');
+
+    this.service.findJourneyAndFeedback(p).subscribe(
+      {
+        next: (response: any) => {
+          const indicatorsDocs = response.docs;
+          const totalDiary = indicatorsDocs.filter((id: any) => id.params.issuer === this._userLogged.email && id.params.recipient === this._userLogged.email) || [];
+          const totalSent = indicatorsDocs.filter((id: any) => id.params.issuer === this._userLogged.email && id.params.recipient !== this._userLogged.email) || [];
+          const totalReceived = indicatorsDocs.filter((id: any) => id.params.issuer !== this._userLogged.email && id.params.recipient === this._userLogged.email) || [];
+          this.barsTotalData = { totalDiary: totalDiary.length, totalSent: totalSent.length, totalReceived: totalReceived.length };
+          this.appBarsChart.reloadChart(this.barsTotalData);
+        },
+        error: this.showErrors.bind(this),
+        complete: () => this.isLoadingIndicators = false
       }
-    });
+    );
   }
 
   private getMembersOfOrganization() {
@@ -375,7 +393,7 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
         this.membersOfTeamCombo = applicationObject.team.members
           .filter((mm: any) => mm.name !== undefined)
           .map((object: any) => { return { key: object.email, label: object.name }});
-        this.buildIndicators();
+        this.buildTeamIndicators();
         this.loadData();
       })
     } else {

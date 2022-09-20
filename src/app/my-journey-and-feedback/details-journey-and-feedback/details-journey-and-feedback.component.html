@@ -263,7 +263,9 @@
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important">
 
-            <div class="row" style="padding: 10px; padding-top: 65px;">
+            <app-bars-chart #appBarsChart [data]="comparissonResultsData"></app-bars-chart>
+
+            <!-- <div class="row" style="padding: 10px; padding-top: 65px;">
               <div class="col s1 offset-s4" style="height: 40px; border-radius: 5px; padding: 5px; display: inline-table; background-color: lightgreen;">
                 <span style="font-size: 20pt;">{{ totalReceived }}</span>
               </div>
@@ -282,7 +284,7 @@
                 <span style="font-size: 20pt;">{{ totalDiary }}</span>
               </div>
               <div class="col s6"><span style="font-size: 20pt;">Diário</span></div>
-            </div>
+            </div> -->
 
           </div>
         </div>
