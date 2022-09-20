@@ -18,7 +18,7 @@ noData(Highcharts);
 })
 export class ComparisonOfResultsComponent implements OnInit {
 
-  @Input() data: { competences: Array<string>, autoResults: Array<any>, leaderResults: Array<any>, pairResults: Array<any> };
+  @Input() data: { competences: Array<string>, autoResults: Array<any>, leaderResults: Array<any>, pairResults: Array<any>, averageResults: Array<any> };
 
   options: any;
 
@@ -31,9 +31,49 @@ export class ComparisonOfResultsComponent implements OnInit {
       Highcharts.chart('comparisson-of-results', this.buildChart());
   }
 
-  reloadChart(data: { competences: Array<string>, autoResults: Array<any>, leaderResults: Array<any>, pairResults: Array<any> }) {
+  reloadChart(data: { competences: Array<string>, autoResults: Array<any>, leaderResults: Array<any>, pairResults: Array<any>, averageResults: Array<any> }) {
     this.data = data;
     Highcharts.chart('comparisson-of-results', this.buildChart());
+  }
+
+  teamReloadChart(data: any) {
+    const options: any = {
+      chart: {
+        polar: true
+      },
+      xAxis: {
+        categories: data[0].competences || [],
+        tickmarkPlacement: 'on',
+        lineWidth: 0
+      },
+      yAxis: {
+        gridLineInterpolation: 'circle',
+        lineWidth: 0,
+        min: 0,
+        max: 4
+      },
+      accessibility: {
+        screenReaderSection: {
+            beforeChartFormat: ''
+        }
+      },
+      title: {
+        text: ''
+      }
+    };
+
+    const series: Array<any> = [];
+    data.forEach((el: any) => {
+      series.push(
+        {
+          pointPlacement: 'on',
+          name: el.name,
+          data: el.data
+        },
+      );
+    });
+    options['series'] = series;
+    Highcharts.chart('comparisson-of-results', options);
   }
 
   private buildChart(): any {
@@ -70,6 +110,12 @@ export class ComparisonOfResultsComponent implements OnInit {
           name: 'Pares',
           type: 'area',
           data: this.data.pairResults
+        },
+        {
+          pointPlacement: 'on',
+          name: 'Média',
+          type: 'area',
+          data: this.data.averageResults
         }
       ],
       accessibility: {

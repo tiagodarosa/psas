@@ -29,6 +29,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   isLoadingComplete: boolean;
   comparissonResultsData: any;
   teamValue: any;
+  profile: string;
 
   @ViewChild('appWordCloud') appWordCloud: WordCloudComponent;
   @ViewChild('appComparisonOfResults') appComparisonOfResults: ComparisonOfResultsComponent;
@@ -45,6 +46,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
               private datePipe: DatePipe,
               private service: ServicesService) {
     this._organizationId = this.cookie.get('ORGANIZATIONID');
+    this.profile = this.cookie.get('ORGANIZATIONMEMBERPROFILE');
     this.wcData = [];
     this.applicationsList = [];
     this._applicationsListCache = [];
@@ -84,13 +86,22 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
     this.router.navigate(['questionnaire-result', paramUrl, this.assessmentValue, 'thigo.san@gmail.com']);
   }
 
-  onChangeProfile() {
-    this.person = this.profileSelector === '1' ? this._userLogged.email : '';
+  onChangeProfile(value: number) {
+    this.profileSelector = String(value);
+    this.person = value === 1 ? this._userLogged.email : '';
     this.loadWordCloudData();
+    this.onSelectApplication();
   }
 
   onSelectApplication() {
     const object = this._applicationsListCache.find((al: any) => al._id === this.assessmentValue);
+    
+    if (object === undefined || object === null) {
+      M.toast({ html: 'Selecione a aplicação!' });
+      return;
+    }
+
+
     const teamLeader = object.team.members[0].email;
     const competences = object.assessment.questions.map((q:any) => {
       return {
@@ -98,29 +109,82 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
         name: q.competenceName
       };
     }).sort((a: any, b: any) => a.order - b.order);
-    const autoResultsObj: Array<any> = object.answers.filter((a: any) => a.userEvaluator === this._userLogged.email && a.userRated === a.userEvaluator);
-    const leaderResultsObj: Array<any> = object.answers.filter((a: any) => a.userEvaluator === teamLeader && a.userRated === a.userEvaluator);
-    const pairResultsObj: Array<any> = object.answers.filter((a: any) => a.userEvaluator !== teamLeader && a.userEvaluator !== this._userLogged.email && a.userRated === a.userEvaluator);
-    const autoResults: Array<number> = [];
-    const leaderResults: Array<number> = [];
-    const pairResults: Array<number> = [];
-    competences.forEach((c: any) => {
-      const arObject = autoResultsObj.find((obj: any) => obj.questionOrder === c.order);
-      const lrObject = leaderResultsObj.find((obj: any) => obj.questionOrder === c.order);
-      const prObject = pairResultsObj.find((obj: any) => obj.questionOrder === c.order);
-      autoResults.push(Number(arObject.answer));
-      leaderResults.push(Number(lrObject.answer));
-      pairResults.push(Number(prObject.answer));
-    });
 
-    this.comparissonResultsData = {
-      competences: competences.map((c: any) => c.name),
-      autoResults,
-      leaderResults,
-      pairResults
-    };
+    if (this.profileSelector === '1') {
+      const autoResultsObj: Array<any> = object.answers.filter((a: any) => a.userEvaluator === this._userLogged.email && a.userRated === a.userEvaluator);
+      const leaderResultsObj: Array<any> = object.answers.filter((a: any) => a.userEvaluator === teamLeader && a.userRated === this._userLogged.email);
+      const pairResultsObj: Array<any> = object.answers.filter((a: any) => a.userEvaluator !== teamLeader && a.userEvaluator !== this._userLogged.email && a.userRated === this._userLogged.email);
+      const autoResults: Array<number> = [];
+      const leaderResults: Array<number> = [];
+      const pairResults: Array<number> = [];
+      const averageResults: Array<number> = [];
+      competences.forEach((c: any) => {
+        const arObject = autoResultsObj.find((obj: any) => obj.questionOrder === c.order);
+        const lrObject = leaderResultsObj.find((obj: any) => obj.questionOrder === c.order);
+        const prObject = pairResultsObj.find((obj: any) => obj.questionOrder === c.order);
+        let average: number = 0;
+        autoResults.push(Number(arObject.answer));
+        leaderResults.push(Number(lrObject.answer));
+        pairResults.push(Number(prObject.answer));
+        average = Number(Number(prObject.answer) + Number(lrObject.answer) ) / 2;
+        averageResults.push(average);
+      });
+  
+      this.comparissonResultsData = {
+        competences: competences.map((c: any) => c.name),
+        autoResults,
+        leaderResults,
+        pairResults,
+        averageResults
+      };
+  
+      this.appComparisonOfResults.reloadChart(this.comparissonResultsData);
+    } else {
+      const membersOfTeam = object.team.members.filter((mbs: any) => mbs.email !== teamLeader);
+      const teamCompResultsData = [];
+      membersOfTeam.forEach( (mot: any) => {
+        const leaderResultsObj: Array<any> = object.answers.filter((a: any) => a.userEvaluator === teamLeader && a.userRated === mot.email);
+        const pairResultsObj: Array<any> = object.answers.filter((a: any) => a.userEvaluator !== teamLeader && a.userEvaluator !== mot.email && a.userRated === mot.email);
+        const averageResults: Array<number> = [];
+        const leaderResults: Array<number> = [];
+        const pairResults: Array<number> = [];
+        competences.forEach((c: any) => {
+          const lrObject = leaderResultsObj.find((obj: any) => obj.questionOrder === c.order);
+          const prObject = pairResultsObj.find((obj: any) => obj.questionOrder === c.order);
+          let average: number = 0;
+          leaderResults.push(Number(lrObject.answer));
+          pairResults.push(Number(prObject.answer));
+          average = Number(Number(prObject.answer) + Number(lrObject.answer) ) / 2;
+          averageResults.push(average);
+        });
+        teamCompResultsData.push(
+          {
+            competences: competences.map((c: any) => c.name),
+            data: averageResults,
+            name: mot.name
+          }
+        );
+      });
 
-    this.appComparisonOfResults.reloadChart(this.comparissonResultsData);
+      let teamData: Array<number> = [];
+      for (let count = 0; count < competences.length; count++) {
+        let competenceTotal = 0;
+        for (let membersCount = 0; membersCount < teamCompResultsData.length;membersCount++) {
+          competenceTotal += teamCompResultsData[membersCount]['data'][count];
+        }
+        teamData.push(competenceTotal / teamCompResultsData.length);
+      }
+
+      teamCompResultsData.push(
+        {
+          competences: competences.map((c: any) => c.name),
+          data: teamData,
+          name: 'Média Equipe'
+        }
+      );
+
+      this.appComparisonOfResults.teamReloadChart(teamCompResultsData);
+    }
   }
 
   private getMembers() {

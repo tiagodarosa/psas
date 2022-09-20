@@ -21,12 +21,11 @@
       <div class="row">
         <div class="col s12">
             <label>
-              <input name="perfilGroup" type="radio" value="1" [(ngModel)]="profileSelector" (click)="onChangeProfile()"/>
+              <input name="perfilGroup" type="radio" value="1" [(ngModel)]="profileSelector" (click)="onChangeProfile(1)"/>
               <span>Meu perfil</span>
             </label>
-          
             <label style="margin-left: 20px;">
-              <input name="perfilGroup" type="radio" value="2" [(ngModel)]="profileSelector" (click)="onChangeProfile()"/>
+              <input name="perfilGroup" type="radio" value="2" [(ngModel)]="profileSelector" (click)="onChangeProfile(2)" [disabled]="profile === 'organizationMember'"/>
               <span>Minha equipe</span>
             </label>
         </div>
