@@ -40,7 +40,7 @@
           </select>
         </div>
 
-        <div class="input-field col s6" [hidden]="!isLoadingComplete">
+        <div class="input-field col s6" [hidden]="!isLoadingComplete || profileSelector === '1'">
           <i class="material-icons prefix">description</i>
           <label for="teamField" class="active">Selecione a equipe</label>
           <select #teamField id="teamField" class="validate" [(ngModel)]="teamValue">
@@ -118,7 +118,7 @@
             </span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important;">
-            <app-nine-box-chart></app-nine-box-chart>
+            <app-nine-box-chart #appNineBoxChart [users]="data9Box" [axisX]="axisX" [axisY]="axisY" profile="{{ profileSelector === '1' ? 'user-profile' : 'team-profile' }}"></app-nine-box-chart>
           </div>
         </div>
 

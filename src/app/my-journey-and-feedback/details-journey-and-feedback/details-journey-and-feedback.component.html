@@ -265,27 +265,6 @@
 
             <app-bars-chart #appBarsChart [data]="comparissonResultsData"></app-bars-chart>
 
-            <!-- <div class="row" style="padding: 10px; padding-top: 65px;">
-              <div class="col s1 offset-s4" style="height: 40px; border-radius: 5px; padding: 5px; display: inline-table; background-color: lightgreen;">
-                <span style="font-size: 20pt;">{{ totalReceived }}</span>
-              </div>
-              <div class="col s6"><span style="font-size: 20pt;">Recebidos</span></div>
-            </div>
-
-            <div class="row" style="padding: 10px;">
-              <div class="col s1 offset-s4" style="height: 40px; border-radius: 5px; padding: 5px; display: inline-table; background-color: lightgoldenrodyellow">
-                <span style="font-size: 20pt;">{{ totalSent }}</span>
-              </div>
-              <div class="col s6"><span style="font-size: 20pt;">Enviados</span></div>
-            </div>
-
-            <div class="row" style="padding: 10px;">
-              <div class="col s1 offset-s4" style="height: 40px; border-radius: 5px; padding: 5px; display: inline-table; background-color: lightskyblue">
-                <span style="font-size: 20pt;">{{ totalDiary }}</span>
-              </div>
-              <div class="col s6"><span style="font-size: 20pt;">Diário</span></div>
-            </div> -->
-
           </div>
         </div>
 
@@ -295,7 +274,7 @@
 
         <div class="col s4" *ngFor="let card of cards">
           <div class="widget-header-cards">
-            <img [src]="getPhotoUrl(card.params.recipient)" onError="this.onerror=null;this.src='/assets/user.png';" class="user-avatar"/>
+            <img [src]="getPhotoUrl(card.params.recipient)" onError="this.onerror=null;this.src='/assets/user.png';" class="user-avatar" referrerpolicy="no-referrer"/>
             <span class="widget-header-cards-title">{{ card.params.recipientName || card.params.recipient}}</span>
           </div>
           <div class="card" style="margin-top: 0px !important; height: 396px !important">
@@ -315,7 +294,7 @@
             <div class="col s12" style="margin-top: 10px;">
               <div class="card-panel grey lighten-5" style="padding: 15px !important">
                 <span style="font-size: 17pt; font-weight: bold;">{{ card.informationTypeValue }}</span><br>
-                <span><img [src]="card.params.issuerPhotoUrl" class="user-big-avatar" onError="this.onerror=null;this.src='/assets/user.png';"/></span>
+                <span><img [src]="card.params.issuerPhotoUrl" class="user-big-avatar" onError="this.onerror=null;this.src='/assets/user.png';" referrerpolicy="no-referrer"/></span>
                 <span style="display: inline-block; vertical-align: top; margin-top: 8px; font-size: 15pt;">{{ card.params.issuerName }}</span>
               </div>
             </div>

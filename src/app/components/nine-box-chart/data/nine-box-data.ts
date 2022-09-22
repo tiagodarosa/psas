@@ -4,6 +4,7 @@ import UserData from "./user-data";
 export default class NineBoxData {
 
     color: string;
+    colorTitle: string;
     status: StatusNineBox;
     value: number;
     percentage: number;

@@ -2,10 +2,12 @@ import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'angularx-social-login';
+import { data } from 'jquery';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ComparisonOfResultsComponent } from '../components/charts/comparison-of-results/comparison-of-results.component';
 import { WordCloudComponent } from '../components/charts/word-cloud/word-cloud.component';
+import { NineBoxChartComponent } from '../components/nine-box-chart/nine-box-chart.component';
 import { ServicesService } from '../services.service';
 import MyJourneyAndFeedbackFilterData from '../shared/data/my-journey-and-feedback-filter-data';
 
@@ -30,9 +32,13 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   comparissonResultsData: any;
   teamValue: any;
   profile: string;
+  axisX: number;
+  axisY: number;
+  data9Box: any;
 
   @ViewChild('appWordCloud') appWordCloud: WordCloudComponent;
   @ViewChild('appComparisonOfResults') appComparisonOfResults: ComparisonOfResultsComponent;
+  @ViewChild('appNineBoxChart') appNineBoxChart: NineBoxChartComponent;
 
   private _organizationId: string;
   private _userLogged: any;
@@ -52,9 +58,12 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
     this._applicationsListCache = [];
     this.comparissonResultsData = { competences: [] };
     this.teamValue = {};
+    this.data9Box = {};
     this._isReloadComponents = false;
     this.isLoadingComplete = false;
     this.profileSelector = '1';
+    this.axisX = 0;
+    this.axisY = 0;
   }
 
   ngOnInit() {
@@ -128,8 +137,14 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
         pairResults.push(Number(prObject.answer));
         average = Number(Number(prObject.answer) + Number(lrObject.answer) ) / 2;
         averageResults.push(average);
+        if (String(c.name).toLocaleLowerCase().trim() === 'resultado')
+          this.axisY = average;
+        else
+          this.axisX += average
       });
-  
+      
+      this.axisX = this.axisX / competences.length - 1;
+
       this.comparissonResultsData = {
         competences: competences.map((c: any) => c.name),
         autoResults,
@@ -139,6 +154,13 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
       };
   
       this.appComparisonOfResults.reloadChart(this.comparissonResultsData);
+      this.data9Box = [
+        {
+          name: this._userLogged.name,
+          picture: this._userLogged.photoUrl
+        }
+      ];
+      this.appNineBoxChart.reloadData();
     } else {
       const membersOfTeam = object.team.members.filter((mbs: any) => mbs.email !== teamLeader);
       const teamCompResultsData = [];
@@ -156,7 +178,14 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
           pairResults.push(Number(prObject.answer));
           average = Number(Number(prObject.answer) + Number(lrObject.answer) ) / 2;
           averageResults.push(average);
+          if (String(c.name).toLocaleLowerCase().trim() === 'resultado')
+            this.axisY = average;
+          else
+            this.axisX += average
         });
+
+        this.axisX = this.axisX / competences.length - 1;
+
         teamCompResultsData.push(
           {
             competences: competences.map((c: any) => c.name),
@@ -184,6 +213,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
       );
 
       this.appComparisonOfResults.teamReloadChart(teamCompResultsData);
+      this.data9Box = [];
     }
   }
 

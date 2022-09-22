@@ -178,14 +178,16 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
     let leaderTotal: number = 0;
     let pairTotal: number = 0;
     this.competenceData.forEach((compData: any) => {
-      autoTotal += Number(compData.auto);
-      leaderTotal += Number(compData.leader);
-      pairTotal += Number(compData.pair);
+      if (String(compData).toLocaleLowerCase().trim() !== 'resultado') {
+        autoTotal += Number(compData.auto);
+        leaderTotal += Number(compData.leader);
+        pairTotal += Number(compData.pair);
+      }
     });
 
-    autoTotal = autoTotal / this.competenceData.length;
-    leaderTotal = leaderTotal / this.competenceData.length;
-    pairTotal = pairTotal / this.competenceData.length;
+    autoTotal = autoTotal / (this.competenceData.length - 1);
+    leaderTotal = leaderTotal / (this.competenceData.length - 1);
+    pairTotal = pairTotal / (this.competenceData.length - 1);
     const total = (autoTotal + leaderTotal + pairTotal) / 3;
 
     this.resultCompetenceData = {
