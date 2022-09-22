@@ -33,10 +33,12 @@ export class NineBoxChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.reloadData();
   }
 
-  reloadData() {
+  reloadData(user: any, x: number, y: number) {
+    this.users = user;
+    this.axisX = x;
+    this.axisY = y;
     this.model = this.loadData();
   }
 
@@ -150,7 +152,7 @@ export class NineBoxChartComponent implements OnInit {
         const box = object.find((el:any) => el.status === status);
         box.users.push(this.users[0]);
       } else {
-        
+
       }
     } else {
 

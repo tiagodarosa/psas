@@ -160,7 +160,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
           picture: this._userLogged.photoUrl
         }
       ];
-      this.appNineBoxChart.reloadData();
+      this.appNineBoxChart.reloadData(this.data9Box, this.axisX, this.axisY);
     } else {
       const membersOfTeam = object.team.members.filter((mbs: any) => mbs.email !== teamLeader);
       const teamCompResultsData = [];
@@ -321,7 +321,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
               this.assessmentValue = this.applicationsList[0].value;
               this.onSelectApplication();
             }
-          }, 100)
+          }, 500)
         }
       }
     )
