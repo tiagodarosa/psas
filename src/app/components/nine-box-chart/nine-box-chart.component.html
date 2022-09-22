@@ -6,22 +6,24 @@
         <div class="col-sm-4 box" *ngFor="let nivel of model" [style.background-color]="nivel.color">
             <div class="row" style="margin-top: 10px;">
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <span class="box-title">{{ nivel.status }}</span>
+                    <span class="box-title" [style.color]="nivel.colorTitle">{{ nivel.status }}</span>
                 </div>
-                <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <div class="box-tag">
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" *ngIf="profile === 'team-profile'">
+                    <div class="box-tag" [style.background-color]="nivel.colorTitle">
                         <span class="box-tag-title">{{ nivel.value }}</span>
                     </div>
-                    <div class="box-tag">
+                    <div class="box-tag" [style.background-color]="nivel.colorTitle">
                         <span class="box-tag-title">{{ nivel.percentage }}</span>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12 user-line container">
-                    <div class="row">
+                    <div class="row" style="padding-bottom: 10px;">
                         <div #p="ngbPopover"
                              class="col-sm-2 no-padding"
+                             [class.col-sm-2]="nivel.users.length > 1"
+                             [class.col-sm-12]="nivel.users.length === 1"
                              *ngFor="let user of nivel.users; let idx = index"
                              [openDelay]="300" 
                              (mouseenter)="onSelectUser(p, user, nivel.status, idx);"
@@ -31,8 +33,11 @@
                              triggers="manual"
                              [autoClose]="'outside'">
                             <span *ngIf="idx < 5 && user.picture === ''"><i class="material-icons" style="font-size: 30px; margin-right: 10px;">person</i></span>
-                            <span *ngIf="idx < 5 && user.picture !== ''"><img [src]="user.picture" class="user-mini-avatar"/></span>
+                            <span *ngIf="idx < 5 && user.picture !== ''"><img [src]="user.picture" class="user-mini-avatar" onError="this.onerror=null;this.src='/assets/user.png';" referrerpolicy="no-referrer"/></span>
                             <span *ngIf="idx === 5"><div class="total-users-link"><b>+{{nivel.totalUsers - 5}}</b></div></span>
+                        </div>
+                        <div *ngIf="nivel.users.length === 0" style="height: 28px;">
+
                         </div>
                     </div>
                 </div>
