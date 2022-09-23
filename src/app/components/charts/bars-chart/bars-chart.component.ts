@@ -40,8 +40,9 @@ export class BarsChartComponent implements OnInit {
         type: 'column'
       },
       xAxis: {
-        categories: ['Diário', 'Enviados', 'Recebidos'],
-        crosshair: true
+        categories: [''],
+        //crosshair: true
+        title: ''
       },
       yAxis: {
         title: 'Valores'
