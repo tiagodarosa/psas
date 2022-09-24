@@ -6,11 +6,9 @@ export default class MyJourneyAndFeedbackConstantsData {
     };
 
     static INFORMATION_TYPE = {
-        '1': 'Todos',
         '2': 'Diário particular',
         '3': 'Diário para time',
-        '4': 'Feedback enviados',
-        '5': 'Feedback recebidos'
+        '4': 'Feedback'
     };
 
 }

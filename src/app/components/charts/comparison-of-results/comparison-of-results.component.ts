@@ -96,25 +96,25 @@ export class ComparisonOfResultsComponent implements OnInit {
         {
           pointPlacement: 'on',
           name: 'Auto',
-          type: 'area',
+          // type: 'area',
           data: this.data.autoResults
         },
         {
           pointPlacement: 'on',
           name: 'Líder',
-          type: 'area',
+          // type: 'area',
           data: this.data.leaderResults
         },
         {
           pointPlacement: 'on',
           name: 'Pares',
-          type: 'area',
+          // type: 'area',
           data: this.data.pairResults
         },
         {
           pointPlacement: 'on',
           name: 'Média',
-          type: 'area',
+          // type: 'area',
           data: this.data.averageResults
         }
       ],

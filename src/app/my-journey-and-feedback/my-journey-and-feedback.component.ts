@@ -206,7 +206,7 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
               'id': el._id,
               'rev': el._rev,
               'utilizationDate': this.datePipe.transform(new Date(databaseObject.utilizationDate), 'dd/MM/yyyy'),
-              'type': databaseObject.recipient === this._userLogged.email && databaseObject.issuer !== this._userLogged.email ? 'Feedback recebido' : MyJourneyAndFeedbackConstantsData.INFORMATION_TYPE[`${databaseObject.informationType}`],
+              'type': MyJourneyAndFeedbackConstantsData.INFORMATION_TYPE[`${databaseObject.informationType}`],
               'recipient': databaseObject.recipientName || '-',
               'author': el.name,
               'messageMotive': MyJourneyAndFeedbackConstantsData.MESSAGE_TYPE[`${databaseObject.messageType}`],

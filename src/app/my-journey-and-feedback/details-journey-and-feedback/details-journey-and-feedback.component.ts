@@ -109,7 +109,7 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   }
 
   onSelectInformationType(value: string) {
-    if (value === '2' || value === '5') {
+    if (value === '2') {
       if(this.profile === 'user-profile') {
         this.viewControl.recipient = false;
         this.filter.recipient = this._userLogged.email;
@@ -140,6 +140,11 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
         this.initializeSelects('membersOfOrganizationName');
         this.initializeSelects('membersOfTeamName');
       }
+    } else if (value === '5') {
+      this.filter.recipient = '';
+      this.filter.issuer = '';
+      this.viewControl.issuer = false;
+      this.viewControl.recipient = false;
     }
   }
 
