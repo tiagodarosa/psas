@@ -41,7 +41,6 @@ export class BarsChartComponent implements OnInit {
       },
       xAxis: {
         categories: [''],
-        //crosshair: true
         title: ''
       },
       yAxis: {
