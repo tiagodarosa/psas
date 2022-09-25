@@ -34,13 +34,11 @@ export class HistoryChartComponent implements OnInit {
   private _organizationId: string;
   private _answers: Array<any>
   private _spotlightCompetences: Array<any>;
-  private _applications: Array<any>;
 
   constructor(private service: ServicesService,
               private cookie: CookieService) {
     this._answers = [];
     this._spotlightCompetences = [];
-    this._applications = [];
     this._organizationId = this.cookie.get('ORGANIZATIONID');;
     this.loadData();
   }
@@ -54,7 +52,6 @@ export class HistoryChartComponent implements OnInit {
         next: (data: any) => {
           this._spotlightCompetences = [];
           this._answers = data.answers;
-          this._applications = data.applications;
           let compTempArray = [];
           this._answers.forEach(answer => {
             compTempArray.push(answer.questionCompetence);

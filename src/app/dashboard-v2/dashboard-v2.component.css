@@ -18,3 +18,13 @@
     background-color: #03a9f4 !important;
     border: 2px solid #03a9f4;
 }
+
+.li-options {
+    font-size: 15pt;
+}
+
+.li-options:hover {
+    background-color: #03a9f4;
+    cursor: pointer;
+    border-radius: 5px;
+}

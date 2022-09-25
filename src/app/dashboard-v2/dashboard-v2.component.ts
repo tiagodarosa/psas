@@ -26,6 +26,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   projectsList: Array<any>;
   applicationsList: Array<any>;
   assessmentValue: string;
+  assessmentName: string;
   profileSelector: string;
   person: string;
   isLoadingComplete: boolean;
@@ -35,6 +36,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   axisX: number;
   axisY: number;
   data9Box: any;
+  modalInstance: any;
 
   @ViewChild('appWordCloud') appWordCloud: WordCloudComponent;
   @ViewChild('appComparisonOfResults') appComparisonOfResults: ComparisonOfResultsComponent;
@@ -59,9 +61,11 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
     this.comparissonResultsData = { competences: [] };
     this.teamValue = {};
     this.data9Box = {};
+    this.modalInstance = {};
     this._isReloadComponents = false;
     this.isLoadingComplete = false;
     this.profileSelector = '1';
+    this.assessmentName = '';
     this.axisX = 0;
     this.axisY = 0;
   }
@@ -82,7 +86,9 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => $('select').formSelect(), 1000);
+    const elems = document.querySelectorAll('.modal');
+    this.modalInstance = M.Modal.init(elems, {});
+    setTimeout(() => $('select').formSelect(), 200);
   }
 
   onDetailsJourneyAndFeedback() {
@@ -99,17 +105,31 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
     this.profileSelector = String(value);
     this.person = value === 1 ? this._userLogged.email : '';
     this.loadWordCloudData();
-    this.onSelectApplication();
+    this.selectApplication();
   }
 
-  onSelectApplication() {
-    const object = this._applicationsListCache.find((al: any) => al._id === this.assessmentValue);
+  onSelectAppModal() {
+    const instance = M.Modal.getInstance(document.getElementById('assessmentModal'));
+    instance.open();
+  }
+
+  onSelectApplication(assessmentTemp: string) {
+    this.assessmentValue = assessmentTemp;
+    const instance = M.Modal.getInstance(document.getElementById('assessmentModal'));
+    instance.close();
+    this.selectApplication();
+  }
+
+  selectApplication() {
     
+    const object = this._applicationsListCache.find((al: any) => al._id === this.assessmentValue);
+
     if (object === undefined || object === null) {
       M.toast({ html: 'Selecione a aplicação!' });
       return;
+    } else {
+      this.teamValue = object.team.name;
     }
-
 
     const teamLeader = object.team.members[0].email;
     const competences = object.assessment.questions.map((q:any) => {
@@ -140,7 +160,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
         if (String(c.name).toLocaleLowerCase().trim() === 'resultado')
           this.axisY = average;
         else
-          this.axisX += average
+          this.axisX += average;
       });
       
       this.axisX = this.axisX / competences.length - 1;
@@ -152,15 +172,18 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
         pairResults,
         averageResults
       };
-  
-      this.appComparisonOfResults.reloadChart(this.comparissonResultsData);
+      
       this.data9Box = [
         {
           name: this._userLogged.name,
           picture: this._userLogged.photoUrl
         }
       ];
-      this.appNineBoxChart.reloadData(this.data9Box, this.axisX, this.axisY);
+
+      setTimeout(() => {
+        this.appComparisonOfResults.reloadChart(this.comparissonResultsData);
+        this.appNineBoxChart.reloadData(this.data9Box, this.axisX, this.axisY);
+      }, 100);
     } else {
       const membersOfTeam = object.team.members.filter((mbs: any) => mbs.email !== teamLeader);
       const teamCompResultsData = [];
@@ -217,6 +240,10 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
     }
   }
 
+  onSelectTeam() {
+    this.selectApplication();
+  }
+
   private getMembers() {
     if (this.teamsList.length === 1) {
       return this.teamsList.map((el: any) => {
@@ -239,7 +266,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
     const [ endDay, endMonth, endYear ] = param.endPeriod.toString().split('/');
     param.endPeriod = this.datePipe.transform(new Date(+endYear, +endMonth - 1, +endDay), 'yyyy-MM-dd');
 
-    param.informationType = '2,3,4,5';
+    param.informationType = '2,3,4';
     param.messageType = '1,2';
 
     param.userLogged = this._userLogged.email;
@@ -306,20 +333,16 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
         next: (response: any) => {
           this._applicationsListCache = response.applicationList;
           response.applicationList.filter((el: any) => el.organizationId === this._organizationId)
-            .forEach((el: any) => {
-              this.applicationsList.push({
-                value: el._id,
-                label: el.name
-              });
-            }
+            .forEach((el: any) => this.applicationsList.push(el)
           );
           setTimeout(() => {
-            const selectElems = document.querySelectorAll('select');
-            M.FormSelect.init(selectElems, {});
+            $('select').formSelect();
             this.isLoadingComplete = true;
             if (this.applicationsList.length === 1) {
-              this.assessmentValue = this.applicationsList[0].value;
-              this.onSelectApplication();
+              this.assessmentValue = this.applicationsList[0]._id;
+              this.assessmentName = this.applicationsList[0].name;
+              $("#assessmentField").formSelect();
+              this.selectApplication();
             }
           }, 500)
         }

@@ -33,19 +33,15 @@
 
       <div class="row">
         <div class="input-field col s6" [hidden]="!isLoadingComplete">
-          <i class="material-icons prefix">description</i>
-          <label for="assessmentField" class="active">Selecione a avaliação</label>
-          <select #assessmentField id="assessmentField" class="validate" [(ngModel)]="assessmentValue" (change)="onSelectApplication()">
-              <option *ngFor="let a of applicationsList" [value]="a.value">{{ a.label }}</option>
-          </select>
+          <i class="material-icons prefix" (click)="onSelectAppModal()" style="color: #03a9f4; cursor: pointer;">search</i>
+          <label for="assessmentField" class="active">Equipe</label>
+          <input type="text" [ngModel]="assessmentName" [disabled]="true">
         </div>
 
-        <div class="input-field col s6" [hidden]="!isLoadingComplete || profileSelector === '1'">
+        <div class="input-field col s6" [hidden]="!isLoadingComplete">
           <i class="material-icons prefix">description</i>
-          <label for="teamField" class="active">Selecione a equipe</label>
-          <select #teamField id="teamField" class="validate" [(ngModel)]="teamValue">
-              <option *ngFor="let a of teamsList" [value]="a._id">{{ a.name }}</option>
-          </select>
+          <label for="teamField" class="active">Equipe</label>
+          <input type="text" [ngModel]="teamValue" [disabled]="true">
         </div>
 
         <div class="input-field col s6" [hidden]="isLoadingComplete">
@@ -75,31 +71,31 @@
               <i class="material-icons prefix" style="font-size: 30pt; color: #fff;" *ngIf="isLoadingComplete">more_vert</i>
             </span>
           </div>
-          <div class="card" style="margin-top: 0px !important; height: 405px !important;">
+          <div class="card" style="margin-top: 0px !important; height: 405px !important; padding: 20px; padding-top: 50px !important;">
             <div class="row">
-              <div class="col s3">
-                <span><i class="material-icons prefix" style="font-size: 100pt; text-align: center; color: green;">done</i></span>
+              <div class="col s3" style="text-align: center;">
+                <span><img src="/assets/check.jpeg" style="width: 50%"/></span>
               </div>
               <div class="col s9">
-                <h3>Destaque</h3>
+                <h3>Pontos fortes</h3>
                 <ul>
-                  <li>Comunicação</li>
-                  <li>Respeito</li>
-                  <li>Liderança</li>
+                  <li style="font-size: 15pt;">1º Comunicação</li>
+                  <li style="font-size: 15pt;">2º Respeito</li>
+                  <li style="font-size: 15pt;">3º Liderança</li>
                 </ul>
               </div>
             </div>
             
             <div class="row">
-              <div class="col s3" style="vertical-align: text-top">
-                <span><i class="material-icons prefix" style="font-size: 100pt; text-align: center; color: darkgray;">book</i></span>
+              <div class="col s3" style="vertical-align: text-top; text-align: center;">
+                <span><img src="/assets/warning.jpeg" style="width: 50%"/></span>
               </div>
               <div class="col s9">
-                <h3>À desenvolver</h3>
+                <h3>A desenvolver</h3>
                 <ul>
-                  <li>Negociação</li>
-                  <li>Conhecimento</li>
-                  <li>Relacionamento interpessoal</li>
+                  <li style="font-size: 15pt;">1º Negociação</li>
+                  <li style="font-size: 15pt;">2º Conhecimento</li>
+                  <li style="font-size: 15pt;">3º Relacionamento interpessoal</li>
                 </ul>
               </div>
             </div>
@@ -147,7 +143,7 @@
               <i class="material-icons prefix" style="font-size: 30pt; color: #fff;" *ngIf="isLoadingComplete">more_vert</i>
             </span>
           </div>
-          <div class="card" style="margin-top: 0px !important; height: 405px !important;">
+          <div class="card" style="margin-top: 0px !important; height: 500px !important;">
             <app-history-chart [person]="person" competence="{{ '' }}"></app-history-chart>
           </div>
         </div>
@@ -161,5 +157,18 @@
   <app-footer></app-footer>
   
 </div>
-  
-  
+
+<div id="assessmentModal" class="modal">
+  <div class="modal-content">
+    <h4>Selecione a avaliação</h4>
+    <ul style="margin-top: 10px;">
+      <li *ngFor="let a of applicationsList" class="li-options" (click)="onSelectApplication(a._id)">
+        <h3>{{ a.name }}</h3>
+        <h4>Time: {{ a.team.name }}</h4>
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+  </div>
+</div>
