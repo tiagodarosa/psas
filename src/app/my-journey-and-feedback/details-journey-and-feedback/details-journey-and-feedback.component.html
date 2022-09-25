@@ -201,19 +201,6 @@
           </div>
         </div>
 
-        <!-- <div class="col s3">
-          <div class="widget-header">
-            <span style="font-size: 25pt; color: #fff;">Ranking</span>
-          </div>
-          <div class="card" style="margin-top: 0px !important; height: 405px !important">
-            <div *ngFor="let l of rankingData" style="padding: 10px;">
-              <div class="col s1" style="height: 20px; border-radius: 20%; margin-top: 5px; " style.background-color="{{ l.color }}"></div>
-              <div class="col s10"><span style="font-size: 15pt;">{{ l.name }}</span></div>
-              <div class="col s1"><span style="font-size: 15pt;">{{ l.weight }}</span></div>
-            </div>
-          </div>
-        </div> -->
-
         <div class="col s3">
           <div class="widget-header">
             <span style="font-size: 25pt; color: #fff;">Ranking</span>
@@ -263,7 +250,7 @@
           </div>
           <div class="card" style="margin-top: 0px !important; height: 405px !important">
 
-            <app-bars-chart #appBarsChart [data]="comparissonResultsData"></app-bars-chart>
+            <app-bars-chart #appBarsChart data="{{[]}}"></app-bars-chart>
 
           </div>
         </div>
@@ -300,8 +287,8 @@
             </div>
 
             <div class="col s6">
-              <div class="chip teal" *ngIf="card.messageTypeValue === 'Reconhecimento'">{{ card.messageTypeValue }}</div>
-              <div class="chip yellow" *ngIf="card.messageTypeValue === 'Desenvolvimento'">{{ card.messageTypeValue }}</div>
+              <div class="chip green" style="color: white;" *ngIf="card.messageTypeValue === 'Reconhecimento'">{{ card.messageTypeValue }}</div>
+              <div class="chip yellow darken-3" style="color: white;" *ngIf="card.messageTypeValue === 'Desenvolvimento'">{{ card.messageTypeValue }}</div>
             </div>
 
           </div>

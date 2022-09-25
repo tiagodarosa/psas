@@ -357,9 +357,9 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
       {
         next: (response: any) => {
           const indicatorsDocs = response.docs;
-          const totalDiary = indicatorsDocs.filter((id: any) => id.params.issuer === this._userLogged.email && id.params.recipient === this._userLogged.email) || [];
-          const totalSent = indicatorsDocs.filter((id: any) => id.params.issuer === this._userLogged.email && id.params.recipient !== this._userLogged.email) || [];
-          const totalReceived = indicatorsDocs.filter((id: any) => id.params.issuer !== this._userLogged.email && id.params.recipient === this._userLogged.email) || [];
+          const totalDiary = indicatorsDocs.filter((id: any) => id.params.informationType === 2 && id.params.issuer === this._userLogged.email && id.params.recipient === this._userLogged.email) || [];
+          const totalSent = indicatorsDocs.filter((id: any) => id.params.informationType === 4 && id.params.issuer === this._userLogged.email && id.params.recipient !== this._userLogged.email) || [];
+          const totalReceived = indicatorsDocs.filter((id: any) => id.params.informationType === 4 && id.params.issuer !== this._userLogged.email && id.params.recipient === this._userLogged.email) || [];
           this.barsTotalData = { totalDiary: totalDiary.length, totalSent: totalSent.length, totalReceived: totalReceived.length };
           this.appBarsChart.reloadChart(this.barsTotalData);
         },

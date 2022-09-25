@@ -107,6 +107,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   onChangeProfile(value: number) {
     this.profileSelector = String(value);
     this.person = value === 1 ? this._userLogged.email : '';
+    this._isReloadComponents = true;
     this.loadWordCloudData();
     this.selectApplication();
     this.historyChart.reloadChart(this.person);
@@ -119,6 +120,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
 
   onSelectApplication(assessmentTemp: string) {
     this.assessmentValue = assessmentTemp;
+    this.assessmentName = this.applicationsList.find((el: any) => el._id === assessmentTemp).name
     const instance = M.Modal.getInstance(document.getElementById('assessmentModal'));
     instance.close();
     this.selectApplication();
