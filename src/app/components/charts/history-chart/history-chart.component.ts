@@ -46,6 +46,11 @@ export class HistoryChartComponent implements OnInit {
   ngOnInit(){
   }
 
+  reloadChart(person: string) {
+    this.person = person;
+    this.loadData();
+  }
+
   private loadData() {
     this.service.findOrganizationProfile(this._organizationId).subscribe(
       {
@@ -67,15 +72,8 @@ export class HistoryChartComponent implements OnInit {
 
   private updateHistoryChart(person: string, competence: string) {
     let answ = [];
-    if (person !== '') {
-      this._answers.forEach(a => {
-        if (a.userRated === person) {
-          answ.push(a);
-        }
-      });
-    } else {
-      answ = this._answers;
-    }
+    console.log(person);
+    answ = person !== undefined && person !== '' ? this._answers.filter(a => a.userRated === person) : this._answers;
 
     const temporary = [];
     const dates = [];
@@ -84,6 +82,7 @@ export class HistoryChartComponent implements OnInit {
         dates.push(a.endDate);
       }
     });
+
     this._spotlightCompetences.forEach(function(c, i) {
       temporary[i] = { name: c, showInLegend: true, data: [] };
       dates.forEach(d => {
@@ -97,7 +96,7 @@ export class HistoryChartComponent implements OnInit {
             day = new Date(a.endDate).getUTCDate();
             month = new Date(a.endDate).getUTCMonth();
             year = new Date(a.endDate).getUTCFullYear();
-            value = value + ((a.answer * 100) / 100);
+            value += Number(a.answer);
             count++;
           }
         });
@@ -131,6 +130,7 @@ export class HistoryChartComponent implements OnInit {
       });
       c.data = tempData2;
     });
+    console.log(competenceSeries);
     Highcharts.chart('history-chart-id', {
       chart: {
         type: 'area',
@@ -158,7 +158,7 @@ export class HistoryChartComponent implements OnInit {
       },
       tooltip: {
         headerFormat: '<b>{series.name}</b><br>',
-        pointFormat: 'Atingiu {point.y:.0f}% em {point.x:%e/%m/%Y}'
+        pointFormat: 'Atingiu a média {point.y:.0f} em {point.x:%e/%m/%Y}'
       },
       plotOptions: {
           area: {
