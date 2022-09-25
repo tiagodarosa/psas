@@ -6,6 +6,7 @@ import { data } from 'jquery';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ComparisonOfResultsComponent } from '../components/charts/comparison-of-results/comparison-of-results.component';
+import { HistoryChartComponent } from '../components/charts/history-chart/history-chart.component';
 import { WordCloudComponent } from '../components/charts/word-cloud/word-cloud.component';
 import { NineBoxChartComponent } from '../components/nine-box-chart/nine-box-chart.component';
 import { ServicesService } from '../services.service';
@@ -41,6 +42,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   @ViewChild('appWordCloud') appWordCloud: WordCloudComponent;
   @ViewChild('appComparisonOfResults') appComparisonOfResults: ComparisonOfResultsComponent;
   @ViewChild('appNineBoxChart') appNineBoxChart: NineBoxChartComponent;
+  @ViewChild('historyChart') historyChart: HistoryChartComponent;
 
   private _organizationId: string;
   private _userLogged: any;
@@ -78,6 +80,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
           this.getApplications();
           this.getTeams();
           this.loadWordCloudData();
+          this.historyChart.reloadChart(this._userLogged.email);
         },
         error: () => this.spinner.hide(),
         complete: () => this.spinner.hide()
@@ -106,6 +109,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
     this.person = value === 1 ? this._userLogged.email : '';
     this.loadWordCloudData();
     this.selectApplication();
+    this.historyChart.reloadChart(this.person);
   }
 
   onSelectAppModal() {
