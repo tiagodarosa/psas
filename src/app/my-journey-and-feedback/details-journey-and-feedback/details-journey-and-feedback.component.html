@@ -234,10 +234,12 @@
               </thead>
               <tbody>
                 <tr *ngFor="let i of indicators">
-                  <td style="font-size: 10pt;">{{ i.name }}</td>
-                  <td style="text-align: center; font-size: 12pt; font-weight: bold;">{{ i.partDiary }}</td>
-                  <td style="text-align: center; font-size: 12pt; font-weight: bold;">{{ i.sent }}</td>
-                  <td style="text-align: center; font-size: 12pt; font-weight: bold;">{{ i.received }}</td>
+                  <td>
+                    <img [src]="getPhotoUrl(i.email)" onError="this.onerror=null;this.src='/assets/user.png';" class="user-avatar" referrerpolicy="no-referrer" [alt]="i.name" [title]="i.name"/>
+                  </td>
+                  <td style="text-align: center; font-size: 16pt;" [style.color]="i.partDiaryColor" [style.font-weight]="i.partDiary === 0 || i.partDiaryColor === 'green' ? 'bold' : 'normal'" >{{ i.partDiary }}</td>
+                  <td style="text-align: center; font-size: 16pt;" [style.color]="i.sentColor" [style.font-weight]="i.sent === 0 || i.sentColor === 'green' ? 'bold' : 'normal'">{{ i.sent }}</td>
+                  <td style="text-align: center; font-size: 16pt;" [style.color]="i.receivedColor" [style.font-weight]="i.received === 0 || i.receivedColor === 'green' ? 'bold' : 'normal'">{{ i.received }}</td>
                 </tr>
               </tbody>
             </table>
@@ -261,8 +263,11 @@
 
         <div class="col s4" *ngFor="let card of cards">
           <div class="widget-header-cards">
-            <img [src]="getPhotoUrl(card.params.recipient)" onError="this.onerror=null;this.src='/assets/user.png';" class="user-avatar" referrerpolicy="no-referrer"/>
-            <span class="widget-header-cards-title">{{ card.params.recipientName || card.params.recipient}}</span>
+            <span *ngIf="card.params.informationType === 2"><i class="material-icons card-header">person</i></span> 
+            <span *ngIf="card.params.informationType === 3"><i class="material-icons card-header">group</i></span> 
+            <span *ngIf="card.params.informationType === 4"><i class="material-icons card-header">forum</i></span> 
+            <span class="widget-header-cards-title">{{ card.informationTypeValue }}</span>
+            <!-- <span class="widget-header-cards-title">{{ card.params.recipientName || card.params.recipient}}</span> -->
           </div>
           <div class="card" style="margin-top: 0px !important; height: 396px !important">
 
@@ -277,18 +282,28 @@
             <div class="col s12" style="height: 80px;">
               <a class="waves-effect waves-light btn" style="margin: 2px" *ngFor="let skill of card.params.relatedSkills">{{ skill }}</a>
             </div>
-          
-            <div class="col s12" style="margin-top: 10px;">
-              <div class="card-panel grey lighten-5" style="padding: 15px !important">
-                <span style="font-size: 17pt; font-weight: bold;">{{ card.informationTypeValue }}</span><br>
-                <span><img [src]="card.params.issuerPhotoUrl" class="user-big-avatar" onError="this.onerror=null;this.src='/assets/user.png';" referrerpolicy="no-referrer"/></span>
-                <span style="display: inline-block; vertical-align: top; margin-top: 8px; font-size: 15pt;">{{ card.params.issuerName }}</span>
-              </div>
-            </div>
-
-            <div class="col s6">
+            
+            <div class="col s12">
               <div class="chip green" style="color: white;" *ngIf="card.messageTypeValue === 'Reconhecimento'">{{ card.messageTypeValue }}</div>
               <div class="chip yellow darken-3" style="color: white;" *ngIf="card.messageTypeValue === 'Desenvolvimento'">{{ card.messageTypeValue }}</div>
+            </div>
+
+            <div class="col s12" style="margin-top: 10px;">
+              <div class="card-panel grey lighten-5" style="padding: 15px !important" *ngIf="card.params.informationType !== 2">
+                <span style="font-size: 17pt; font-weight: bold;"><i class="material-icons card-header">call_made</i></span>
+                <span><img [src]="getPhotoUrl(card.params.issuer)" class="user-big-avatar" onError="this.onerror=null;this.src='/assets/user.png';" referrerpolicy="no-referrer"/></span>
+                <span style="display: inline-block; vertical-align: top; margin-top: 15px; margin-left: 10px; font-size: 13pt;">{{ card.params.issuerName }}</span>
+                <br>
+                <span style="font-size: 17pt; font-weight: bold;"><i class="material-icons card-header">call_received</i></span>
+                <span><img [src]="getPhotoUrl(card.params.recipient)" class="user-big-avatar" onError="this.onerror=null;this.src='/assets/user.png';" referrerpolicy="no-referrer"/></span>
+                <span style="display: inline-block; vertical-align: top; margin-top: 15px; margin-left: 10px; font-size: 13pt;">{{ card.params.recipientName || card.params.recipient}}</span>
+              </div>
+
+              <div class="card-panel grey lighten-5" style="padding: 15px !important" *ngIf="card.params.informationType === 2">
+                <span style="font-size: 17pt; font-weight: bold;"><i class="material-icons card-header">repeat</i></span>
+                <span><img [src]="getPhotoUrl(card.params.issuer)" class="user-big-avatar" onError="this.onerror=null;this.src='/assets/user.png';" referrerpolicy="no-referrer"/></span>
+                <span style="display: inline-block; vertical-align: top; margin-top: 15px; margin-left: 10px; font-size: 13pt;">{{ card.params.issuerName }}</span>
+              </div>
             </div>
 
           </div>

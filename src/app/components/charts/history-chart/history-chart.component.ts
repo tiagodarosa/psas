@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { CookieService } from 'ngx-cookie-service';
 import { ServicesService } from 'src/app/services.service';
 
 declare var require: any;
 declare var $: any;
+declare var M: any;
 
 let Boost = require('highcharts/modules/boost');
 let noData = require('highcharts/modules/no-data-to-display');
@@ -20,7 +21,7 @@ noData(Highcharts);
   templateUrl: './history-chart.component.html',
   styleUrls: ['./history-chart.component.css']
 })
-export class HistoryChartComponent implements OnInit {
+export class HistoryChartComponent implements OnInit, AfterViewInit {
 
   @Input()
   person: string;
@@ -28,8 +29,13 @@ export class HistoryChartComponent implements OnInit {
   @Input()
   competence: string;
 
-  
+  @Input()
+  showData: boolean;
+
+  competenceSeries: Array<any>;
+  rows: Array<number>;
   options: any;
+  application: any;
   
   private _organizationId: string;
   private _answers: Array<any>
@@ -37,18 +43,33 @@ export class HistoryChartComponent implements OnInit {
 
   constructor(private service: ServicesService,
               private cookie: CookieService) {
+    this.competenceSeries = [];
     this._answers = [];
     this._spotlightCompetences = [];
-    this._organizationId = this.cookie.get('ORGANIZATIONID');;
+    this.rows = [];
+    this.application = {};
+    this._organizationId = this.cookie.get('ORGANIZATIONID');
     this.loadData();
   }
 
   ngOnInit(){
   }
 
+  ngAfterViewInit(): void {
+    let dtElems = document.querySelectorAll('.datepicker');
+    let selElems = document.querySelectorAll('select');
+    M.Datepicker.init(dtElems, {});
+    M.FormSelect.init(selElems, {});
+  }
+
   reloadChart(person: string) {
     this.person = person;
     this.loadData();
+  }
+
+  getData(index: number, data: any) {
+    let arr: Array<any> = data[index];
+    return Number(arr[1]).toFixed(1);
   }
 
   private loadData() {
@@ -57,6 +78,7 @@ export class HistoryChartComponent implements OnInit {
         next: (data: any) => {
           this._spotlightCompetences = [];
           this._answers = data.answers;
+          this.application = data.applications[0];
           let compTempArray = [];
           this._answers.forEach(answer => {
             compTempArray.push(answer.questionCompetence);
@@ -72,7 +94,6 @@ export class HistoryChartComponent implements OnInit {
 
   private updateHistoryChart(person: string, competence: string) {
     let answ = [];
-    console.log(person);
     answ = person !== undefined && person !== '' ? this._answers.filter(a => a.userRated === person) : this._answers;
 
     const temporary = [];
@@ -104,17 +125,16 @@ export class HistoryChartComponent implements OnInit {
       });
     });
 
-    let competenceSeries = [];
     if (competence !== '') {
       temporary.forEach(t => {
         if (t.name === competence) {
-          competenceSeries.push(t);
+          this.competenceSeries.push(t);
         }
       });
     } else {
-      competenceSeries = temporary;
+      this.competenceSeries = temporary;
     }
-    competenceSeries.forEach(c => {
+    this.competenceSeries.forEach(c => {
       let tempData2 = [];
       let temp = [];
       c.data.forEach(d => {
@@ -130,7 +150,9 @@ export class HistoryChartComponent implements OnInit {
       });
       c.data = tempData2;
     });
-    console.log(competenceSeries);
+
+    this.rows = this.competenceSeries[0].data.map((el: any) => 1);
+
     Highcharts.chart('history-chart-id', {
       chart: {
         type: 'area',
@@ -174,7 +196,7 @@ export class HistoryChartComponent implements OnInit {
               }
           }
       },
-      series: competenceSeries
+      series: this.competenceSeries
     });
     $('.highcharts-credits').hide();
   }
