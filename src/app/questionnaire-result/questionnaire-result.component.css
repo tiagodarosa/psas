@@ -1,9 +1,32 @@
+.th-team {
+    min-width: 50px;
+    padding: 50px 0;
+}
+
+.td-team {
+    min-width: 50px;
+}
+
+.th-transform {
+    transform: rotate(270deg);
+    -ms-transform: rotate(270deg);	 /*  for IE  */
+
+    /* 	for browsers supporting webkit (such as chrome, firefox, safari etc.). */
+    -webkit-transform: rotate(270deg);
+    display: inline-block;
+}
+
 .user-big-avatar {
     width: 150px;
     height: 150px;
     border-radius: 50%;
     border: 2px solid lightgray;
     margin-left: 10px;
+}
+
+.blue-line {
+    color: #039be5 !important;
+    background-color: rgb(3, 155, 229, 0.2) !important;
 }
 
 ::ng-deep .tab a.active {

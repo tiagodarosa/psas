@@ -33,7 +33,7 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   filter: MyJourneyAndFeedbackFilterData;
   profile: string;
   messageTypeFilter: { acknowledgment: boolean, development: boolean };
-  indicators: Array<{ name: string, partDiary: number, sent: number, received: number }>;
+  indicators: Array<{ name: string, partDiary: number, sent: number, received: number, partDiaryColor: string, sentColor: string, receivedColor: string, email: string }>;
   viewControl: { recipient: boolean, issuer: boolean };
   membersOfOrganization: Array<any>;
   membersOfTeam: Array<any>;
@@ -282,9 +282,47 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
               const particularDiary = indicatorsDocs.filter((id: any) => id.params.issuer === member.email && id.params.recipient === member.email) || [];
               const sentFeedbacks = indicatorsDocs.filter((id: any) => id.params.issuer === member.email && id.params.recipient !== member.email) || [];
               const receivedFeedbacks = indicatorsDocs.filter((id: any) => id.params.issuer !== member.email && id.params.recipient === member.email) || [];
-              this.indicators.push({ name: member.name, partDiary: particularDiary.length, sent: sentFeedbacks.length, received: receivedFeedbacks.length });
+              this.indicators.push(
+                {
+                  email: member.email,
+                  name: member.name,
+                  partDiary: particularDiary.length, 
+                  sent: sentFeedbacks.length, 
+                  received: receivedFeedbacks.length,
+                  partDiaryColor: particularDiary.length === 0 ? 'red' : 'black',
+                  sentColor: sentFeedbacks.length === 0 ? 'red' : 'black',
+                  receivedColor: receivedFeedbacks.length === 0 ? 'red' : 'black'
+                 });
             }
           });
+
+          let propertyName = '';
+          let object = null;
+          let largerValue = 0;
+          this.indicators.forEach((el: any) => {
+
+            if (el.partDiary > largerValue) {
+              largerValue = el.partDiary;
+              object = el;
+              propertyName = 'partyDiaryColor';
+            }
+
+            if (el.sent > largerValue) {
+              largerValue = el.sent;
+              object = el;
+              propertyName = 'sentColor';
+            }
+
+            if (el.received > largerValue) {
+              largerValue = el.received;
+              object = el;
+              propertyName = 'receivedColor';
+            }
+          });
+
+          object[propertyName] = 'green';
+          object['bold'] = 'bold';
+
         },
         error: this.showErrors.bind(this),
         complete: () => this.isLoadingIndicators = false

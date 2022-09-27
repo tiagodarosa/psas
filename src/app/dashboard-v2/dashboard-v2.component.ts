@@ -55,13 +55,12 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
               private authService: AuthService,
               private datePipe: DatePipe,
               private service: ServicesService) {
-    this._organizationId = this.cookie.get('ORGANIZATIONID');
-    this.profile = this.cookie.get('ORGANIZATIONMEMBERPROFILE');
+    console.log(this.profile);
     this.wcData = [];
     this.applicationsList = [];
     this._applicationsListCache = [];
     this.comparissonResultsData = { competences: [] };
-    this.teamValue = {};
+    this.teamValue = '';
     this.data9Box = {};
     this.modalInstance = {};
     this._isReloadComponents = false;
@@ -73,6 +72,8 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this._organizationId = this.cookie.get('ORGANIZATIONID');
+    this.profile = this.cookie.get('ORGANIZATIONMEMBERPROFILE');
     this.authService.authState.subscribe(
       {
         next: (user) => {
