@@ -43,8 +43,8 @@ export class NineBoxChartComponent implements OnInit {
   }
 
   onSelectUser(popover: NgbPopover, userDataTemp: UserData, nivel: string, index: number) {
-    if (index > 4) {
-
+    if (index > 3) {
+      // abrir menu
     } else {
       this.userDataPopup = userDataTemp;
       this.nivelPopup = nivel;
@@ -59,6 +59,10 @@ export class NineBoxChartComponent implements OnInit {
   onCleanUserObject() {
     this.userDataPopup = new UserData();
     this.nivelPopup = '';
+  }
+
+  formatValue(value: number): string {
+    return Number(value).toFixed(1);
   }
 
   private loadData(): Array<NineBoxData> {
@@ -76,7 +80,7 @@ export class NineBoxChartComponent implements OnInit {
       {
         color: '#B6D7A8',
         colorTitle: '#52b64e',
-        title: 'Alto potencial e desempenho esperado (forte desempenho);',
+        title: 'Alto potencial e desempenho esperado (forte desempenho)',
         status: StatusNineBox.A2,
         percentage: 0,
         value: 0,
@@ -96,7 +100,7 @@ export class NineBoxChartComponent implements OnInit {
       {
         color: '#EA9999',
         colorTitle: '#db0000',
-        title: 'Potencial baixo e desempenho abaixo do esperado (insuficiente)',
+        title: 'Potencial mediano e baixo desempenho (questionável)',
         status: StatusNineBox.B1,
         percentage: 0,
         value: 0,
@@ -106,7 +110,7 @@ export class NineBoxChartComponent implements OnInit {
       {
         color: '#CFE2F3',
         colorTitle: '#3f64da',
-        title: 'Baixo potencial mas atinge o desempenho esperado (eficaz)',
+        title: 'Potencial e desempenho em nível mediano (mantenedor)',
         status: StatusNineBox.B2,
         percentage: 0,
         value: 0,
@@ -116,7 +120,7 @@ export class NineBoxChartComponent implements OnInit {
       {
         color: '#B6D7A8',
         colorTitle: '#52b64e',
-        title: 'Baixo potencial e desempenho acima do esperado (comprometido)',
+        title: 'Potencial mediano e desempenho acima do esperado (forte desempenho)',
         status: StatusNineBox.B3,
         percentage: 0,
         value: 0,
@@ -126,7 +130,7 @@ export class NineBoxChartComponent implements OnInit {
       {
         color: '#EA9999',
         colorTitle: '#db0000',
-        title: '',
+        title: 'Potencial baixo e desempenho abaixo do esperado (insuficiente)',
         status: StatusNineBox.C1,
         percentage: 0,
         value: 0,
@@ -136,7 +140,7 @@ export class NineBoxChartComponent implements OnInit {
       {
         color: '#EA9999',
         colorTitle: '#db0000',
-        title: '',
+        title: 'Baixo potencial mas atinge o desempenho esperado (eficaz)',
         status: StatusNineBox.C2,
         percentage: 0,
         value: 0,
@@ -146,7 +150,7 @@ export class NineBoxChartComponent implements OnInit {
       {
         color: '#CFE2F3',
         colorTitle: '#3f64da',
-        title: '',
+        title: 'Baixo potencial e desempenho acima do esperado (comprometido)',
         status: StatusNineBox.C3,
         percentage: 0,
         value: 0,
@@ -160,11 +164,21 @@ export class NineBoxChartComponent implements OnInit {
         const status = NineBoxChartComponent.calcAxis(this.axisX, this.axisY);
         const box = object.find((el:any) => el.status === status);
         box.users.push(this.users[0]);
-      } else {
-
       }
     } else {
+      this.users.forEach((user: any) => {
+        const status = NineBoxChartComponent.calcAxis(user.x, user.y);
+        const box = object.find((el:any) => el.status === status);
+        box.value += 1; 
+        box.users.push(user);
+      });
 
+      object.forEach((o: any) => {
+        if (o.users.length > 0)
+          o.percentage = (o.users.length * 100) / this.users.length;
+        else
+          o.percentage = 0;
+      });
     }
 
     return object;
