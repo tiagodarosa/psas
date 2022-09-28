@@ -8,10 +8,14 @@
 
 <div class="row" style="padding: 16px;" *ngIf="showData">
     <div class="input-field col s4">
-        <input type="text" class="datepicker">
+        <i class="material-icons prefix">date_range</i>
+        <input id="initialPeriod" type="text" class="datepicker" [ngModel]="startPeriod">
+        <label for="initialPeriod" class="active">Periodo inicial</label>
     </div>
     <div class="input-field col s4">
-        <input type="text" class="datepicker">
+        <i class="material-icons prefix">date_range</i>
+        <input id="finalPeriod" type="text" class="datepicker" [ngModel]="endPeriod">
+        <label for="finalPeriod" class="active">Periodo final</label>
     </div>
 </div>
 
@@ -19,9 +23,11 @@
     <div class="input-field col s4">
         <select>
             <option value="" disabled selected>Selecione o cargo</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
+            <option value="1">Analista I</option>
+            <option value="2">Analista II</option>
+            <option value="3">Coordenador</option>
+            <option value="4">Especialista</option>
+            <option value="5">Técnico em Desenv.</option>
         </select>
         <label>Cargo</label>
     </div>
@@ -29,9 +35,7 @@
     <div class="input-field col s4">
         <select>
             <option value="" disabled selected>Selecione a equipe</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
+            <option [value]="team._id" *ngFor="let team of teamsList">{{ team.name }}</option>
         </select>
         <label>Equipe</label>
     </div>
@@ -39,9 +43,7 @@
     <div class="input-field col s4">
         <select>
             <option value="" disabled selected>Selecione a competência</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
+            <option [value]="comp.name" *ngFor="let comp of competenceSeries">{{ comp.name }}</option>
         </select>
         <label>Competências</label>
     </div>
@@ -60,14 +62,16 @@
     <thead>
       <tr>
         <th style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;">Data</th>
-        <th style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;">Equipe</th>
+        <th style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5; width: 250px;">Cargo</th>
+        <th style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5; width: 250px;">Equipe</th>
         <th style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;" *ngFor="let comp of competenceSeries" [hidden]="comp.name === 'Resultado'">{{ comp.name }}</th>
       </tr>
     </thead>
     <tbody>
         <tr *ngFor="let r of rows; let idx = index;">
-            <td style="text-align: center;">{{ application.endDate | date: 'dd/MM/yyyy' }}</td>
-            <td style="text-align: center;">{{ application.team.name }}</td>
+            <td style="text-align: center; background-color: lightgray;">{{ application.endDate | date: 'dd/MM/yyyy' }}</td>
+            <td style="text-align: center; background-color: lightgray; width: 250px;">Analista II</td>
+            <td style="text-align: center; background-color: lightgray; width: 250px;">{{ application.team.name }}</td>
             <td style="text-align: center;" *ngFor="let comp of competenceSeries" [hidden]="comp.name === 'Resultado'">{{ getData(idx, comp.data) }}</td>
         </tr>
     </tbody>

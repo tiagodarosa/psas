@@ -25,6 +25,7 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   results: Array<any>;
   competenceData: Array<any>;
   competenceSeries: Array<any>;
+  totalSeries: any;
   resultCompetenceData: any;
   userLogged: any;
   application: any;
@@ -32,6 +33,7 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   methods: any;
   comparissonResultsData: any;
   rows: Array<any>;
+  nineBox: string;
   
   @ViewChild('appComparisonOfResults') appComparisonOfResults: ComparisonOfResultsComponent;
   @ViewChild('historyChart') historyChart: HistoryChartComponent;
@@ -54,6 +56,8 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
     this.competenceSeries = [];
     this.rows = [];
     this.resultCompetenceData = {};
+    this.totalSeries = {};
+    this.nineBox = '';
     this.application = { name: 'Carregando...' };
     this.applicationId = this.route.snapshot.params.assessment;
     this.code = this.route.snapshot.params.code;
@@ -70,6 +74,14 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
         complete: () => this.spinner.hide()
       }
     );
+  }
+
+  getTotalSeriesArr() {
+    return Object.keys(this.totalSeries);
+  }
+
+  getTotalValue(key: string) {
+    return this.totalSeries[key];
   }
 
   loadInitialData() {
@@ -97,6 +109,14 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
 
   onBack() {
     this.router.navigate(['dashboard-v2']);
+  }
+
+  getAverageValue(r: any, totalCompetence: number): string {
+    let total = 0;
+    for (let count = 0; count < totalCompetence; count++) {
+      total += Number(r[`$qst_${count}`]);
+    }
+    return Number(total / totalCompetence).toFixed(1);
   }
 
   getValue(order: number, r: any) {
@@ -171,9 +191,6 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   }
 
   private buildTeamCompetences() {
-
-
-
     this.rows = [];
     this.competenceSeries = this.application.assessment.questions.map((q:any) => {
       return {
@@ -186,6 +203,8 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
     this.application.team.members.forEach((member: any) => {
       
       if (member.name !== undefined) {
+        this._axisX = 0;
+        this._axisY = 0;
         const autoResultsObj: Array<any> = this.application.answers.filter((a: any) => a.userEvaluator === member.email && a.userRated === a.userEvaluator);
         const leaderResultsObj: Array<any> = this.application.answers.filter((a: any) => a.userEvaluator === teamLeader && a.userRated === member.email);
         const pairResultsObj: Array<any> = this.application.answers.filter((a: any) => a.userEvaluator !== teamLeader && a.userEvaluator !== member.email && a.userRated === a.userEvaluator);
@@ -214,50 +233,35 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
           }
 
         });
-
         this._axisX = this._axisX / this.competenceSeries.length - 1;
 
         const objTemp = this.rows.find((r: any) => r.name === member.name);
         if (objTemp !== undefined)
-          objTemp['$9box'] = NineBoxChartComponent.calcAxis(this._axisX, this._axisY);
+          objTemp['nine_box'] = NineBoxChartComponent.calcAxis(this._axisX, this._axisY);
       }
 
     });
-    
-    console.log(this.rows);
 
-    
+    for (let count = 0; count < this.competenceSeries.length; count++) {
+      this.totalSeries[`$qst_${count}`] = 0;
+    }
 
+    this.rows.forEach((r: any) => {
+      for (let count = 0; count < this.competenceSeries.length; count++) {
+        this.totalSeries[`$qst_${count}`] += Number(r[`$qst_${count}`]);
+      }  
+    });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+    for (let count = 0; count < this.competenceSeries.length; count++) {
+      this.totalSeries[`$qst_${count}`] = this.totalSeries[`$qst_${count}`] / this.rows.length;
+    }
 
   }
   
   private buildCompetences(userMail: string) {
+
+    this._axisX = 0;
+    this._axisY = 0;
 
     const teamLeader = this.application.team.members[0].email;
     const competences = this.application.assessment.questions.map((q:any) => {
@@ -280,6 +284,14 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
       autoResults.push(Number(arObject.answer));
       leaderResults.push(Number(lrObject.answer));
       pairResults.push(Number(prObject.answer));
+      let _9boxAverage: number = 0;
+      _9boxAverage = Number(Number(prObject.answer) + Number(lrObject.answer) ) / 2;
+      
+      if (String(c.name).toLocaleLowerCase().trim() === 'resultado')
+        this._axisY = _9boxAverage;
+      else
+        this._axisX += _9boxAverage
+
       this.competenceData.push( 
         { 
           'name': c.name, 
@@ -292,6 +304,9 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
       );
       
     });
+
+    this._axisX = this._axisX / competences.length - 1;
+    this.nineBox = NineBoxChartComponent.calcAxis(this._axisX, this._axisY);
 
     this.comparissonResultsData = {
       competences: competences.map((c: any) => c.name),

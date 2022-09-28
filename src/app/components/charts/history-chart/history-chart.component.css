@@ -3,3 +3,28 @@
     overflow-x: auto;
     white-space: nowrap;
 }
+
+::ng-deep .datepicker-date-display {
+    background-color: #03a9f4 !important;
+}
+
+::ng-deep .datepicker-table td.is-today {
+    color: #03a9f4;
+}
+
+::ng-deep .datepicker-table td.is-selected {
+    background-color: #03a9f4 !important;
+    color: #fff;
+}
+
+::ng-deep .datepicker-cancel, .datepicker-clear, .datepicker-today, .datepicker-done {
+    color: #03a9f4 !important;
+}
+
+::ng-deep .datepicker-done {
+    color: #03a9f4 !important;
+}
+
+::ng-deep .input-field .prefix.active {
+    color: #03a9f4 !important;
+}

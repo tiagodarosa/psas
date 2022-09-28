@@ -2,7 +2,6 @@ import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'angularx-social-login';
-import { data } from 'jquery';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ComparisonOfResultsComponent } from '../components/charts/comparison-of-results/comparison-of-results.component';
@@ -26,6 +25,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   teamsList: Array<any>;
   projectsList: Array<any>;
   applicationsList: Array<any>;
+  userInfoList: Array<any>;
   assessmentValue: string;
   assessmentName: string;
   profileSelector: string;
@@ -55,10 +55,10 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
               private authService: AuthService,
               private datePipe: DatePipe,
               private service: ServicesService) {
-    console.log(this.profile);
     this.wcData = [];
     this.applicationsList = [];
     this._applicationsListCache = [];
+    this.userInfoList = [];
     this.comparissonResultsData = { competences: [] };
     this.teamValue = '';
     this.data9Box = {};
@@ -74,6 +74,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   ngOnInit() {
     this._organizationId = this.cookie.get('ORGANIZATIONID');
     this.profile = this.cookie.get('ORGANIZATIONMEMBERPROFILE');
+    this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => this.userInfoList = response.docs);
     this.authService.authState.subscribe(
       {
         next: (user) => {
@@ -93,6 +94,18 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
     const elems = document.querySelectorAll('.modal');
     this.modalInstance = M.Modal.init(elems, {});
     setTimeout(() => $('select').formSelect(), 200);
+  }
+
+  getPhotoUrl(email: string) {
+    try {
+      const userInfo = this.userInfoList.find((uil: any) => uil.params.email === email);
+      if (userInfo !== undefined && userInfo !== null)
+        return userInfo.params.photoUrl;
+      else
+        return '/assets/user.png';
+    } catch(error) {
+      return '/assets/user.png';
+    }
   }
 
   onDetailsJourneyAndFeedback() {
@@ -138,6 +151,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
       this.teamValue = object.team.name;
     }
 
+    this.data9Box = [];
     const teamLeader = object.team.members[0].email;
     const competences = object.assessment.questions.map((q:any) => {
       return {
@@ -195,6 +209,8 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
       const membersOfTeam = object.team.members.filter((mbs: any) => mbs.email !== teamLeader);
       const teamCompResultsData = [];
       membersOfTeam.forEach( (mot: any) => {
+        this.axisX = 0;
+        this.axisY = 0;
         const leaderResultsObj: Array<any> = object.answers.filter((a: any) => a.userEvaluator === teamLeader && a.userRated === mot.email);
         const pairResultsObj: Array<any> = object.answers.filter((a: any) => a.userEvaluator !== teamLeader && a.userEvaluator !== mot.email && a.userRated === mot.email);
         const averageResults: Array<number> = [];
@@ -208,6 +224,7 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
           pairResults.push(Number(prObject.answer));
           average = Number(Number(prObject.answer) + Number(lrObject.answer) ) / 2;
           averageResults.push(average);
+
           if (String(c.name).toLocaleLowerCase().trim() === 'resultado')
             this.axisY = average;
           else
@@ -215,6 +232,8 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
         });
 
         this.axisX = this.axisX / competences.length - 1;
+
+        this.data9Box.push({ name: mot.name, picture: this.getPhotoUrl(mot.email), x: this.axisX, y: this.axisY });
 
         teamCompResultsData.push(
           {
@@ -241,9 +260,12 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
           name: 'Média Equipe'
         }
       );
-
-      this.appComparisonOfResults.teamReloadChart(teamCompResultsData);
-      this.data9Box = [];
+      
+      setTimeout(() => {
+        this.appComparisonOfResults.teamReloadChart(teamCompResultsData);
+        console.log('data9Box', this.data9Box);
+        this.appNineBoxChart.reloadData(this.data9Box, this.axisX, this.axisY);
+      }, 100);
     }
   }
 

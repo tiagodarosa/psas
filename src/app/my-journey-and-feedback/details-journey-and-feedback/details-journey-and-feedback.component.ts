@@ -85,10 +85,7 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     this.cards = [];
     this.data = [];
     this._docs = [];
-    this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => {
-      this.userInfoList = response.docs;
-      console.log(this.userInfoList);
-    });
+    this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => this.userInfoList = response.docs);
     this.authService.authState.subscribe(
       {
         next: (user) => {
@@ -143,8 +140,10 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     } else if (value === '5') {
       this.filter.recipient = '';
       this.filter.issuer = '';
-      this.viewControl.issuer = false;
+      this.viewControl.issuer = true;
       this.viewControl.recipient = false;
+      this.initializeSelects('membersOfOrganizationName');
+      this.initializeSelects('membersOfTeamName');
     }
   }
 

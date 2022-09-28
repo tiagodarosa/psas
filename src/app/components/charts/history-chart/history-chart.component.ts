@@ -34,8 +34,11 @@ export class HistoryChartComponent implements OnInit, AfterViewInit {
 
   competenceSeries: Array<any>;
   rows: Array<number>;
+  teamsList: Array<any>;
   options: any;
   application: any;
+  startPeriod: string;
+  endPeriod: string;
   
   private _organizationId: string;
   private _answers: Array<any>
@@ -47,12 +50,17 @@ export class HistoryChartComponent implements OnInit, AfterViewInit {
     this._answers = [];
     this._spotlightCompetences = [];
     this.rows = [];
+    this.teamsList = [];
     this.application = {};
     this._organizationId = this.cookie.get('ORGANIZATIONID');
+    this.startPeriod = `01/01/${new Date().getFullYear() - 1}`;
+    const d = new Date();
+    this.endPeriod = `${d.getDate()}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
     this.loadData();
   }
 
   ngOnInit(){
+    this.getTeams();
   }
 
   ngAfterViewInit(): void {
@@ -70,6 +78,23 @@ export class HistoryChartComponent implements OnInit, AfterViewInit {
   getData(index: number, data: any) {
     let arr: Array<any> = data[index];
     return Number(arr[1]).toFixed(1);
+  }
+
+  private getTeams() {
+    this.teamsList = [];
+    this.service.findTeamsFromUser().subscribe((data) => {
+      const tList = Object(data).teams;
+      tList.forEach((t: any) => {
+        if (this.teamsList.findIndex((el: any) => el.name === t.name) < 0 )
+          this.teamsList.push(t);
+      });
+      setTimeout(() => {
+        const selectElems = document.querySelectorAll('select');
+        M.FormSelect.init(selectElems, {});
+      }, 100);
+    }, (error) => {
+      console.log(error);
+    });
   }
 
   private loadData() {
@@ -152,6 +177,11 @@ export class HistoryChartComponent implements OnInit, AfterViewInit {
     });
 
     this.rows = this.competenceSeries[0].data.map((el: any) => 1);
+
+    setTimeout(() => {
+      const selectElems = document.querySelectorAll('select');
+      M.FormSelect.init(selectElems, {});
+    }, 100);
 
     Highcharts.chart('history-chart-id', {
       chart: {
