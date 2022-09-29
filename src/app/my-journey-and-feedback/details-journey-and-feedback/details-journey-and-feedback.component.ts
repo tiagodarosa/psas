@@ -110,42 +110,38 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
     if (value === '2') {
       if(this.profile === 'user-profile') {
         this.viewControl.recipient = false;
+        this.viewControl.issuer = false;
+        this.filter.issuer = this._userLogged.email;
         this.filter.recipient = this._userLogged.email;
       } else {
         this.viewControl.issuer = true;
         this.viewControl.recipient = true;
         this.filter.recipient = '';
         this.filter.issuer = '';
-        this.initializeSelects('membersOfOrganizationName');
-        this.initializeSelects('membersOfTeamName');
       }
     } else if (value === '3') {
-      this.viewControl.issuer = false;
+      this.viewControl.issuer = true;
       this.viewControl.recipient = true;
-      this.filter.issuer = this._userLogged.email;
-      this.initializeSelects('membersOfOrganizationName');
     } else if (value === '4') {
       if(this.profile === 'user-profile') {
         this.viewControl.recipient = true;
+        this.viewControl.issuer = true;
         this.filter.recipient = '';
         this.filter.issuer = this._userLogged.email;
-        this.initializeSelects('membersOfOrganizationName');
       } else {
         this.viewControl.issuer = true;
         this.viewControl.recipient = true;
         this.filter.recipient = '';
         this.filter.issuer = '';
-        this.initializeSelects('membersOfOrganizationName');
-        this.initializeSelects('membersOfTeamName');
       }
     } else if (value === '5') {
       this.filter.recipient = '';
       this.filter.issuer = '';
       this.viewControl.issuer = true;
-      this.viewControl.recipient = false;
-      this.initializeSelects('membersOfOrganizationName');
-      this.initializeSelects('membersOfTeamName');
+      this.viewControl.recipient = true;
     }
+    this.initializeSelects('membersOfOrganizationName');
+    this.initializeSelects('membersOfTeamName');
   }
 
   onSearch() {
