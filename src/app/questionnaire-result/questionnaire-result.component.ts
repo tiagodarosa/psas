@@ -357,8 +357,8 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
         difference = diffTemp;
       }
     });
-    markObject['$biggerDifference'] = true;
-    console.log('markObject', markObject);
+    if (markObject !== null)
+      markObject['$biggerDifference'] = true;
 
     const index = this.competenceData.findIndex((el: any) => String(el.name).toLocaleLowerCase() === 'resultado');
     const cache = this.competenceData.splice(index, 1);
