@@ -12,7 +12,7 @@
     <div class="container">
 
       <!-- Title -->
-      <div class="row">
+      <div class="row" *ngIf="profile === 'user-profile'">
         <div class="col s2" style="text-align: center; margin-top: 4%;">
           <span>
             <img *ngIf="userLogged.photoUrl !== undefined" [src]="userLogged.photoUrl" class="user-big-avatar" onError="this.onerror=null;this.src='/assets/user.png';"/>
@@ -21,6 +21,23 @@
         </div>
         <div class="col s8">
           <h3 class="header">{{ userLogged.name }}</h3>
+          <div>
+            <h5>Aplicação: {{ application.name }}</h5>
+            <h5>Tipo de aplicação: {{ types[application.type] }}</h5>
+            <h5>Método de aplicação: {{ methods[application.method] }}</h5>
+          </div>
+        </div>
+        <div class="col s2" style="text-align: right; margin-top: 2%;">
+          <a class="waves-effect waves-light light-blue btn-large"
+             (click)="onBack()">
+            <i class="material-icons left">keyboard_return</i>Voltar
+          </a>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="profile === 'team-profile'">
+        <div class="col s10">
+          <h3 class="header">Equipe: {{ teamName }}</h3>
           <div>
             <h5>Aplicação: {{ application.name }}</h5>
             <h5>Tipo de aplicação: {{ types[application.type] }}</h5>
@@ -52,8 +69,14 @@
             <tbody>
               <tr *ngFor="let d of competenceData">
                 <td [class.blue-line] = "d.name === 'Resultado'"> {{ d.name }} </td>
-                <td [class.blue-line] = "d.name === 'Resultado'" style="text-align: center;"> {{ d.auto }} </td>
-                <td [class.blue-line] = "d.name === 'Resultado'" style="text-align: center;"> {{ d.leader }} </td>
+                <td [class.blue-line] = "d.name === 'Resultado'" style="text-align: center;">
+                  <b *ngIf="d.$biggerDifference" style="color: red;">*{{ d.auto }}</b>
+                  <span *ngIf="!d.$biggerDifference">{{ d.auto }}</span>
+                </td>
+                <td [class.blue-line] = "d.name === 'Resultado'" style="text-align: center;">
+                  <b *ngIf="d.$biggerDifference" style="color: red;">*{{ d.leader }}</b>
+                  <span *ngIf="!d.$biggerDifference">{{ d.leader }}</span>
+                </td>
                 <td [class.blue-line] = "d.name === 'Resultado'" style="text-align: center;"> {{ d.pair }} </td>
                 <td [class.blue-line] = "d.name === 'Resultado'" style="text-align: center;" [style.background-color]="d.color"> {{ d.average }} </td>
               </tr>
@@ -70,6 +93,9 @@
                 <td style="background-color: rgb(3, 155, 229, 0.2); color: #039be5;" colspan="4"> <span><b>ENQUADRAMENTO 9BOX</b></span> </td>
                 <td style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;"><span><b>{{ nineBox }}</b></span></td>
               </tr>
+              <tr>
+                <td colspan="5"><span style="color: red">*</span>Maiores discrepâncias entre resultados da autoavaliação e avaliação do líder.</td>
+              </tr>
             </tfoot>
           </table>
 
@@ -85,17 +111,19 @@
             </thead>
             <tbody>
               <tr *ngFor="let r of rows; let idx = index;">
-                  <td class="td-team" style="text-align: center;">{{ idx + 1 }}º</td>
-                  <td class="td-team" style="text-align: center;">{{ getAverageValue(r, competenceSeries.length) }}</td>
-                  <td class="td-team" style="text-align: center;">{{ r.nine_box }}</td>
+                  <td class="td-team" style="text-align: center; background-color: lightgray;">{{ idx + 1 }}º</td>
+                  <td class="td-team" style="text-align: center;" [style.background-color]="r.averageColor">{{ r.average }}</td>
+                  <td class="td-team" style="text-align: center; background-color: lightgray;">{{ r.nine_box }}</td>
                   <td class="td-team" style="text-align: center;">{{ r.name }}</td>
                   <td class="td-team" style="text-align: center;" *ngFor="let comp of competenceSeries">{{ getValue(comp.order, r) }}</td>
               </tr>
             </tbody>
             <tfoot>
-              <td colspan="3"></td>
-              <td class="td-team" style="text-align: center;">Média equipe</td>
-              <td class="td-team" style="text-align: center;" *ngFor="let key of getTotalSeriesArr()">{{ getTotalValue(key) }}</td>
+              <tr>
+                <td colspan="3"></td>
+                <td class="td-team" style="text-align: center;"><span style="font-weight: bold; text-align: right;">Média equipe</span></td>
+                <td class="td-team" style="text-align: center;" [style.background-color]="getTotalColor(key)" *ngFor="let key of getTotalSeriesArr()">{{ getTotalValue(key) }}</td>
+              </tr>
             </tfoot>
 
           </table>

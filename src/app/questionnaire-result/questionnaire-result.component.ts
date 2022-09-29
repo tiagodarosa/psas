@@ -34,6 +34,7 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   comparissonResultsData: any;
   rows: Array<any>;
   nineBox: string;
+  teamName: string;
   
   @ViewChild('appComparisonOfResults') appComparisonOfResults: ComparisonOfResultsComponent;
   @ViewChild('historyChart') historyChart: HistoryChartComponent;
@@ -58,6 +59,7 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
     this.resultCompetenceData = {};
     this.totalSeries = {};
     this.nineBox = '';
+    this.teamName = 'Carregando...';
     this.application = { name: 'Carregando...' };
     this.applicationId = this.route.snapshot.params.assessment;
     this.code = this.route.snapshot.params.code;
@@ -121,6 +123,11 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
 
   getValue(order: number, r: any) {
     return r[`$qst_${order}`];
+  }
+
+  getTotalColor(key: string) {
+    const value = this.getTotalValue(key);
+    return this.getColor(value);
   }
 
   private loadData() {
@@ -199,7 +206,7 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
       };
     }).sort((a: any, b: any) => a.order - b.order);
     const teamLeader = this.application.team.members[0].email;
-
+    this.teamName = this.application.team.name;
     this.application.team.members.forEach((member: any) => {
       
       if (member.name !== undefined) {
@@ -229,6 +236,7 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
               'name': member.name
             };
             objTemp[`$qst_${c.order}`] = average.toFixed();
+
             this.rows.push(objTemp);
           }
 
@@ -254,7 +262,15 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
 
     for (let count = 0; count < this.competenceSeries.length; count++) {
       this.totalSeries[`$qst_${count}`] = this.totalSeries[`$qst_${count}`] / this.rows.length;
+
     }
+
+    this.rows.forEach((r: any) => {
+      r['average'] = this.getAverageValue(r, this.competenceSeries.length);
+      r['averageColor'] = this.getColor(r['average']);
+    })
+    
+    this.initializaCollapses();
 
   }
   
@@ -325,6 +341,24 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
         pairTotal += Number(compData.pair);
       }
     });
+
+    let difference: number = 0;
+    let markObject: any = null;;
+    this.competenceData.forEach((data: any) => {
+      let diffTemp = data.auto - data.leader;
+      if (diffTemp > difference) {
+        markObject = data;
+        difference = diffTemp;
+      }
+
+      diffTemp = data.leader - data.auto;
+      if (diffTemp > difference) {
+        markObject = data;
+        difference = diffTemp;
+      }
+    });
+    markObject['$biggerDifference'] = true;
+    console.log('markObject', markObject);
 
     const index = this.competenceData.findIndex((el: any) => String(el.name).toLocaleLowerCase() === 'resultado');
     const cache = this.competenceData.splice(index, 1);

@@ -109,13 +109,21 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   }
 
   onDetailsJourneyAndFeedback() {
-    const paramUrl = this.profileSelector === '1' ? 'user-profile' : 'team-profile';
-    this.router.navigate(['details-journey-and-feedback', paramUrl, this.assessmentValue]);
+    if (this.assessmentValue !== undefined && this.assessmentValue !== null) {
+      const paramUrl = this.profileSelector === '1' ? 'user-profile' : 'team-profile';
+      this.router.navigate(['details-journey-and-feedback', paramUrl, this.assessmentValue]);
+    } else {
+      M.toast({ html: 'Selecione a aplicação!' });
+    }
   }
 
   onShowQuestionnaireResult() {
-    const paramUrl = this.profileSelector === '1' ? 'user-profile' : 'team-profile';
-    this.router.navigate(['questionnaire-result', paramUrl, this.assessmentValue, 'thigo.san@gmail.com']);
+    if (this.assessmentValue !== undefined && this.assessmentValue !== null) {
+      const paramUrl = this.profileSelector === '1' ? 'user-profile' : 'team-profile';
+      this.router.navigate(['questionnaire-result', paramUrl, this.assessmentValue, this._userLogged.email]);
+    } else {
+      M.toast({ html: 'Selecione a aplicação!' });
+    }
   }
 
   onChangeProfile(value: number) {
