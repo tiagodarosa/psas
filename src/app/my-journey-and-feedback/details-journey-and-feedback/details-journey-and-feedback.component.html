@@ -84,14 +84,14 @@
                 </div>
                 <div class="row" *ngIf="viewControl.issuer">
                   <div class="col s5">
-                    <div class="input-field col s12" *ngIf="profile === 'team-profile' && filter.informationType === '5'">
+                    <div class="input-field col s12" *ngIf="profile === 'user-profile' || profile === 'team-profile' && (filter.informationType === '4' || filter.informationType === '5')">
                       <i class="material-icons prefix">person</i>
                       <select name="membersOfTeamName" [(ngModel)]="filter.issuer" >
                         <option *ngFor="let o of membersOfOrganization" [value]="o.key">{{ o.label }}</option>
                       </select>
                     </div>
 
-                    <div class="input-field col s12" *ngIf="profile === 'user-profile' || profile === 'team-profile' && filter.informationType !== '5'">
+                    <div class="input-field col s12" *ngIf="profile === 'team-profile' && (filter.informationType === '2' || filter.informationType === '3')">
                       <i class="material-icons prefix">person</i>
                       <select name="membersOfTeamName" [(ngModel)]="filter.issuer" >
                         <option *ngFor="let o of membersOfTeamCombo" [value]="o.key">{{ o.label }}</option>
@@ -107,14 +107,14 @@
                 </div>
                 <div class="row" *ngIf="viewControl.recipient">
                   <div class="col s5">
-                    <div class="input-field col s12" *ngIf="profile === 'user-profile' || profile === 'team-profile' && filter.informationType !== '3' && filter.informationType !== '5'">
+                    <div class="input-field col s12" *ngIf="profile === 'user-profile' || profile === 'team-profile' && (filter.informationType === '4' || filter.informationType === '5')">
                       <i class="material-icons prefix">person</i>
                       <select name="membersOfOrganizationName" [(ngModel)]="filter.recipient" >
                         <option *ngFor="let o of membersOfOrganization" [value]="o.key">{{ o.label }}</option>
                       </select>
                     </div>
 
-                    <div class="input-field col s12" *ngIf="profile === 'team-profile' && (filter.informationType === '3' || filter.informationType === '5')">
+                    <div class="input-field col s12" *ngIf="profile === 'team-profile' && (filter.informationType === '2' || filter.informationType === '3')">
                       <i class="material-icons prefix">person</i>
                       <select name="membersOfOrganizationName" [(ngModel)]="filter.recipient">
                         <option *ngFor="let o of membersOfTeamCombo" [value]="o.key">{{ o.label }}</option>
