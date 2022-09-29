@@ -82,11 +82,19 @@ export class HistoryChartComponent implements OnInit, AfterViewInit {
 
   private getTeams() {
     this.teamsList = [];
+    const projectsList = [];
     this.service.findTeamsFromUser().subscribe((data) => {
+      const projs = Object(data).projects;
+      projs.forEach(p => {
+        if (p.organizationId === this._organizationId) {
+          projectsList.push(p);
+        }
+      });
       const tList = Object(data).teams;
-      tList.forEach((t: any) => {
-        if (this.teamsList.findIndex((el: any) => el.name === t.name) < 0 )
+      tList.forEach(t => {
+        if (projectsList.some(p => p._id === t.projectId)) {
           this.teamsList.push(t);
+        }
       });
       setTimeout(() => {
         const selectElems = document.querySelectorAll('select');

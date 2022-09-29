@@ -32,6 +32,7 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   dateFildsInstances: any;
   filter: MyJourneyAndFeedbackFilterData;
   profile: string;
+  teamName: string;
   messageTypeFilter: { acknowledgment: boolean, development: boolean };
   indicators: Array<{ name: string, partDiary: number, sent: number, received: number, partDiaryColor: string, sentColor: string, receivedColor: string, email: string }>;
   viewControl: { recipient: boolean, issuer: boolean };
@@ -428,19 +429,15 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
   }
 
   private getMembersOfTeam() {
-    if (this.profile === 'team-profile') {
-      this.service.findApplicationsFromUser().subscribe((app: any) => {
-        const applicationObject = app.applicationList.find((appList: any) => appList._id === this._assessmentId);
-        this.membersOfTeam = applicationObject.team.members;
-        this.membersOfTeamCombo = applicationObject.team.members
-          .filter((mm: any) => mm.name !== undefined)
-          .map((object: any) => { return { key: object.email, label: object.name }});
-        this.buildTeamIndicators();
-        this.loadData();
-      })
-    } else {
+    this.service.findApplicationsFromUser().subscribe((app: any) => {
+      const applicationObject = app.applicationList.find((appList: any) => appList._id === this._assessmentId);
+      this.membersOfTeam = applicationObject.team.members;
+      this.membersOfTeamCombo = applicationObject.team.members
+        .filter((mm: any) => mm.name !== undefined)
+        .map((object: any) => { return { key: object.email, label: object.name }});
+      this.buildTeamIndicators();
       this.loadData();
-    }
+    })
   }
 
 }
