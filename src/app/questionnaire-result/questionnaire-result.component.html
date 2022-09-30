@@ -37,7 +37,7 @@
 
       <div class="row" *ngIf="profile === 'team-profile'">
         <div class="col s10">
-          <h3 class="header">Equipe: {{ teamName }}</h3>
+          <h3 class="header">{{ teamName }}</h3>
           <div>
             <h5>Aplicação: {{ application.name }}</h5>
             <h5>Tipo de aplicação: {{ types[application.type] }}</h5>
@@ -102,19 +102,21 @@
           <table *ngIf="profile === 'team-profile'">
             <thead>
               <tr>
-                <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;"><span class="th-transform">Ranking</span></th>
-                <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;"><span class="th-transform">Média</span></th>
-                <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;"><span class="th-transform">9BOX</span></th>
-                <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;"><span class="th-transform__">Equipe</span></th>
+                <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.3); color: #039be5;"><span class="th-transform">Ranking</span></th>
+                <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.3); color: #039be5;"><span class="th-transform">Média</span></th>
+                <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.3); color: #039be5;"><span class="th-transform">9BOX</span></th>
+                <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.3); color: #039be5;"><span>Equipe</span></th>
                 <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;" *ngFor="let comp of competenceSeries"><span class="th-transform">{{ comp.name }}</span></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let r of rows; let idx = index;">
-                  <td class="td-team" style="text-align: center; background-color: lightgray;">{{ idx + 1 }}º</td>
+                  <td class="td-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.1);">{{ idx + 1 }}º</td>
                   <td class="td-team" style="text-align: center;" [style.background-color]="r.averageColor">{{ r.average }}</td>
-                  <td class="td-team" style="text-align: center; background-color: lightgray;">{{ r.nine_box }}</td>
-                  <td class="td-team" style="text-align: center;">{{ r.name }}</td>
+                  <td class="td-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.1);">{{ r.nine_box }}</td>
+                  <td class="td-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.1);">
+                    <img [src]="getPhotoUrl(r.email)" onError="this.onerror=null;this.src='/assets/user.png';" class="user-avatar" referrerpolicy="no-referrer" [alt]="r.name" [title]="r.name" (click)="onShowQuestionnaireResult(r.email)"/>
+                  </td>
                   <td class="td-team" style="text-align: center;" *ngFor="let comp of competenceSeries">{{ getValue(comp.order, r) }}</td>
               </tr>
             </tbody>
@@ -131,7 +133,7 @@
         </div>
       </div>
 
-      <div class="row" style="margin-top: 70px;">
+      <div class="row" style="margin-top: 70px;" *ngIf="profile === 'user-profile'">
         <div class="col s12">
           <ul class="tabs">
             <li class="tab col s4"><a class="active" href="#auto">Autoavaliação</a></li>
@@ -144,17 +146,17 @@
           <ul class="collapsible">
             <li>
               <div class="collapsible-header"><i class="material-icons">chat</i>Comentário</div>
-              <div class="collapsible-body"><span>Lorem ipsum d olor sit amet.</span></div>
+              <div class="collapsible-body"><span>...</span></div>
             </li>
             
             <li>
               <div class="collapsible-header"><i class="material-icons">chat</i>Pontos fortes</div>
-              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+              <div class="collapsible-body"><span>...</span></div>
             </li>
 
             <li>
               <div class="collapsible-header"><i class="material-icons">chat</i>Pontos à desenvolver</div>
-              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+              <div class="collapsible-body"><span>...</span></div>
             </li>
           </ul>
 
@@ -164,17 +166,17 @@
           <ul class="collapsible">
             <li>
               <div class="collapsible-header"><i class="material-icons">chat</i>Comentário</div>
-              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+              <div class="collapsible-body"><span>...</span></div>
             </li>
             
             <li>
               <div class="collapsible-header"><i class="material-icons">chat</i>Pontos fortes</div>
-              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+              <div class="collapsible-body"><span>...</span></div>
             </li>
 
             <li>
               <div class="collapsible-header"><i class="material-icons">chat</i>Pontos à desenvolver</div>
-              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+              <div class="collapsible-body"><span>...</span></div>
             </li>
           </ul>
 
@@ -184,17 +186,17 @@
           <ul class="collapsible">
             <li>
               <div class="collapsible-header"><i class="material-icons">chat</i>Comentário</div>
-              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+              <div class="collapsible-body"><span>...</span></div>
             </li>
             
             <li>
               <div class="collapsible-header"><i class="material-icons">chat</i>Pontos fortes</div>
-              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+              <div class="collapsible-body"><span>...</span></div>
             </li>
 
             <li>
               <div class="collapsible-header"><i class="material-icons">chat</i>Pontos à desenvolver</div>
-              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+              <div class="collapsible-body"><span>...</span></div>
             </li>
           </ul>
 
@@ -220,10 +222,17 @@
             <li>
               <div class="collapsible-header" style="background-color: rgb(3, 155, 229, 0.2); color: #039be5;">Histórico de competências</div>
               <div class="collapsible-body col s12">
-                <app-history-chart #historyChart [person]="person" competence="{{ '' }}" [showData]="true"></app-history-chart>
+                <app-history-chart #historyChart [person]="person" competence="{{ '' }}" [showData]="true" [applicationId]="applicationId"></app-history-chart>
               </div>
             </li>
           </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12">
+          <i class="material-icons left" style="font-size: 30pt">cloud</i>
+          <span style="cursor: pointer; font-size: 18pt" class="cloud" (click)="onDiaryAndFeedback()">Nuvem de competências (Diário & Feedback)</span>
         </div>
       </div>
 

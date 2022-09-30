@@ -33,6 +33,7 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   methods: any;
   comparissonResultsData: any;
   rows: Array<any>;
+  userInfoList: Array<any>;
   nineBox: string;
   teamName: string;
   
@@ -63,9 +64,14 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
     this.application = { name: 'Carregando...' };
     this.applicationId = this.route.snapshot.params.assessment;
     this.code = this.route.snapshot.params.code;
+
+    route.params.subscribe((params: any) => {
+      console.log(params);
+    });
   }
 
   ngOnInit() {
+    this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => this.userInfoList = response.docs);
     this.authService.authState.subscribe(
       {
         next: (user) => {
@@ -76,6 +82,23 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
         complete: () => this.spinner.hide()
       }
     );
+  }
+
+  ngAfterViewInit(): void {
+    const tabsElems = document.querySelectorAll('.tabs');
+    M.Tabs.init(tabsElems, {});
+  }
+
+  getPhotoUrl(email: string) {
+    try {
+      const userInfo = this.userInfoList.find((uil: any) => uil.params.email === email);
+      if (userInfo !== undefined && userInfo !== null)
+        return userInfo.params.photoUrl;
+      else
+        return '/assets/user.png';
+    } catch(error) {
+      return '/assets/user.png';
+    }
   }
 
   getTotalSeriesArr() {
@@ -93,15 +116,18 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
         this.profile = this.route.snapshot.params.profile;
         if (this.profile === 'user-profile')
           this.buildCompetences(this.userLogged.email);
-        else
+        else {
+          this.competenceSeries = this.application.assessment.questions.map((q:any) => {
+            return {
+              order: q.order,
+              name: q.competenceName
+            };
+          }).sort((a: any, b: any) => a.order - b.order);
           this.buildTeamCompetences();
+          this.buildRadarTeam();
+        }
       }
     });
-  }
-
-  ngAfterViewInit(): void {
-    const tabsElems = document.querySelectorAll('.tabs');
-    M.Tabs.init(tabsElems, {});
   }
   
   initializaCollapses() {
@@ -128,6 +154,15 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   getTotalColor(key: string) {
     const value = this.getTotalValue(key);
     return this.getColor(value);
+  }
+
+  onDiaryAndFeedback() {
+    this.router.navigate(['details-journey-and-feedback', this.profile, this.applicationId]);
+  }
+
+  onShowQuestionnaireResult(email: string) {
+    this.router.navigate(['questionnaire-result', 'user-profile', this.applicationId, email]);
+    window.location.reload();
   }
 
   private loadData() {
@@ -197,14 +232,59 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
       return '#fff6cb';
   }
 
+  private buildRadarTeam() {
+    const teamLeader = this.application.team.members[0].email;
+    const membersOfTeam = this.application.team.members.filter((mbs: any) => mbs.email !== teamLeader);
+    const teamCompResultsData = [];
+    membersOfTeam.forEach( (mot: any) => {
+      const leaderResultsObj: Array<any> = this.application.answers.filter((a: any) => a.userEvaluator === teamLeader && a.userRated === mot.email);
+      const pairResultsObj: Array<any> = this.application.answers.filter((a: any) => a.userEvaluator !== teamLeader && a.userEvaluator !== mot.email && a.userRated === mot.email);
+      const averageResults: Array<number> = [];
+      const leaderResults: Array<number> = [];
+      const pairResults: Array<number> = [];
+      this.competenceSeries.forEach((c: any) => {
+        const lrObject = leaderResultsObj.find((obj: any) => obj.questionOrder === c.order);
+        const prObject = pairResultsObj.find((obj: any) => obj.questionOrder === c.order);
+        let average: number = 0;
+        leaderResults.push(Number(lrObject.answer));
+        pairResults.push(Number(prObject.answer));
+        average = Number(Number(prObject.answer) + Number(lrObject.answer) ) / 2;
+        averageResults.push(average);
+      });
+
+      teamCompResultsData.push(
+        {
+          competences: this.competenceSeries.map((c: any) => c.name),
+          data: averageResults,
+          name: mot.name
+        }
+      );
+    });
+
+    let teamData: Array<number> = [];
+    for (let count = 0; count < this.competenceSeries.length; count++) {
+      let competenceTotal = 0;
+      for (let membersCount = 0; membersCount < teamCompResultsData.length;membersCount++) {
+        competenceTotal += teamCompResultsData[membersCount]['data'][count];
+      }
+      teamData.push(competenceTotal / teamCompResultsData.length);
+    }
+
+    teamCompResultsData.push(
+      {
+        competences: this.competenceSeries.map((c: any) => c.name),
+        data: teamData,
+        name: 'Média Equipe'
+      }
+    );
+    
+    setTimeout(() => {
+      this.appComparisonOfResults.teamReloadChart(teamCompResultsData);
+    }, 100);
+  }
+
   private buildTeamCompetences() {
     this.rows = [];
-    this.competenceSeries = this.application.assessment.questions.map((q:any) => {
-      return {
-        order: q.order,
-        name: q.competenceName
-      };
-    }).sort((a: any, b: any) => a.order - b.order);
     const teamLeader = this.application.team.members[0].email;
     this.teamName = this.application.team.name;
     this.application.team.members.forEach((member: any) => {
@@ -233,7 +313,8 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
             objTemp[`$qst_${c.order}`] = average.toFixed();
           } else {
             const objTemp = {
-              'name': member.name
+              'name': member.name,
+              'email': member.email
             };
             objTemp[`$qst_${c.order}`] = average.toFixed();
 
