@@ -211,7 +211,6 @@ export class HistoryChartComponent implements OnInit, AfterViewInit {
     }, 100);
 
     Highcharts.addEvent(Highcharts.Point, 'click', function () {
-      console.log(this.series);
       for (let i = 0; i < this.series.xAxis.series.length; i++) {
         const arr = document.querySelectorAll(`.col_${i}`);
         for (let count = 0; count < arr.length; count++) {
