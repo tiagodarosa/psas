@@ -36,6 +36,7 @@ const routes: Routes = [
   { path: 'add-journey-and-feedback', component: AddJourneyAndFeedbackComponent },
   { path: 'details-journey-and-feedback/:profile/:assessmentId', component: DetailsJourneyAndFeedbackComponent },
   { path: 'questionnaire-result/:profile/:assessment/:code', component: QuestionnaireResultComponent },
+  { path: 'individual-result/:profile/:assessment/:code', component: QuestionnaireResultComponent },
   { path: 'help', component: HelpComponent },
   { path: 'privacy', component: PrivacyComponent },
   { path: 'contact', component: ContactComponent },

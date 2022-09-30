@@ -64,10 +64,6 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
     this.application = { name: 'Carregando...' };
     this.applicationId = this.route.snapshot.params.assessment;
     this.code = this.route.snapshot.params.code;
-
-    route.params.subscribe((params: any) => {
-      console.log(params);
-    });
   }
 
   ngOnInit() {
@@ -161,8 +157,7 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   }
 
   onShowQuestionnaireResult(email: string) {
-    this.router.navigate(['questionnaire-result', 'user-profile', this.applicationId, email]);
-    window.location.reload();
+    this.router.navigate(['individual-result', 'user-profile', this.applicationId, email]);
   }
 
   private loadData() {
@@ -180,7 +175,8 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
           this._docs = response.docs;
           this.buildCompetenceTable();
           this.loadInitialData();
-          this.historyChart.reloadChart(this.userLogged.email);
+          if (this.userLogged !== undefined && this.userLogged !== null)
+            this.historyChart.reloadChart(this.userLogged.email);
         },
         error: this.showErrors.bind(this),
         complete: () => this.spinner.hide()
