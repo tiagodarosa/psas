@@ -271,7 +271,6 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
       
       setTimeout(() => {
         this.appComparisonOfResults.teamReloadChart(teamCompResultsData);
-        console.log('data9Box', this.data9Box);
         this.appNineBoxChart.reloadData(this.data9Box, this.axisX, this.axisY);
       }, 100);
     }

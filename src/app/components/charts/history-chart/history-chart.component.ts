@@ -30,6 +30,9 @@ export class HistoryChartComponent implements OnInit, AfterViewInit {
   competence: string;
 
   @Input()
+  applicationId: string;
+
+  @Input()
   showData: boolean;
 
   competenceSeries: Array<any>;
@@ -39,6 +42,7 @@ export class HistoryChartComponent implements OnInit, AfterViewInit {
   application: any;
   startPeriod: string;
   endPeriod: string;
+  membersOfTeamCombo: Array<any>;
   
   private _organizationId: string;
   private _answers: Array<any>
@@ -51,6 +55,7 @@ export class HistoryChartComponent implements OnInit, AfterViewInit {
     this._spotlightCompetences = [];
     this.rows = [];
     this.teamsList = [];
+    this.membersOfTeamCombo = [];
     this.application = {};
     this._organizationId = this.cookie.get('ORGANIZATIONID');
     this.startPeriod = `01/01/${new Date().getFullYear() - 1}`;
@@ -61,6 +66,7 @@ export class HistoryChartComponent implements OnInit, AfterViewInit {
 
   ngOnInit(){
     this.getTeams();
+    this.getMembersOfTeam();
   }
 
   ngAfterViewInit(): void {
@@ -78,6 +84,19 @@ export class HistoryChartComponent implements OnInit, AfterViewInit {
   getData(index: number, data: any) {
     let arr: Array<any> = data[index];
     return Number(arr[1]).toFixed(1);
+  }
+
+  private getMembersOfTeam() {
+    this.service.findApplicationsFromUser().subscribe((app: any) => {
+      const applicationObject = app.applicationList.find((appList: any) => appList._id === this.applicationId);
+      if (applicationObject != null) {
+        this.membersOfTeamCombo = applicationObject.team.members
+          .filter((mm: any) => mm.name !== undefined)
+          .map((object: any) => { return { key: object.email, label: object.name }});
+        let selElems = document.querySelectorAll('select');
+        M.FormSelect.init(selElems, {});
+      }
+    })
   }
 
   private getTeams() {
@@ -190,6 +209,17 @@ export class HistoryChartComponent implements OnInit, AfterViewInit {
       const selectElems = document.querySelectorAll('select');
       M.FormSelect.init(selectElems, {});
     }, 100);
+
+    Highcharts.addEvent(Highcharts.Point, 'click', function () {
+      console.log(this.series);
+      for (let i = 0; i < this.series.xAxis.series.length; i++) {
+        const arr = document.querySelectorAll(`.col_${i}`);
+        for (let count = 0; count < arr.length; count++) {
+          let elem: any = arr[count];
+          elem.style.backgroundColor = this.series.index === i ? 'rgb(3, 155, 229, 0.5)' : 'white';
+        }
+      } 
+    });
 
     Highcharts.chart('history-chart-id', {
       chart: {

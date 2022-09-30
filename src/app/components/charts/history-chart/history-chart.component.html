@@ -20,7 +20,7 @@
 </div>
 
 <div class="row" style="padding: 16px;" *ngIf="showData">
-    <div class="input-field col s4">
+    <div class="input-field col s3">
         <select>
             <option value="" disabled selected>Selecione o cargo</option>
             <option value="1">Analista I</option>
@@ -32,7 +32,7 @@
         <label>Cargo</label>
     </div>
     
-    <div class="input-field col s4">
+    <div class="input-field col s3">
         <select>
             <option value="" disabled selected>Selecione a equipe</option>
             <option [value]="team._id" *ngFor="let team of teamsList">{{ team.name }}</option>
@@ -40,12 +40,20 @@
         <label>Equipe</label>
     </div>
 
-    <div class="input-field col s4">
+    <div class="input-field col s3">
         <select>
             <option value="" disabled selected>Selecione a competência</option>
             <option [value]="comp.name" *ngFor="let comp of competenceSeries">{{ comp.name }}</option>
         </select>
         <label>Competências</label>
+    </div>
+
+    <div class="input-field col s3">
+        <select>
+            <option value="" disabled selected>Selecione o membro do time</option>
+            <option *ngFor="let o of membersOfTeamCombo" [value]="o.key">{{ o.label }}</option>
+        </select>
+        <label>Membro do time</label>
     </div>
 
 </div>
@@ -61,18 +69,18 @@
 <table style="margin-top: 10px;" *ngIf="showData">
     <thead>
       <tr>
-        <th style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;">Data</th>
-        <th style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5; width: 250px;">Cargo</th>
-        <th style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5; width: 250px;">Equipe</th>
+        <th style="text-align: center; background-color: rgb(3, 155, 229, 0.3); color: #039be5;">Data</th>
+        <th style="text-align: center; background-color: rgb(3, 155, 229, 0.3); color: #039be5; width: 250px;">Cargo</th>
+        <th style="text-align: center; background-color: rgb(3, 155, 229, 0.3); color: #039be5; width: 250px;">Equipe</th>
         <th style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;" *ngFor="let comp of competenceSeries" [hidden]="comp.name === 'Resultado'">{{ comp.name }}</th>
       </tr>
     </thead>
     <tbody>
         <tr *ngFor="let r of rows; let idx = index;">
-            <td style="text-align: center; background-color: lightgray;">{{ application.endDate | date: 'dd/MM/yyyy' }}</td>
-            <td style="text-align: center; background-color: lightgray; width: 250px;">Analista II</td>
-            <td style="text-align: center; background-color: lightgray; width: 250px;">{{ application.team.name }}</td>
-            <td style="text-align: center;" *ngFor="let comp of competenceSeries" [hidden]="comp.name === 'Resultado'">{{ getData(idx, comp.data) }}</td>
+            <td style="text-align: center; background-color: rgb(3, 155, 229, 0.1);">{{ application.endDate | date: 'dd/MM/yyyy' }}</td>
+            <td style="text-align: center; background-color: rgb(3, 155, 229, 0.1); width: 250px;">Analista II</td>
+            <td style="text-align: center; background-color: rgb(3, 155, 229, 0.1); width: 250px;">{{ application.team.name }}</td>
+            <td style="text-align: center;" *ngFor="let comp of competenceSeries; let cIdx = index;" [hidden]="comp.name === 'Resultado'" class="col_{{cIdx}}">{{ getData(idx, comp.data) }}</td>
         </tr>
     </tbody>
 </table>
