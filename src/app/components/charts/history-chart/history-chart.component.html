@@ -72,7 +72,7 @@
         <th style="text-align: center; background-color: rgb(3, 155, 229, 0.3); color: #039be5;">Data</th>
         <th style="text-align: center; background-color: rgb(3, 155, 229, 0.3); color: #039be5; width: 250px;">Cargo</th>
         <th style="text-align: center; background-color: rgb(3, 155, 229, 0.3); color: #039be5; width: 250px;">Equipe</th>
-        <th style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;" *ngFor="let comp of competenceSeries" [hidden]="comp.name === 'Resultado'">{{ comp.name }}</th>
+        <th style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;" *ngFor="let comp of competenceSeries">{{ comp.name }}</th>
       </tr>
     </thead>
     <tbody>
@@ -80,7 +80,7 @@
             <td style="text-align: center; background-color: rgb(3, 155, 229, 0.1);">{{ application.endDate | date: 'dd/MM/yyyy' }}</td>
             <td style="text-align: center; background-color: rgb(3, 155, 229, 0.1); width: 250px;">Analista II</td>
             <td style="text-align: center; background-color: rgb(3, 155, 229, 0.1); width: 250px;">{{ application.team.name }}</td>
-            <td style="text-align: center;" *ngFor="let comp of competenceSeries; let cIdx = index;" [hidden]="comp.name === 'Resultado'" class="col_{{cIdx}}">{{ getData(idx, comp.data) }}</td>
+            <td style="text-align: center;" *ngFor="let comp of competenceSeries; let cIdx = index;" class="col_{{cIdx}}">{{ getData(idx, comp.data) }}</td>
         </tr>
     </tbody>
 </table>

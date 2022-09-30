@@ -106,7 +106,7 @@
                 <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.3); color: #039be5;"><span class="th-transform">Média</span></th>
                 <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.3); color: #039be5;"><span class="th-transform">9BOX</span></th>
                 <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.3); color: #039be5;"><span>Equipe</span></th>
-                <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;" *ngFor="let comp of competenceSeries"><span class="th-transform">{{ comp.name }}</span></th>
+                <th class="th-team" style="text-align: center; background-color: rgb(3, 155, 229, 0.2); color: #039be5;" *ngFor="let comp of competenceSeries"><span class="">{{ comp.name }}</span></th>
               </tr>
             </thead>
             <tbody>
@@ -133,7 +133,7 @@
         </div>
       </div>
 
-      <div class="row" style="margin-top: 70px;" *ngIf="profile === 'user-profile'">
+      <div class="row" style="margin-top: 70px;" [hidden]="profile === 'team-profile'">
         <div class="col s12">
           <ul class="tabs">
             <li class="tab col s4"><a class="active" href="#auto">Autoavaliação</a></li>
@@ -231,7 +231,7 @@
 
       <div class="row">
         <div class="col s12">
-          <i class="material-icons left" style="font-size: 30pt">cloud</i>
+          <i class="material-icons left" style="font-size: 30pt">forum</i>
           <span style="cursor: pointer; font-size: 18pt" class="cloud" (click)="onDiaryAndFeedback()">Nuvem de competências (Diário & Feedback)</span>
         </div>
       </div>
