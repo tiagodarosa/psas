@@ -79,15 +79,24 @@
                   <div class="collapsible-header">{{ i+1 }} - {{ question.name | slice:0:40 }}{{ question.name.length > 40 ? '...' : ''}}</div>
                   <div class="collapsible-body">
                     <p><b>Questão: </b>{{ question.name }}</p>
-                    <p><b>Competência: </b>{{ question.competenceName }}</p>
+                    <p>
+                      <b>Competência: </b>{{ question.competenceName }}
+                      <span title="Tenha a visualização detalhada dos diários e também dos feedbacks recebidos para melhorar ainda mais a qualidade desta avaliação, baseado em fatos e dados que tenham sido registrados durante o período."><i class="material-icons">forum</i></span>
+                    </p>
                     <!-- Alternatives -->
-                    <div class="row" *ngIf="question.items.length>0">
+                    <div class="row" *ngIf="question.items.length > 0">
                       <div class="col s12 m6 l4 xl3" *ngFor="let item of question.items; let j = index" style="padding: 0;">
                         <div class="card" style="cursor: pointer;" id="{{ i + '' + j}}" (click)="selectItem(i,j)">
                           <div class="card-content">
                             <p>{{ item.description }}</p>
                           </div>
                         </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="input-field col s5 m4 l3">
+                        <i class="material-icons prefix">sms</i>
+                        <input type="text" class="datepicker" name="comments" placeholder="Comentário">
                       </div>
                     </div>
                   </div>
@@ -101,6 +110,22 @@
                   <div class="input-field col s12 m6">
                     <i class="material-icons prefix">comment</i>
                     <label class="active" for="comments">Comentários</label>
+                    <input #comments id="comments" type="text" class="validate" value="">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">comment</i>
+                    <label class="active" for="comments">Pontos fortes</label>
+                    <input #comments id="comments" type="text" class="validate" value="">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">comment</i>
+                    <label class="active" for="comments">À desenvolver</label>
                     <input #comments id="comments" type="text" class="validate" value="">
                   </div>
                 </div>

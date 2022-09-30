@@ -266,15 +266,17 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
 
   private getMembersOfOrganization() {
     this.service.findOrganizationById(this._organizationId).subscribe((el: any) => {
-      this.membersOfOrganization = el.users.map((it: any) => {
-        return {
-          'label': it.name,
-          'key': it.email
-        }
-      });
-      this.membersOfOrganization.unshift({
-        'label': '', 'key': ''
-      });
+      if (el.users !== undefined) {
+        this.membersOfOrganization = el.users.map((it: any) => {
+          return {
+            'label': it.name,
+            'key': it.email
+          }
+        });
+        this.membersOfOrganization.unshift({
+          'label': '', 'key': ''
+        });
+      }
     });
   }
 
