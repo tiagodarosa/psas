@@ -252,13 +252,15 @@ export class MyJourneyAndFeedbackComponent implements OnInit, AfterViewInit {
       {
         next: (response: any) => {
           this.compentencesList.push({ key: 'todos', label: 'Todos' });
-          response.competences.forEach((el: any) => {
-            this.compentencesList.push({ key: el.name, label: el.name });
-          });
-          setTimeout(() => {
-            const selectElems = document.querySelectorAll('select');
-            this.relatedSkillsInstance = M.FormSelect.init(selectElems, {});
-          }, 0);
+          if(response !== undefined) {
+            response.competences.forEach((el: any) => {
+              this.compentencesList.push({ key: el.name, label: el.name });
+            });
+            setTimeout(() => {
+              const selectElems = document.querySelectorAll('select');
+              this.relatedSkillsInstance = M.FormSelect.init(selectElems, {});
+            }, 0);
+          }
         }
       }
     );
