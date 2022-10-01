@@ -70,37 +70,13 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    const usInfTemp = localStorage.getItem('userInfoList');
-    if (usInfTemp !== undefined && usInfTemp !== null && usInfTemp.length > 0) {
-      this.userInfoList = JSON.parse(usInfTemp);
-      setTimeout(() => {
-        let userInfo = this.userInfoList.find((info: any) => info.email === this.code);
-        if (userInfo !== undefined) {
-          this.employeeNameSelected = userInfo.name;
-          this.employeePhotoSelected = userInfo.photoUrl;
-        }
-      }, 100);
-    } else {
-      this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => {
-        this.userInfoList = response.docs.map((d: any) => {
-          return {
-            name: d.name,
-            email: d.email,
-            photoUrl: d.photoUrl || d.params.photoUrl
-          };
-        });
-        if (this.userInfoList !== undefined)
-          localStorage.setItem('userInfoList', JSON.stringify(this.userInfoList));
-        setTimeout(() => {
-          let userInfo = this.userInfoList.find((info: any) => info.email === this.code);
-          if (userInfo !== undefined) {
-            this.employeeNameSelected = userInfo.name;
-            this.employeePhotoSelected = userInfo.photoUrl;
-          }
-        }, 100);
-      });
-
+    this.userInfoList = this.buildUserInfoList();
+    let userInfo = this.userInfoList.find((info: any) => info.email === this.code);
+    if (userInfo !== undefined) {
+      this.employeeNameSelected = userInfo.name;
+      this.employeePhotoSelected = userInfo.photoUrl;
     }
+
     this.authService.authState.subscribe(
       {
         next: (user) => {
@@ -120,9 +96,9 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
 
   getPhotoUrl(email: string) {
     try {
-      const userInfo = this.userInfoList.find((uil: any) => uil.params.email === email);
+      const userInfo = this.userInfoList.find((uil: any) => uil.email === email);
       if (userInfo !== undefined && userInfo !== null)
-        return userInfo.params.photoUrl;
+        return userInfo.photoUrl;
       else
         return '/assets/user.png';
     } catch(error) {
@@ -531,6 +507,36 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
 
     this.appComparisonOfResults.reloadChart(this.comparissonResultsData);
     this.initializaCollapses();
+  }
+
+  private buildUserInfoList() {
+    return [
+      {
+        "name":"Ana Cristina Calegari Corrêa",
+        "email":"anacristina.calegari@gmail.com",
+        "photoUrl":"https://lh3.googleusercontent.com/a-/ACNPEu8dncgo2a1FyjuplepDeZeRYfcNSJIbHEWwc4OyxTo=s96-c"
+      },
+      {
+        "name":"Cristina da Silva",
+        "email":"cristinaccsilva2022@gmail.com",
+        "photoUrl":"https://lh3.googleusercontent.com/a-/ACNPEu-UVk4NPpYtdTMwXpkbjAIs4VTuBTPZ7ay0h8mx=s96-c"
+      },
+      {
+        "name":"Thiago Gonçalves dos Santos",
+        "email":"thigo.san@gmail.com",
+        "photoUrl":"https://lh3.googleusercontent.com/a-/AFdZucpod9jta5TZSY0jTGuMyTgeb9kJIJlhKM6CrqqEWJU=s96-c"
+      },
+      {
+        "name":"Ana Cristina Calegari Corrêa",
+        "email":"anacalegari.academica@gmail.com",
+        "photoUrl":"https://lh3.googleusercontent.com/a/AItbvmmi0CshehMwNRKaEhKE5FXZO-dzq9VdHqDG9DdE=s96-c"
+      },
+      {
+        "name": "Neomesio Junior",
+        "email": "neomesio@gmail.com",
+        "photoUrl": "https://lh3.googleusercontent.com/a-/ACNPEu8HpsMap5UMuTCi3X6mHOYl08byZf3rqXcEX4OUzg=s96-c"
+      }
+    ];
   }
 
 }
