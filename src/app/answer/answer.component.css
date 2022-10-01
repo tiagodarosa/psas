@@ -1,3 +1,19 @@
 .modal {
     width: 80% !important;
 }
+
+.label-form {
+    font-size: 17pt;
+}
+
+::ng-deep .select-wrapper {
+    padding-top: 15px;
+}
+
+.user-big-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid lightgray;
+    margin-left: 10px;
+}
