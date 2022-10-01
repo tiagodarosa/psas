@@ -2,7 +2,6 @@ import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'angularx-social-login';
-import { CookieService } from 'ngx-cookie-service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ComparisonOfResultsComponent } from '../components/charts/comparison-of-results/comparison-of-results.component';
 import { HistoryChartComponent } from '../components/charts/history-chart/history-chart.component';
@@ -37,6 +36,8 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   definitiveRows: Array<any>;
   nineBox: string;
   teamName: string;
+  employeeNameSelected: string;
+  emplyeePhotoSelected: string;
   
   @ViewChild('appComparisonOfResults') appComparisonOfResults: ComparisonOfResultsComponent;
   @ViewChild('historyChart') historyChart: HistoryChartComponent;
@@ -50,7 +51,6 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
               private datePipe: DatePipe,
               private authService: AuthService,
               private service: ServicesService,
-              private cookie: CookieService,
               private spinner: NgxSpinnerService) {
     this.methods = this.buildMethodsObject();
     this.types = this.buildTypesObject();
@@ -61,6 +61,8 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
     this.resultCompetenceData = {};
     this.totalSeries = {};
     this.nineBox = '';
+    this.employeeNameSelected = 'Carregando...';
+    this.emplyeePhotoSelected = '';
     this.teamName = 'Carregando...';
     this.application = { name: 'Carregando...' };
     this.applicationId = this.route.snapshot.params.assessment;
@@ -68,7 +70,12 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => this.userInfoList = response.docs);
+    this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => {
+      this.userInfoList = response.docs;
+      let userInfo = this.userInfoList.find((info: any) => info.email === this.code);
+      this.employeeNameSelected = userInfo.name;
+      this.emplyeePhotoSelected = userInfo.params.photoUrl;
+    });
     this.authService.authState.subscribe(
       {
         next: (user) => {
