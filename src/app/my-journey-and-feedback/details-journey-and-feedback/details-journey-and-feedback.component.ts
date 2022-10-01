@@ -300,7 +300,7 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
             if (el.partDiary > largerValue) {
               largerValue = el.partDiary;
               object = el;
-              propertyName = 'partyDiaryColor';
+              propertyName = 'partDiaryColor';
             }
 
             if (el.sent > largerValue) {
@@ -320,6 +320,7 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
           object['bold'] = 'bold';
 
         },
+
         error: this.showErrors.bind(this),
         complete: () => this.isLoadingIndicators = false
       }

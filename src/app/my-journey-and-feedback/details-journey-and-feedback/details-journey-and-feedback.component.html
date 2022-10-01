@@ -237,9 +237,9 @@
                   <td>
                     <img [src]="getPhotoUrl(i.email)" onError="this.onerror=null;this.src='/assets/user.png';" class="user-avatar" referrerpolicy="no-referrer" [alt]="i.name" [title]="i.name"/>
                   </td>
-                  <td style="text-align: center; font-size: 16pt;" [style.color]="i.partDiaryColor" [style.font-weight]="i.partDiary === 0 || i.partDiaryColor === 'green' ? 'bold' : 'normal'" >{{ i.partDiary }}</td>
-                  <td style="text-align: center; font-size: 16pt;" [style.color]="i.sentColor" [style.font-weight]="i.sent === 0 || i.sentColor === 'green' ? 'bold' : 'normal'">{{ i.sent }}</td>
-                  <td style="text-align: center; font-size: 16pt;" [style.color]="i.receivedColor" [style.font-weight]="i.received === 0 || i.receivedColor === 'green' ? 'bold' : 'normal'">{{ i.received }}</td>
+                  <td style="text-align: center; font-size: 30pt;" [style.color]="i.partDiaryColor" [style.font-weight]="i.partDiary === 0 || i.partDiaryColor === 'green' ? 'bold' : 'normal'" >{{ i.partDiary }}</td>
+                  <td style="text-align: center; font-size: 30pt;" [style.color]="i.sentColor" [style.font-weight]="i.sent === 0 || i.sentColor === 'green' ? 'bold' : 'normal'">{{ i.sent }}</td>
+                  <td style="text-align: center; font-size: 30pt;" [style.color]="i.receivedColor" [style.font-weight]="i.received === 0 || i.receivedColor === 'green' ? 'bold' : 'normal'">{{ i.received }}</td>
                 </tr>
               </tbody>
             </table>

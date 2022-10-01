@@ -281,14 +281,10 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   }
 
   private getMembers() {
-    if (this.teamsList.length === 1) {
-      return this.teamsList.map((el: any) => {
-        const members = el.members.map((el: any) => el.email)
-        return members;
-      }).join(',');
-    } else {
-      throw new Error('Adicionar o campo para escolha de times na tela.');
-    }
+    return this.teamsList.map((el: any) => {
+      const members = el.members.map((el: any) => el.email)
+      return members;
+    }).join(',');
   }
 
   private loadWordCloudData() {

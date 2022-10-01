@@ -34,6 +34,7 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   comparissonResultsData: any;
   rows: Array<any>;
   userInfoList: Array<any>;
+  definitiveRows: Array<any>;
   nineBox: string;
   teamName: string;
   
@@ -143,13 +144,12 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
     return Number(total / totalCompetence).toFixed(1);
   }
 
-  getValue(order: number, r: any) {
-    return r[`$qst_${order}`];
+  getNoteValue(lineData: any, rIndex: number) {
+    return lineData.averageUsers[rIndex].note;
   }
 
-  getTotalColor(key: string) {
-    const value = this.getTotalValue(key);
-    return this.getColor(value);
+  getTotalColor(value: string) {
+    return this.getColor(Number(value));
   }
 
   onDiaryAndFeedback() {
@@ -339,8 +339,49 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
 
     for (let count = 0; count < this.competenceSeries.length; count++) {
       this.totalSeries[`$qst_${count}`] = this.totalSeries[`$qst_${count}`] / this.rows.length;
-
     }
+    
+    this.definitiveRows = [];
+    let result: any = {};
+    this.competenceSeries.forEach((c: any, index: number) => {
+      if (String(c.name).trim().toLocaleLowerCase() !== 'resultado') {
+        const object = {
+          'id': c.order,
+          'competenceName': c.name,
+          'totalValue': this.totalSeries[`$qst_${index}`],
+          'averageUsers': []
+        };
+  
+        for (let count = 0; count < this.rows.length; count++) {
+          object.averageUsers.push(
+            {
+              'competenceName': c.name,
+              'note': this.rows[count][`$qst_${index}`]
+            }
+          );
+        }
+        this.definitiveRows.push(object);
+      } else {
+        result = {
+          'id': c.order,
+          'competenceName': c.name,
+          'totalValue': this.totalSeries[`$qst_${index}`],
+          'averageUsers': []
+        };
+  
+        for (let count = 0; count < this.rows.length; count++) {
+          result.averageUsers.push(
+            {
+              'competenceName': c.name,
+              'note': this.rows[count][`$qst_${index}`]
+            }
+          );
+        }
+      }
+    });
+    
+    this.definitiveRows = this.definitiveRows.sort((a, b) => Number(b.totalValue) - Number(a.totalValue));
+    this.definitiveRows.push(result);
 
     this.rows.forEach((r: any) => {
       r['average'] = this.getAverageValue(r, this.competenceSeries.length);
