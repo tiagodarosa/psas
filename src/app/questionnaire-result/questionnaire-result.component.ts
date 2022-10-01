@@ -70,25 +70,37 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => {
-      this.userInfoList = response.docs.map((d: any) => {
-        return {
-          name: d.name,
-          email: d.email,
-          photoUrl: d.photoUrl || d.params.photoUrl
-        };
-      });
+    const usInfTemp = localStorage.getItem('userInfoList');
+    if (usInfTemp !== undefined && usInfTemp !== null && usInfTemp.length > 0) {
+      this.userInfoList = JSON.parse(usInfTemp);
       setTimeout(() => {
         let userInfo = this.userInfoList.find((info: any) => info.email === this.code);
-        console.log(userInfo);
-        console.log(userInfo.photoUrl);
         if (userInfo !== undefined) {
-          console.log(userInfo.name); 
           this.employeeNameSelected = userInfo.name;
           this.employeePhotoSelected = userInfo.photoUrl;
         }
       }, 100);
-    });
+    } else {
+      this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => {
+        this.userInfoList = response.docs.map((d: any) => {
+          return {
+            name: d.name,
+            email: d.email,
+            photoUrl: d.photoUrl || d.params.photoUrl
+          };
+        });
+        if (this.userInfoList !== undefined)
+          localStorage.setItem('userInfoList', JSON.stringify(this.userInfoList));
+        setTimeout(() => {
+          let userInfo = this.userInfoList.find((info: any) => info.email === this.code);
+          if (userInfo !== undefined) {
+            this.employeeNameSelected = userInfo.name;
+            this.employeePhotoSelected = userInfo.photoUrl;
+          }
+        }, 100);
+      });
+
+    }
     this.authService.authState.subscribe(
       {
         next: (user) => {

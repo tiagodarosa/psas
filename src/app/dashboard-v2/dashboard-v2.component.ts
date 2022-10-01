@@ -74,7 +74,17 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   ngOnInit() {
     this._organizationId = this.cookie.get('ORGANIZATIONID');
     this.profile = this.cookie.get('ORGANIZATIONMEMBERPROFILE');
-    this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => this.userInfoList = response.docs);
+    this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => {
+      this.userInfoList = response.docs.map((d: any) => {
+        return {
+          name: d.name,
+          email: d.email,
+          photoUrl: d.photoUrl || d.params.photoUrl
+        };
+      });
+      if (this.userInfoList !== undefined)
+        localStorage.setItem('userInfoList', JSON.stringify(this.userInfoList));
+    });
     this.authService.authState.subscribe(
       {
         next: (user) => {
