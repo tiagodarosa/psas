@@ -15,12 +15,12 @@
       <div class="row" *ngIf="profile === 'user-profile'">
         <div class="col s2" style="text-align: center; margin-top: 4%;">
           <span>
-            <img *ngIf="userLogged.photoUrl !== undefined" [src]="userLogged.photoUrl" class="user-big-avatar" onError="this.onerror=null;this.src='/assets/user.png';"/>
-            <i *ngIf="userLogged.photoUrl === undefined" class="material-icons" style="width: 150px; height: 150px;">account_circle</i>
+            <img *ngIf="emplyeePhotoSelected !== undefined && emplyeePhotoSelected !== ''" [src]="emplyeePhotoSelected" class="user-big-avatar" onError="this.onerror=null;this.src='/assets/user.png';"/>
+            <i *ngIf="emplyeePhotoSelected === undefined" class="material-icons" style="width: 150px; height: 150px;">account_circle</i>
           </span>
         </div>
         <div class="col s8">
-          <h3 class="header">{{ userLogged.name }}</h3>
+          <h3 class="header">{{ employeeNameSelected }}</h3>
           <div>
             <h5>Aplicação: {{ application.name }}</h5>
             <h5>Tipo de aplicação: {{ types[application.type] }}</h5>
