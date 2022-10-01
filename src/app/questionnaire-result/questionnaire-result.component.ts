@@ -37,7 +37,7 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
   nineBox: string;
   teamName: string;
   employeeNameSelected: string;
-  emplyeePhotoSelected: string;
+  employeePhotoSelected: string;
   
   @ViewChild('appComparisonOfResults') appComparisonOfResults: ComparisonOfResultsComponent;
   @ViewChild('historyChart') historyChart: HistoryChartComponent;
@@ -62,7 +62,7 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
     this.totalSeries = {};
     this.nineBox = '';
     this.employeeNameSelected = 'Carregando...';
-    this.emplyeePhotoSelected = '';
+    this.employeePhotoSelected = '';
     this.teamName = 'Carregando...';
     this.application = { name: 'Carregando...' };
     this.applicationId = this.route.snapshot.params.assessment;
@@ -71,10 +71,23 @@ export class QuestionnaireResultComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => {
-      this.userInfoList = response.docs;
-      let userInfo = this.userInfoList.find((info: any) => info.email === this.code);
-      this.employeeNameSelected = userInfo.name;
-      this.emplyeePhotoSelected = userInfo.params.photoUrl;
+      this.userInfoList = response.docs.map((d: any) => {
+        return {
+          name: d.name,
+          email: d.email,
+          photoUrl: d.photoUrl || d.params.photoUrl
+        };
+      });
+      setTimeout(() => {
+        let userInfo = this.userInfoList.find((info: any) => info.email === this.code);
+        console.log(userInfo);
+        console.log(userInfo.photoUrl);
+        if (userInfo !== undefined) {
+          console.log(userInfo.name); 
+          this.employeeNameSelected = userInfo.name;
+          this.employeePhotoSelected = userInfo.photoUrl;
+        }
+      }, 100);
     });
     this.authService.authState.subscribe(
       {
