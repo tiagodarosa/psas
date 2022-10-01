@@ -15,8 +15,8 @@
       <div class="row" *ngIf="profile === 'user-profile'">
         <div class="col s2" style="text-align: center; margin-top: 4%;">
           <span>
-            <img *ngIf="emplyeePhotoSelected !== undefined && emplyeePhotoSelected !== ''" [src]="emplyeePhotoSelected" class="user-big-avatar" onError="this.onerror=null;this.src='/assets/user.png';"/>
-            <i *ngIf="emplyeePhotoSelected === undefined" class="material-icons" style="width: 150px; height: 150px;">account_circle</i>
+            <img *ngIf="employeePhotoSelected !== undefined && employeePhotoSelected !== ''" [src]="employeePhotoSelected" class="user-big-avatar" onError="this.onerror=null;this.src='/assets/user.png';" referrerpolicy="no-referrer"/>
+            <i *ngIf="employeePhotoSelected === undefined || employeePhotoSelected === ''" class="material-icons" style="width: 150px; height: 150px;">account_circle</i>
           </span>
         </div>
         <div class="col s8">
