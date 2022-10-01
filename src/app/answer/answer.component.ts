@@ -21,6 +21,7 @@ export class AnswerComponent implements OnInit {
   applicationsByUser = [];
   teamList = [];
   assessmentList = [];
+  userInfoList: Array<any>;
   currentApplication = {
     name: '',
     type: '',
@@ -60,6 +61,7 @@ export class AnswerComponent implements OnInit {
   ngOnInit() {
     this.spinner.show();
     this.organizationId = this.cookie.get('ORGANIZATIONID');
+    this.service.getUserInfoByEmail({email: ''}).subscribe((response:any) => this.userInfoList = response.docs);
     this.authService.authState.subscribe((user) => {
       this.userEmail = user.email;
       this.getApplications();
@@ -193,5 +195,22 @@ export class AnswerComponent implements OnInit {
         this.router.navigate(['home']);
       });
     }
-  } 
+  }
+
+  getPhotoUrl(email: string) {
+    try {
+      const userInfo = this.userInfoList.find((uil: any) => uil.params.email === email);
+      if (userInfo !== undefined && userInfo !== null)
+        return userInfo.params.photoUrl;
+      else
+        return '/assets/user.png';
+    } catch(error) {
+      return '/assets/user.png';
+    }
+  }
+
+  onDetailsJourneyAndFeedback() {
+    window.open(`/details-journey-and-feedback/team-profile/${Object(this.currentApplication)._id}`, '_blank');
+    // this.router.navigate(['details-journey-and-feedback', 'team-profile', Object(this.currentApplication)._id])
+  }
 }
