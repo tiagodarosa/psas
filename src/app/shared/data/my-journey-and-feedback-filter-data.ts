@@ -13,6 +13,7 @@ export default class MyJourneyAndFeedbackFilterData {
     profile: string;
     membersList?: string;
     words?: string;
+    occurrences?: number;
 
     constructor() {
         this.informationType = '';
@@ -25,6 +26,7 @@ export default class MyJourneyAndFeedbackFilterData {
         this.profile = '';
         this.teamLeader = '';
         this.words = '';
+        this.occurrences = 0;
     }
 
 }
