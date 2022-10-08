@@ -314,6 +314,12 @@ export class DetailsJourneyAndFeedbackComponent implements OnInit, AfterViewInit
               object = el;
               propertyName = 'receivedColor';
             }
+
+            if (propertyName === null || propertyName === '') {
+              largerValue = el.partDiary;
+              object = el;
+              propertyName = 'partDiaryColor';
+            }
           });
 
           object[propertyName] = 'green';

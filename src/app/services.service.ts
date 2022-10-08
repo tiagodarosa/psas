@@ -1,8 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { AuthService } from 'angularx-social-login';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { AuthService, SocialUser } from 'angularx-social-login';
 import { map } from 'rxjs/operators';
 import MyJourneyAndFeedbackData from './shared/data/my-journey-and-feedback-data';
 import MyJourneyAndFeedbackFilterData from './shared/data/my-journey-and-feedback-filter-data';
@@ -18,10 +17,9 @@ export class ServicesService {
 
   private token = '';
   private httpOptions = {};
-  private _userInfo: Array<any>;
+  private _userInfo: SocialUser;
 
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService, private authService: AuthService) {
-    this._userInfo = [];
   }
 
   private extractData(res: Response) {
@@ -40,6 +38,7 @@ export class ServicesService {
   private getHttpOptions() {
     this.authService.authState.subscribe((user) => {
       if (user != null) {
+        this._userInfo = user;
         this.httpOptions = {
           headers: new HttpHeaders({
             'Content-Type': 'application/json',
@@ -56,8 +55,15 @@ export class ServicesService {
 
   findOrganizationsFromUser() {
     this.getHttpOptions();
-    return this.http.get(endpoint + '/organization', this.httpOptions).pipe(
-      map(this.extractData));
+    let httpParams = new HttpParams();
+    httpParams = httpParams.append('email', this._userInfo.email);
+    httpParams = httpParams.append('name', this._userInfo.name);
+    this.httpOptions['params'] = httpParams;
+    return this.http.get('https://us-south.functions.appdomain.cloud/api/v1/web/7cce1250-d66c-4a8e-a0e4-a83a70a2d77b/UserInfo/findOrganizationFromUserV2', this.httpOptions)
+      .pipe(map(this.extractData));
+    // return this.http.get('https://us-south.functions.appdomain.cloud/api/v1/web/7cce1250-d66c-4a8e-a0e4-a83a70a2d77b/Organization/findOrganizationsFromUser', this.httpOptions)
+      // .pipe(map(this.extractData));
+    //return this.http.get(endpoint + '/organization', this.httpOptions).pipe(map(this.extractData));
   }
 
   deleteOrganization(id: string) {
