@@ -290,7 +290,6 @@ export class DashboardV2Component implements OnInit, AfterViewInit {
   private loadWordCloudData() {
     this.wcData = [];
     const param: MyJourneyAndFeedbackFilterData = new MyJourneyAndFeedbackFilterData();
-    param.informationType = '1';
     param.recipient = this.profileSelector === '1' ? this._userLogged.email : this.getMembers();
     const [ startDay, startMonth, startYear ] = param.startPeriod.toString().split('/');
     param.startPeriod = this.datePipe.transform(new Date(+startYear, +startMonth - 1, +startDay), 'yyyy-MM-dd');

@@ -134,7 +134,8 @@ export class NoCacheHeadersInterceptor implements HttpInterceptor {
           'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/default/teste.json',
           'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/default/',
           'https://us-south.functions.cloud.ibm.com/api/v1/web/psas_psas/default',
-          'https://us-south.functions.cloud.ibm.com/api/v1/namespaces/7cce1250-d66c-4a8e-a0e4-a83a70a2d77b/'
+          'https://us-south.functions.cloud.ibm.com/api/v1/namespaces/7cce1250-d66c-4a8e-a0e4-a83a70a2d77b/',
+          'https://us-south.functions.appdomain.cloud/api/v1/web/7cce1250-d66c-4a8e-a0e4-a83a70a2d77b'
         ],
         blacklistedRoutes: []
       }
