@@ -47,9 +47,13 @@
             <p (click)="selectOrganizationCompetence(org._id)">
               {{ org.competences.length>0 ? (org.competences.length>1 ? org.competences.length + ' competências' : org.competences.length + ' competência') : ('Nenhuma competência cadastrada') }}
             </p>
+            <br>
+            <a class="waves-effect waves-light light-blue btn" (click)="selectOrganizationCompetence(org._id)">Mais Informações 
+              <i class="material-icons left">folder</i>
+            </a>
           </div>
           <div class="card-action light-blue">
-            <a class="modal-trigger" style="color: white;" href="#deleteOrganization" title="Excluir organização {{ org.name }}" (click)="deleteOrganizationModal(org._id)"><i class="material-icons left">delete</i></a>
+            <a class="modal-trigger" style="color: white;" href="#deleteOrganization" title="Excluir organização {{ org.name }}" (click)="deleteOrganizationModal(org._id)"><i class="material-icons left">delete</i>Excluir organização</a>
           </div>
         </div>
       </div>

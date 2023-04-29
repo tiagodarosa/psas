@@ -90,6 +90,7 @@ export class ProjectComponent implements OnInit {
       };
       this.service.addProject(project).subscribe((data) => {
         this.getProjects();
+        M.toast({html: 'Projeto adicionado com sucesso!'});
       }, (error) => {
         this.router.navigate(['home']);
       });
@@ -108,6 +109,7 @@ export class ProjectComponent implements OnInit {
     this.spinner.show();
     this.service.deleteProject(projectId).subscribe((data) => {
       this.getProjects();
+      M.toast({html: 'Projeto excluído com sucesso!'});
     }, (error) => {
       this.router.navigate(['home']);
     });
@@ -131,6 +133,7 @@ export class ProjectComponent implements OnInit {
     project.organizationId = this.organizationId;
     this.service.updateProject(project).subscribe((data) => {
       this.getProjects();
+      M.toast({html: 'Projeto atualizado com sucesso!'});
     }, (error) => {
       this.router.navigate(['home']);
     });

@@ -116,6 +116,7 @@ export class TeamComponent implements OnInit {
     this.spinner.show();
     this.service.deleteTeam(teamId).subscribe((data) => {
       this.getTeams();
+      M.toast({html: 'Equipe excluída com sucesso!'});
     }, (error) => {
       this.router.navigate(['home']);
     });

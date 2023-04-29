@@ -5,6 +5,7 @@ import { AuthService, SocialUser } from 'angularx-social-login';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 declare var $: any;
+declare var M: any;
 
 @Component({
   selector: 'app-organization',
@@ -72,11 +73,14 @@ export class OrganizationComponent implements OnInit {
 
   deleteOrganization(id: string) {
     this.spinner.show();
+    console.log('ohoh, mostrar mensagem de erro pro usuario');
+    this.spinner.hide();
+    M.toast({html: 'Organização excluída com sucesso!'});
     this.service.deleteOrganization(id).subscribe((data) => {
       this.getOrganizations();
     }, (error) => {
       console.log('ohoh, mostrar mensagem de erro pro usuario');
-      this.spinner.hide();
+      // this.spinner.hide();
     });
   }
 
@@ -90,6 +94,7 @@ export class OrganizationComponent implements OnInit {
     this.spinner.show();
     this.service.addOrganization(name).subscribe((data) => {
       this.getOrganizations();
+    M.toast({html: 'Organização adicionada com sucesso!'});
     }, (error) => {
       console.log('ohoh, mostrar mensagem de erro pro usuario');
       this.spinner.hide();
